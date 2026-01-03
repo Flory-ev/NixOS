@@ -28,6 +28,13 @@
     okular
   ];
 
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 4d --keep 3";
+    flake = "/home/f/nixos";
+  };
+
   nix = {
     settings.experimental-features = [ "flakes" "nix-command" ];
     settings.auto-optimise-store = true;

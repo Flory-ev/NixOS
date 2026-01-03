@@ -20,9 +20,7 @@
           ./hardware-configuration.nix
           ./modules/system.nix
           ./modules/users.nix
-          ./modules/services.nix
-          ./modules/programs.nix
-          ./modules/packages.nix
+          ./modules/software.nix
           ./modules/virtualization.nix
           home-manager.nixosModules.home-manager
           {

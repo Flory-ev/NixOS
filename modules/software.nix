@@ -1,4 +1,5 @@
 { config, lib, pkgs, ... }:
+
 {
   nixpkgs.config.allowUnfree = true;
 
@@ -30,4 +31,14 @@
        #Y
     zoxide   #Z
   ];
+
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
+
+  programs.steam.enable = true;
+  programs.zsh.enable = true;
+
+  services.flatpak.enable = true;
 }
