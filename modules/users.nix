@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  users.mutableUsers = false;
-
   users.users.f = {
     isNormalUser = true;
     home = "/home/f";
