@@ -6,7 +6,7 @@
   environment.systemPackages = with pkgs; [
        #A
     bat btop   #B
-    curl   #C
+    chromium curl   #C
     discord   #D
     eza   #E
     fastfetch fd firefox fzf   #F
