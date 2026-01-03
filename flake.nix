@@ -19,12 +19,10 @@
         modules = [
           ./hardware-configuration.nix
           ./modules/system.nix
-          ./modules/desktop.nix
           ./modules/users.nix
           ./modules/services.nix
           ./modules/programs.nix
           ./modules/packages.nix
-          #./modules/partitions.nix
           ./modules/virtualization.nix
           home-manager.nixosModules.home-manager
           {

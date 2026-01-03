@@ -2,7 +2,7 @@
 
 {
   home.username = "f";
-  home.homedirectory = "/home/f";
+  home.homeDirectory = "/home/f";
 
   programs.zsh = {
     enable = true;
