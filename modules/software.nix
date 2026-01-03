@@ -14,7 +14,7 @@
        #H
        #I
        #J
-    kdePackages.partitionmanager   #K
+    kdePackages.partitionmanager kitty   #K
     lazygit   #L
        #M
     nodejs   #N
@@ -25,7 +25,7 @@
     spotify   #S
     telegram-desktop tor-browser tree   #T
     unzip   #U
-    vim vscode vscodium  #V
+    vim vscodium  #V
     wget  #W
        #X
        #Y
