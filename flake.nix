@@ -17,10 +17,10 @@
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          ./hardware-configuration.nix
+          ./hardware.nix
+          ./modules/software.nix
           ./modules/system.nix
           ./modules/users.nix
-          ./modules/software.nix
           ./modules/virtualization.nix
           home-manager.nixosModules.home-manager
           {
