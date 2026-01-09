@@ -23,7 +23,7 @@
     qbittorrent   #Q
     ripgrep reaper   #R
     spotify   #S
-    telegram-desktop tor-browser tree   #T
+    telegram-desktop tor-browser trdr tree   #T
     unzip   #U
     vim vscodium  #V
     wget  #W
