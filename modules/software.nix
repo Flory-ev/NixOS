@@ -15,7 +15,7 @@
        #I
        #J
     kdePackages.partitionmanager kitty   #K
-    lazygit   #L
+    lazygit lutris   #L
        #M
     nodejs   #N
        #O
