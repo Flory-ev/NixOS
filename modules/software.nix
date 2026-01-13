@@ -4,32 +4,56 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-       #A
-    bat btop   #B
-    chromium curl   #C
-    discord   #D
-    eza   #E
-    fastfetch fd firefox fzf   #F
-    gcc git   #G
-       #H
-       #I
-       #J
-    kdePackages.partitionmanager kitty   #K
-    lazygit lutris   #L
-       #M
+    #A
+
+    #B
+		bat btop
+		#C
+    chromium curl
+    #D
+		discord
+    #E
+		eza
+    #F
+		fastfetch fd firefox fzf
+    #G
+		gcc git
+    #H
+
+    #I
+
+    #J
+
+		#K
+    kdePackages.partitionmanager kitty
+
+    lazygit lutris
+    #M
     nodejs   #N
-       #O
-       #P
-    qbittorrent   #Q
-    ripgrep reaper   #R
-    spotify   #S
-    telegram-desktop tor-browser trdr tree   #T
-    unzip   #U
-    vim vscodium  #V
-    wget  #W
-       #X
-       #Y
-    zoxide   #Z
+    #O
+
+		#P
+
+		#Q
+    qbittorrent
+		#R
+    ripgrep reaper
+		#S
+    spotify
+		#T
+    telegram-desktop tor-browser trdr tree
+    #U
+		unzip
+		#V
+    vim vscodium
+		#W
+    wget
+    #X
+
+    #Y
+
+		#Z
+    zoxide
   ];
 
   programs.appimage = {
