@@ -41,7 +41,7 @@
 		#S
     spotify
 		#T
-    telegram-desktop tor-browser trdr tree
+    telegram-desktop tor-browser tldr tree
     #U
 		unzip
 		#V
