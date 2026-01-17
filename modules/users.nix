@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
-
 {
-  users.users.f = {
+  
+	users.users.f = {
     isNormalUser = true;
     home = "/home/f";
     shell = pkgs.zsh;
