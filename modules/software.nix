@@ -1,68 +1,76 @@
 { config, lib, pkgs, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
-
+	
+	#Packages
   environment.systemPackages = with pkgs; [
-    #A
+  #A
 
-    #B
+  #B
 		bat btop
-		#C
+	#C
     chromium curl
-    #D
+  #D
 		discord
-    #E
+  #E
 		eza
-    #F
+  #F
 		fastfetch fd firefox fzf
-    #G
-		gcc git
-    #H
+  #G
+		gamemode gcc git
+  #H
 
-    #I
+  #I
 
-    #J
+  #J
 
-		#K
+	#K
     kdePackages.partitionmanager kitty
-
+	#L
     lazygit lutris
-    #M
-    nodejs   #N
-    #O
+  #M
 
-		#P
+	#N
+    nodejs
+  #O
 
-		#Q
+	#P
+
+	#Q
     qbittorrent
-		#R
+	#R
     ripgrep reaper
-		#S
+	#S
     spotify
-		#T
+	#T
     telegram-desktop tor-browser tldr tree
-    #U
+  #U
 		unzip
-		#V
+	#V
     vim vscodium
-		#W
+	#W
     wget
-    #X
+  #X
 
-    #Y
+  #Y
 
-		#Z
+	#Z
     zoxide
   ];
 
+	nixpkgs.config.allowUnfree = true;
+
+	#Programs
   programs.appimage = {
     enable = true;
     binfmt = true;
   };
 
   programs.steam.enable = true;
+  programs.gamemode.enable = true;
   programs.zsh.enable = true;
 
+	#Services
   services.flatpak.enable = true;
+
 }
