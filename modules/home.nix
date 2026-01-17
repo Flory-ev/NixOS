@@ -1,41 +1,57 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.username = "f";
-  home.homeDirectory = "/home/f";
+  home = {
+    homeDirectory = "/home/f";
+    packages = with pkgs; [ 
+      bat 
+      eza 
+      fzf 
+      zoxide 
+    ];
+    stateVersion = "25.05";
+    username = "f";
+  };
 
-  programs.zsh = {
-    enable = true;
-    oh-my-zsh = {
+  programs = {
+    direnv = {
       enable = true;
-      theme = "robbyrussell";
-      plugins = [ "git" "fzf" "zoxide" ];
+      nix-direnv.enable = true;
     };
-    shellAliases = {
-      ll = "eza -lah";
-      ls = "eza";
-      cat = "bat";
-      cd = "z";
-      ns = "nix-shell";
+
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
     };
-    initContent = ''
-      eval "$(zoxide init zsh)"
-    '';
-  };
 
-  programs.git = {
-    enable = true;
-    settings.user.name = "F";
-    settings.user.email = "vladislavtkachuk@yahoo.com";
-    settings = {
-      init.defaultBranch = "Main";
+    git = {
+      enable = true;
+      settings = {
+        init.defaultBranch = "Main";
+        user.email = "vladislavtkachuk@yahoo.com";
+        user.name = "F";
+      };
+    };
+
+    zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+      options = [ "--cmd cd" ];
+    };
+
+    zsh = {
+      enable = true;
+      oh-my-zsh = {
+        enable = true;
+        plugins = [ "git" ];
+        theme = "robbyrussell";
+      };
+      shellAliases = {
+        cat = "bat";
+        ll = "eza -lah --icons";
+        ls = "eza";
+        ns = "nix-shell";
+      };
     };
   };
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
-
-  home.stateVersion = "25.05";
 }
