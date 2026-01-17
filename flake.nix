@@ -9,25 +9,21 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager }:
-    let
+  outputs = { self, nixpkgs, home-manager, ... }: {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-    in
-    {
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-          ./hardware.nix
-          ./modules/software.nix
-          ./modules/system.nix
-          ./modules/users.nix
-          ./modules/virtualization.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.users.f = import ./modules/home.nix;
-          }
-        ];
-      };
+      modules = [
+        ./hardware.nix
+        ./modules/software.nix
+        ./modules/system.nix
+        ./modules/users.nix
+        ./modules/virtualization.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.users.f = import ./modules/home.nix;
+        }
+      ];
     };
+  };
 }
