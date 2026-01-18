@@ -12,5 +12,7 @@
     timeout = 5;
 
   boot.plymouth.enable = true;
+	
+	kernelPackages = pkgs.linuxPackages_latest;
 
 }
