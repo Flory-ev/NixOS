@@ -1,25 +1,23 @@
 { config, lib, pkgs, ... }:
 
 {
+  environment = {
+    cosmic.excludePackages = [ ];
+    plasma6.excludePackages = with pkgs.kdePackages; [ elisa gwenview kwalletmanager okular ];
+  };
 
-services = {
+  services = {
+    desktopManager = {
+      cosmic.enable = true;
+      plasma6.enable = true;
+    };
     displayManager = {
       cosmic-greeter.enable = true;
     };
-    desktopManager = {
-      plasma6.enable = true;
-      cosmic.enable = true;
-    };
-		pipewire = {
-      enable = true;
+    pipewire = {
       alsa.enable = true;
+      enable = true;
       pulse.enable = true;
     };
   };
-
-  environment = {
-    plasma6.excludePackages = with pkgs.kdePackages; [ elisa gwenview kwalletmanager okular ];
-    cosmic.excludePackages = [ ];
-  };
-
 }
