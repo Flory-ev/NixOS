@@ -18,7 +18,7 @@
         ./system/hardware.nix
         ./system/locale.nix
         ./system/networking.nix
-        ./system/system.nix
+        ./system/nix.nix
         ./system/virtualization.nix
         ./user/packages.nix
         ./user/programs.nix
