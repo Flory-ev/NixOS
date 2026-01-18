@@ -1,10 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
-  };
 
   networking = {
     hostName = "nixos";
@@ -14,16 +10,6 @@
   time.timeZone = "Europe/Copenhagen";
 	i18n.defaultLocale = "en_US.UTF-8";
 
-  nix = {
-    settings.experimental-features = [ "flakes" "nix-command" ];
-    settings.auto-optimise-store = true;
-  };
-
-  programs.nh = {
-    enable = true;
-    clean = { enable = true; extraArgs = "--keep-since 4d --keep 3"; };
-    flake = "/home/f/nixos";
-  };
   security.rtkit.enable = true;
   services = {
     displayManager.sddm = {
@@ -45,6 +31,16 @@
   environment = {
     plasma6.excludePackages = with pkgs.kdePackages; [ elisa gwenview kwalletmanager okular ];
     cosmic.excludePackages = [ ];
+  };
+
+	nix = {
+    settings.experimental-features = [ "flakes" "nix-command" ];
+    settings.auto-optimise-store = true;
+  };
+
+	boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
   };
 
   system.stateVersion = "25.05";
