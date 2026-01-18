@@ -9,6 +9,7 @@
     fastfetch fd firefox fzf
     kdePackages.partitionmanager kitty
     lazygit lutris
+    ncdu
     qbittorrent
     reaper ripgrep
     spotify
