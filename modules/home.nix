@@ -14,5 +14,6 @@
     zsh = { enable = true; oh-my-zsh = { enable = true; plugins = [ "git" ]; theme = "robbyrussell"; }; shellAliases = { cat = "bat"; ll = "eza -lah --icons"; ls = "eza"; ns = "nix-shell"; };
     };
   };
+
 	stateVersion = "25.05";
 }
