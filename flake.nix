@@ -14,14 +14,14 @@
       system = "x86_64-linux";
       modules = [
         ./hardware.nix
-        ./modules/software.nix
-        ./modules/system.nix
+        ./system/software.nix
+        ./system/system.nix
         ./modules/users.nix
-        ./modules/virtualization.nix
+        ./system/virtualization.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
-          home-manager.users.f = import ./modules/home.nix;
+          home-manager.users.f = import ./user/home.nix;
         }
       ];
     };
