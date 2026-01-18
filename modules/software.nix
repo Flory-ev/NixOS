@@ -2,21 +2,19 @@
 
 {
   environment.systemPackages = with pkgs; [
-    bat btop
+    bat bitwarden btop
     chromium curl
     discord
     eza
     fastfetch fd firefox fzf
-    gamemode gcc
     kdePackages.partitionmanager kitty
     lazygit lutris
-    nodejs
     qbittorrent
     reaper ripgrep
     spotify
     telegram-desktop tldr tor-browser tree
     unzip
-    vim vscodium
+    vim vlc vscodium
     wget
     zoxide
   ];
