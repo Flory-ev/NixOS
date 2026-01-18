@@ -11,8 +11,8 @@
     networkmanager.enable = true;
   };
 
-  i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "Europe/Copenhagen";
+	i18n.defaultLocale = "en_US.UTF-8";
 
   nix = {
     settings.experimental-features = [ "flakes" "nix-command" ];
@@ -35,7 +35,8 @@
       plasma6.enable = true;
       cosmic.enable = true;
     };
-    pipewire = {
+    security.rtkit.enable = true;
+		pipewire = {
       enable = true;
       alsa.enable = true;
       pulse.enable = true;
@@ -47,6 +48,5 @@
     cosmic.excludePackages = [ ];
   };
 
-  security.rtkit.enable = true;
   system.stateVersion = "25.05";
 }
