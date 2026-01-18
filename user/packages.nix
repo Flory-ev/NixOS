@@ -22,15 +22,4 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  programs = {
-    appimage = { enable = true; binfmt = true; };
-    gamemode.enable = true;
-    steam.enable = true;
-    zsh.enable = true;
-  };
-
-  services = {
-    flatpak = { enable = true; };
-  };
-    
 }

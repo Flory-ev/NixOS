@@ -13,11 +13,18 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./hardware.nix
-        ./user/software.nix
+        ./system/boot
+        ./system/desktop.nix
+        ./system/hardware.nix
+        ./system/locale
+        ./system/networking
         ./system/system.nix
-        ./user/users.nix
         ./system/virtualization.nix
+        ./user/packages.nix
+        ./user/programs.nix
+        ./user/services.nix
+        ./user/users.nix
+        
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
