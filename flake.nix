@@ -13,11 +13,11 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./system/boot
+        ./system/boot.nix
         ./system/desktop.nix
         ./system/hardware.nix
-        ./system/locale
-        ./system/networking
+        ./system/locale.nix
+        ./system/networking.nix
         ./system/system.nix
         ./system/virtualization.nix
         ./user/packages.nix
