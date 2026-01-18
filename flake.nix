@@ -14,7 +14,7 @@
       system = "x86_64-linux";
       modules = [
         ./hardware.nix
-        ./system/software.nix
+        ./user/software.nix
         ./system/system.nix
         ./modules/users.nix
         ./system/virtualization.nix
