@@ -2,7 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-    bat bitwarden btop
+    bat bitwarden-desktop btop
     chromium curl
     discord
     eza

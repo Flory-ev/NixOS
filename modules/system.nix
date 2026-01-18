@@ -24,7 +24,7 @@
     clean = { enable = true; extraArgs = "--keep-since 4d --keep 3"; };
     flake = "/home/f/nixos";
   };
-
+  security.rtkit.enable = true;
   services = {
     displayManager.sddm = {
       enable = true;
@@ -35,7 +35,6 @@
       plasma6.enable = true;
       cosmic.enable = true;
     };
-    security.rtkit.enable = true;
 		pipewire = {
       enable = true;
       alsa.enable = true;
