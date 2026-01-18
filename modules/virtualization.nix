@@ -2,13 +2,16 @@
 
 {
   boot = {
-    kernelModules = [ "kvm-intel" "kvm-amd" ];
     extraModprobeConfig = "options kvm_intel nested=1";
+    kernelModules = [ "kvm-amd" "kvm-intel" ];
   };
 
   environment.systemPackages = with pkgs; [
-    OVMF qemu spice spice-gtk spice-protocol
-    virt-manager virt-viewer virtio-win win-spice
+    OVMF
+    qemu
+    spice spice-gtk spice-protocol
+    virt-manager virt-viewer virtio-win
+		win-spice
   ];
 
   networking = {
@@ -19,11 +22,11 @@
   programs.virt-manager.enable = true;
 
   systemd.services.libvirtd-default-network = {
-    description = "Setup libvirt default network";
     after = [ "libvirtd.service" ];
+    description = "Setup libvirt default network";
     requires = [ "libvirtd.service" ];
     wantedBy = [ "multi-user.target" ];
-    serviceConfig = { Type = "oneshot"; RemainAfterExit = "yes"; };
+    serviceConfig = { RemainAfterExit = "yes"; Type = "oneshot"; };
     script = ''
       ${pkgs.libvirt}/bin/virsh net-autostart default || true
       ${pkgs.libvirt}/bin/virsh net-start default || true
