@@ -16,7 +16,7 @@
         ./hardware.nix
         ./user/software.nix
         ./system/system.nix
-        ./modules/users.nix
+        ./user/users.nix
         ./system/virtualization.nix
         home-manager.nixosModules.home-manager
         {
