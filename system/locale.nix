@@ -20,6 +20,7 @@
 
   services.xserver.xkb = {
     layout = "us,ru";
+		variant = "dvorak";
     options = "grp:alt_shift_toggle";
   
 }
