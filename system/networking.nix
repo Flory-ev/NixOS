@@ -8,7 +8,7 @@
       enable = true;
     };
 
-    hostName = "nixos";
+    hostName = "vortex";
     nameservers = [ "1.1.1.1" "1.0.0.1" ];
 
     networkmanager = {
