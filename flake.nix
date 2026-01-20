@@ -15,11 +15,11 @@
       system = "x86_64-linux";
       modules = [
         ./system/boot.nix
+				./system/configuration.nix
         ./system/desktop.nix
         ./system/hardware.nix
         ./system/locale.nix
         ./system/networking.nix
-        ./system/nix.nix
         ./system/virtualization.nix
         
         ./user/home.nix
