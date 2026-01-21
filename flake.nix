@@ -11,7 +11,7 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... }: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         ./system/boot.nix
