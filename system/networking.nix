@@ -20,9 +20,9 @@
   services.resolved = {
     enable = true; 
     settings = {
+      Resolve.FallbackDNS = [ "1.1.1.1" "1.0.0.1" ];
       Resolve.dnssec = "true";
       Resolve.Domains = [ "~." ];
-      Resolve.FallbackDNS = [ "1.1.1.1" "1.0.0.1" ];
     };    
   };
 }
