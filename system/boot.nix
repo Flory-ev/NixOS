@@ -15,7 +15,6 @@
         configurationLimit = 10;
         editor = false;
         enable = true;
-        timeout = 5;
       };
     };
 

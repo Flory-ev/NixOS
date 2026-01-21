@@ -22,7 +22,6 @@
         ./system/networking.nix
         ./system/virtualization.nix
         
-        ./user/home.nix
         ./user/packages.nix
         ./user/programs.nix
         ./user/services.nix

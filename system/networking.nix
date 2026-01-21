@@ -18,9 +18,11 @@
   };
 
   services.resolved = {
-    dnssec = "true";
-    domains = [ "~." ];
-    enable = true;
-    fallbackDns = [ "1.1.1.1" "1.0.0.1" ];
+    enable = true; 
+    settings = {
+      Resolve.dnssec = "true";
+      Resolve.Domains = [ "~." ];
+      Resolve.FallbackDNS = [ "1.1.1.1" "1.0.0.1" ];
+    }    
   };
 }
