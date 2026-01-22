@@ -2,6 +2,9 @@
 
 {
 
+  networking = {
+  
   hostName = "vortex";
+  };
 
 }

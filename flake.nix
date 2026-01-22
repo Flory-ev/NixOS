@@ -16,12 +16,12 @@
       specialArgs = { inherit inputs; }; 
       modules = [
         ./hosts/${host}
-        ./system
+        ./modules/system/imports.nix
         home-manager.nixosModules.home-manager {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            users.f = import ./user/home.nix;
+            users.f = import ./modules/user/home.nix;
           };
         }
       ];
