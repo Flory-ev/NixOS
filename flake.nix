@@ -7,9 +7,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    cosmic-manager = {
+      url = "github:HeitorAugustoLN/cosmic-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }@inputs: 
+  outputs = { nixpkgs, home-manager, cosmic-manager, ... }@inputs: 
   let
     mkSystem = host: user: system: nixpkgs.lib.nixosSystem {
       inherit system;
@@ -23,6 +28,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
+            extraSpecialArgs = { inherit inputs; };
             users.${user} = import ./modules/user/home.nix;
           };
         }

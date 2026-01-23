@@ -1,6 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
+  imports = [
+    inputs.cosmic-manager.homeManagerModules.cosmic-manager
+    ./cosmic.nix
+  ];
+
   home = {
     homeDirectory = "/home/f";
     username = "f";
