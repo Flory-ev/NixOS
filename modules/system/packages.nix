@@ -2,6 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
+    antigravity
     bat bitwarden-desktop btop
     chromium curl
     discord
