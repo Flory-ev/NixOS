@@ -14,7 +14,7 @@
     qbittorrent
     reaper ripgrep
     spotify
-    telegram-desktop tldr tor-browser tree
+    telegram-desktop thunderbird tldr tor-browser tree
     unzip
     vim vlc vscodium
     wget
