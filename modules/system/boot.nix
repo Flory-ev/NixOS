@@ -5,6 +5,7 @@
   inputs,
   ...
 }:
+
 {
   boot = {
     kernelParams = [
@@ -20,9 +21,9 @@
       };
 
       systemd-boot = {
-        configurationLimit = 10;
-        editor = false;
         enable = true;
+        editor = false;
+        configurationLimit = 10;
       };
     };
 

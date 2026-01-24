@@ -5,12 +5,12 @@
   inputs,
   ...
 }:
+
 {
   networking = {
-    firewall = {
-      allowedTCPPorts = [ ];
-      allowedUDPPorts = [ ];
+    networkmanager = {
       enable = true;
+      wifi.powersave = false;
     };
 
     nameservers = [
@@ -18,21 +18,22 @@
       "1.0.0.1"
     ];
 
-    networkmanager = {
+    firewall = {
+      allowedTCPPorts = [ ];
+      allowedUDPPorts = [ ];
       enable = true;
-      wifi.powersave = false;
     };
   };
 
   services.resolved = {
     enable = true;
     settings = {
+      Resolve.dnssec = "true";
+      Resolve.Domains = [ "~." ];
       Resolve.FallbackDNS = [
         "1.1.1.1"
         "1.0.0.1"
       ];
-      Resolve.dnssec = "true";
-      Resolve.Domains = [ "~." ];
     };
   };
 }
