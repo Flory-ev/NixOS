@@ -5,6 +5,7 @@
   inputs,
   ...
 }:
+
 {
   environment = {
     cosmic.excludePackages = with pkgs; [

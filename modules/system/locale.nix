@@ -5,7 +5,11 @@
   inputs,
   ...
 }:
+
 {
+
+  time.timeZone = "Europe/Copenhagen";
+
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {
@@ -20,8 +24,6 @@
       LC_TIME = "en_US.UTF-8";
     };
   };
-
-  time.timeZone = "Europe/Copenhagen";
 
   services.xserver.xkb = {
     layout = "us,ru";
