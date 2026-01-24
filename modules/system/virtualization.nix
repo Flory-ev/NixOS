@@ -1,9 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   boot = {
     extraModprobeConfig = "options kvm_intel nested=1";
-    kernelModules = [ "kvm-amd" "kvm-intel" ];
+    kernelModules = [
+      "kvm-amd"
+      "kvm-intel"
+    ];
   };
 
   environment.systemPackages = with pkgs; [

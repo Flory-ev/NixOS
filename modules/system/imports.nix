@@ -1,4 +1,12 @@
-{ ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+
+{
   imports = [
     ./audio.nix
     ./boot.nix

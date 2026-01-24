@@ -1,9 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
 
-  services = { 
-    flatpak = { enable = true; };
+  services = {
+    flatpak = {
+      enable = true;
+    };
   };
 
 }

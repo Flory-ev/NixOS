@@ -1,10 +1,18 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   boot = {
-    kernelParams = [ "quiet" "splash" ];
+    kernelParams = [
+      "quiet"
+      "splash"
+    ];
     kernelPackages = pkgs.linuxPackages_latest;
-    
+
     loader = {
       efi = {
         canTouchEfiVariables = true;

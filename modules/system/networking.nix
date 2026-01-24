@@ -1,5 +1,10 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   networking = {
     firewall = {
@@ -8,7 +13,10 @@
       enable = true;
     };
 
-    nameservers = [ "1.1.1.1" "1.0.0.1" ];
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1"
+    ];
 
     networkmanager = {
       enable = true;
@@ -17,11 +25,14 @@
   };
 
   services.resolved = {
-    enable = true; 
+    enable = true;
     settings = {
-      Resolve.FallbackDNS = [ "1.1.1.1" "1.0.0.1" ];
+      Resolve.FallbackDNS = [
+        "1.1.1.1"
+        "1.0.0.1"
+      ];
       Resolve.dnssec = "true";
       Resolve.Domains = [ "~." ];
-    };    
+    };
   };
 }

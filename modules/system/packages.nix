@@ -1,22 +1,44 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   environment.systemPackages = with pkgs; [
     antigravity
-    bat bitwarden-desktop btop
-    chromium curl
+    bat
+    bitwarden-desktop
+    btop
+    chromium
+    curl
     discord
     eza
-    fastfetch fd firefox fzf
-    kdePackages.partitionmanager kitty
-    lazygit lutris
-    ncdu nixfmt-rfc-style
+    fastfetch
+    fd
+    firefox
+    fzf
+    kdePackages.partitionmanager
+    kitty
+    lazygit
+    lutris
+    ncdu
+    nixfmt-rfc-style
     qbittorrent
-    reaper ripgrep
+    reaper
+    ripgrep
     spotify
-    telegram-desktop thunderbird tldr tor-browser tree
+    telegram-desktop
+    thunderbird
+    tldr
+    tor-browser
+    tree
     unzip
-    vim vlc vscodium
+    vim
+    vlc
+    vscodium
     wget
     zoxide
   ];

@@ -1,25 +1,29 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   environment = {
-    cosmic.excludePackages = [ ];
+    cosmic.excludePackages = with pkgs; [
+
+    ];
     plasma6.excludePackages = with pkgs.kdePackages; [
-      elisa
-      gwenview
-      kwalletmanager
-      okular
+
     ];
   };
 
   services = {
-    desktopManager = {
-      cosmic.enable = true;
-      plasma6.enable = true;
-    };
-
     displayManager = {
       cosmic-greeter.enable = true;
       defaultSession = "plasma";
+    };
+
+    desktopManager = {
+      cosmic.enable = true;
+      plasma6.enable = true;
     };
   };
 

@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
 
   networking = {
-  
-  hostName = "vortex";
+
+    hostName = "vortex";
   };
 
 }
