@@ -11,7 +11,7 @@
     curl
     fd
     kdePackages.partitionmanager
-    nixfmt-rfc-style
+    nixfmt
     ripgrep
     unzip
     vim
