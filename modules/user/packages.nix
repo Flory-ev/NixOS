@@ -8,9 +8,30 @@
 
 {
   home.packages = with pkgs; [
-    # Add your user-specific packages here
-    # Example:
-    # firefox
-    # vlc
+    antigravity
+    bat
+    bitwarden-desktop
+    btop
+    chromium
+    discord
+    eza
+    fastfetch
+    firefox
+    fzf
+    kitty
+    lazygit
+    lutris
+    ncdu
+    qbittorrent
+    reaper
+    spotify
+    telegram-desktop
+    thunderbird
+    tldr
+    tor-browser
+    tree
+    vlc
+    vscodium
+    zoxide
   ];
 }
