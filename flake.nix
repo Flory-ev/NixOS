@@ -35,14 +35,15 @@
             in
             map (name: dir + "/${name}") (builtins.attrNames nixFiles);
         in
-        nixpkgs.lib.nixosSystem {
+        lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs user; };
           modules =
             (importModules ./modules/system [ ])
             ++ (importModules ./modules/user [
               "packages.nix"
               "programs.nix"
+              "home.nix"
             ])
             ++ [
               ./hosts/${host}/default.nix

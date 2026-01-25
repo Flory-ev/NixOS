@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   inputs,
   ...
@@ -10,14 +9,12 @@
   environment.systemPackages = with pkgs; [
     curl
     fd
-    kdePackages.partitionmanager
+    gparted
     nixfmt
     ripgrep
     unzip
     vim
     wget
   ];
-
-  nixpkgs.config.allowUnfree = true;
 
 }

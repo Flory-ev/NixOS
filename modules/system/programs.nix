@@ -13,8 +13,12 @@
       enable = true;
       binfmt = true;
     };
-    gamemode.enable = true;
-    steam.enable = true;
+    gamemode = {
+      enable = true;
+    };
+    steam = {
+      enable = true;
+    };
     zsh.enable = true;
   };
 

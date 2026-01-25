@@ -3,6 +3,7 @@
   lib,
   pkgs,
   inputs,
+  user,
   ...
 }:
 
@@ -13,8 +14,8 @@
   ];
 
   home = {
-    username = "f";
-    homeDirectory = "/home/f";
+    username = "${user}";
+    homeDirectory = "/home/${user}";
     stateVersion = "25.05";
   };
 }

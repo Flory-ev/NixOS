@@ -7,6 +7,7 @@
 }:
 
 {
+
   nix = {
     optimise = {
       automatic = true;
@@ -19,8 +20,14 @@
         "flakes"
         "nix-command"
       ];
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
     };
   };
+
+  nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "25.05";
 }

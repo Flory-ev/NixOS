@@ -3,6 +3,7 @@
   lib,
   pkgs,
   inputs,
+  user,
   ...
 }:
 
@@ -21,7 +22,7 @@
     git = {
       enable = true;
       settings = {
-        init.defaultBranch = "Main";
+        init.defaultBranch = "main";
         user = {
           name = "F";
           email = "vladislavtkachuk@yahoo.com";
@@ -31,11 +32,11 @@
 
     nh = {
       enable = true;
+      flake = "/home/${user}/nixos";
       clean = {
         enable = true;
         extraArgs = "--keep-since 4d --keep 3";
       };
-      flake = "/home/f/nixos";
     };
 
     zoxide = {
@@ -49,13 +50,6 @@
       oh-my-zsh = {
         enable = true;
         plugins = [ "git" ];
-        theme = "robbyrussell";
-      };
-      shellAliases = {
-        cat = "bat";
-        ll = "eza -lah --icons";
-        ls = "eza";
-        ns = "nix-shell";
       };
     };
   };
