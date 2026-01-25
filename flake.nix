@@ -47,7 +47,7 @@
             ])
             ++ [
               ./hosts/${host}/default.nix
-              ./hosts/${host}/hardware.nix
+              ./hosts/${host}/hardware-configuration.nix
               home-manager.nixosModules.home-manager
               {
                 home-manager = {
