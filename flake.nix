@@ -13,24 +13,50 @@
     let
       mkSystem =
         host: user: system:
+        let
+          lib = nixpkgs.lib;
+          importModules =
+            dir: excludes:
+            let
+              contents = builtins.readDir dir;
+              nixFiles = lib.filterAttrs (
+                name: type:
+                type == "regular"
+                && lib.hasSuffix ".nix" name
+                && !(builtins.elem name (
+                  [
+                    "imports.nix"
+                    "default.nix"
+                    "home.nix"
+                  ]
+                  ++ excludes
+                ))
+              ) contents;
+            in
+            map (name: dir + "/${name}") (builtins.attrNames nixFiles);
+        in
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/${host}/default.nix
-            ./hosts/${host}/hardware.nix
-            ./modules/system/imports.nix
-            ./modules/user/imports.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                extraSpecialArgs = { inherit inputs user; };
-                users.${user} = import ./modules/user/home.nix;
-              };
-            }
-          ];
+          modules =
+            (importModules ./modules/system [ ])
+            ++ (importModules ./modules/user [
+              "packages.nix"
+              "programs.nix"
+            ])
+            ++ [
+              ./hosts/${host}/default.nix
+              ./hosts/${host}/hardware.nix
+              home-manager.nixosModules.home-manager
+              {
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  extraSpecialArgs = { inherit inputs user; };
+                  users.${user} = import ./modules/user/home.nix;
+                };
+              }
+            ];
         };
     in
     {
