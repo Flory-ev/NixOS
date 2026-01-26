@@ -5,12 +5,13 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, home-manager, ... }@inputs:
-  let
-    system = "x86_64-linux";
-  in {
-    nixosConfigurations.vortex =
-      nixpkgs.lib.nixosSystem {
+  outputs =
+    { nixpkgs, home-manager, ... }@inputs:
+    let
+      system = "x86_64-linux";
+    in
+    {
+      nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
@@ -18,5 +19,5 @@
           home-manager.nixosModules.home-manager
         ];
       };
-  };
+    };
 }
