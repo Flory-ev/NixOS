@@ -7,7 +7,13 @@
       binfmt = true;
     };
 
-    gamemode.enable = true;
+    firefox = {
+      enable = true;
+    };
+
+    gamemode = {
+      enable = true;
+    };
 
     steam = {
       enable = true;
@@ -19,6 +25,8 @@
       ];
     };
 
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+    };
   };
 }
