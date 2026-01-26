@@ -6,9 +6,9 @@
       enable = true;
       binfmt = true;
     };
-    
+
     gamemode.enable = true;
-    
+
     steam = {
       enable = true;
       remotePlay.openFirewall = true;
@@ -18,7 +18,7 @@
         proton-ge-bin
       ];
     };
-    
+
     zsh.enable = true;
   };
 }
