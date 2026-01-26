@@ -10,7 +10,8 @@
 
     settings = {
       auto-optimise-store = true;
-      experimental-features = [
+      download-buffer-size = 200000000;
+			experimental-features = [
         "flakes"
         "nix-command"
       ];
