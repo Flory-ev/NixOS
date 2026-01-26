@@ -3,16 +3,11 @@
 {
   home.packages = with pkgs; [
     antigravity
-    bat
     bitwarden-desktop
-    btop
     chromium
     discord
-    eza
-    fastfetch
     firefox
     kitty
-    lazygit
     lutris
     ncdu
     qbittorrent
@@ -20,7 +15,6 @@
     spotify
     telegram-desktop
     thunderbird
-    tldr
     tor-browser
     tree
     vlc
