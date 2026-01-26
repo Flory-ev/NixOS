@@ -1,7 +1,6 @@
 { ... }:
 
 {
-
   nix = {
     optimise = {
       automatic = true;
@@ -11,7 +10,7 @@
     settings = {
       auto-optimise-store = true;
       download-buffer-size = 200000000;
-			experimental-features = [
+      experimental-features = [
         "flakes"
         "nix-command"
       ];

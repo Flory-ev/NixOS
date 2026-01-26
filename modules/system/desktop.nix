@@ -5,6 +5,7 @@
     cosmic.excludePackages = with pkgs; [
 
     ];
+
     plasma6.excludePackages = with pkgs.kdePackages; [
 
     ];
@@ -30,5 +31,4 @@
       nerd-fonts.jetbrains-mono
     ];
   };
-
 }

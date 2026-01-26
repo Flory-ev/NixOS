@@ -5,12 +5,6 @@
   inputs,
   ...
 }:
-
 {
-
-  networking = {
-
-    hostName = "vortex";
-  };
-
+  networking.hostName = "vortex";
 }

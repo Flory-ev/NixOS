@@ -1,7 +1,6 @@
 { ... }:
 
 {
-
   time.timeZone = "Europe/Copenhagen";
 
   i18n = {
@@ -24,5 +23,4 @@
     variant = "dvorak";
     options = "grp:alt_shift_toggle";
   };
-
 }
