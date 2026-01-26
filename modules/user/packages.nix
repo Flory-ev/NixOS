@@ -11,7 +11,6 @@
     eza
     fastfetch
     firefox
-    fzf
     kitty
     lazygit
     lutris
@@ -26,6 +25,5 @@
     tree
     vlc
     vscodium
-    zoxide
   ];
 }
