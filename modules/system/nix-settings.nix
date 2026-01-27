@@ -1,23 +1,22 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   nix = {
-    optimise = {
-      automatic = true;
-      dates = [ "weekly" ];
-    };
-
     settings = {
       auto-optimise-store = true;
-      download-buffer-size = 524288000;
       experimental-features = [
-        "flakes"
         "nix-command"
+        "flakes"
       ];
       trusted-users = [
         "root"
         "@wheel"
       ];
+    };
+
+    optimise = {
+      automatic = true;
+      dates = [ "weekly" ];
     };
   };
 
