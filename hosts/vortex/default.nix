@@ -4,7 +4,6 @@
   inputs,
   ...
 }:
-
 {
   imports = [
     ./hardware-configuration.nix
@@ -32,18 +31,21 @@
     };
     users.f = {
       imports = [
-        ../../modules/home/terminal.nix
-        ../../modules/home/browsers.nix
-        ../../modules/home/communications.nix
-        ../../modules/home/media.nix
-        ../../modules/home/gaming.nix
-        ../../modules/home/editors.nix
-        ../../modules/home/git.nix
+        ../../modules/user/packages.nix
+        ../../modules/user/programs/direnv.nix
+        ../../modules/user/programs/fzf.nix
+        ../../modules/user/programs/git.nix
+        ../../modules/user/programs/nh.nix
+        ../../modules/user/programs/starship.nix
+        ../../modules/user/programs/zoxide.nix
+        ../../modules/user/programs/zsh.nix
       ];
 
-      home.username = "f";
-      home.homeDirectory = "/home/f";
-      home.stateVersion = "25.05";
+      home = {
+        username = "f";
+        homeDirectory = "/home/f";
+        stateVersion = "25.05";
+      };
     };
   };
 }
