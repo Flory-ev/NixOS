@@ -11,6 +11,6 @@
     inputs.home-manager.nixosModules.home-manager
     ./host-modules/networking.nix
     ./host-modules/users.nix
-    ./host-modules/home-manager.nix
+    ./host-modules/home.nix
   ];
 }
