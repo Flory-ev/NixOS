@@ -9,43 +9,8 @@
     ./hardware-configuration.nix
     ../../profiles/desktop.nix
     inputs.home-manager.nixosModules.home-manager
+    ./host-modules/networking.nix
+    ./host-modules/users.nix
+    ./host-modules/home-manager.nix
   ];
-
-  networking.hostName = "vortex";
-
-  users.users.f = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-    ];
-    shell = pkgs.zsh;
-  };
-
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    extraSpecialArgs = {
-      inherit inputs;
-      user = "f";
-    };
-    users.f = {
-      imports = [
-        ../../modules/user/packages.nix
-        ../../modules/user/programs/direnv.nix
-        ../../modules/user/programs/fzf.nix
-        ../../modules/user/programs/git.nix
-        ../../modules/user/programs/nh.nix
-        ../../modules/user/programs/starship.nix
-        ../../modules/user/programs/zoxide.nix
-        ../../modules/user/programs/zsh.nix
-      ];
-
-      home = {
-        username = "f";
-        homeDirectory = "/home/f";
-        stateVersion = "25.05";
-      };
-    };
-  };
 }
