@@ -20,6 +20,11 @@
       };
     };
 
+		tmp = {
+		  useTmpfs = true;
+		  tmpfsSize = "50%";
+	};
+
     plymouth.enable = true;
   };
 
