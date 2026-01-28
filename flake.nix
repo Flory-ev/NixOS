@@ -29,7 +29,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.f = import ./home/home.nix;
+              home-manager.users.f = import ./home/core/home.nix;
             }
           ];
         };

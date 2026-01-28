@@ -10,6 +10,6 @@
     ../system/core/settings.nix
     ../system/core/locale.nix
     ../system/core/security.nix
-    ../../system/software/packages.nix
+    ../system/software/packages.nix
   ];
 }

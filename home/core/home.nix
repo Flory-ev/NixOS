@@ -1,21 +1,13 @@
-{ inputs, ... }:
+{ config, pkgs, ... }:
 {
-  home-manager.users.f = {
-    imports = [
-      ../../home/packages.nix
-      ../../home/programs/direnv.nix
-      ../../home/programs/fzf.nix
-      ../../home/programs/git.nix
-      ../../home/programs/nh.nix
-      ../../home/programs/starship.nix
-      ../../home/programs/zoxide.nix
-      ../../home/programs/zsh.nix
-    ];
+  imports = [
+    ../software/packages.nix
+    ../software/programs.nix
+  ];
 
-    home = {
-      username = "f";
-      homeDirectory = "/home/f";
-      stateVersion = "25.05";
-    };
+  home = {
+    username = "f";
+    homeDirectory = "/home/f";
+    stateVersion = "25.05";
   };
 }

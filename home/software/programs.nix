@@ -23,10 +23,6 @@
       };
     };
 
-    home = {
-      enable = true;
-    };
-
     nh = {
       enable = true;
       flake = "/home/${user}/nixos";
