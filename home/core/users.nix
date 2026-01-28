@@ -4,12 +4,12 @@
   users.users.f = {
     isNormalUser = true;
     isSystemUser = false;
-    extraGroups = [
+    shell = pkgs.zsh;
+    group = "f";
+		extraGroups = [
       "wheel"
       "networkmanager"
     ];
-    shell = pkgs.zsh;
-    group = "f";
   };
 
   users.groups.f = { };
