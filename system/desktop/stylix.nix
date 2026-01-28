@@ -47,7 +47,9 @@
 
       grub.enable = true;
 
-      gtk.enable = true;
+      gtk.enable = false;
+
+      qt.enable = false;
     };
   };
 }
