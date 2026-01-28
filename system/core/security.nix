@@ -2,7 +2,11 @@
 
 {
   security = {
-    rtkit.enable = true;
-    sudo.enable = true;
+	  sudo = {
+	    enable = true;
+	    wheelNeedsPassword = true;
+	    execWheelOnly = true;
+    };
+	  polkit.enable = true;
   };
 }
