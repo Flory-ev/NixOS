@@ -1,5 +1,4 @@
 { pkgs, ... }:
-
 {
   boot = {
     kernelParams = [
@@ -23,4 +22,6 @@
 
     plymouth.enable = true;
   };
+
+	hardware.enableRedistributableFirmware = true;
 }
