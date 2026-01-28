@@ -15,7 +15,25 @@
 
 	programs.light.enable = true;
 
+	zramSwap = {
+	  enable = true;
+	  memoryPercent = 50;
+	};
+
   services = {
+		logind = {
+      lidSwitch = "suspend";
+      lidSwitchDocked = "ignore";
+      lidSwitchExternalPower = "suspend";
+
+      extraConfig = ''
+        HandlePowerKey=suspend
+        LockSessions=yes
+				IdleAction=suspend
+        IdleActionSec=30min
+      '';
+    };
+
     tlp = {
       enable = true;
       settings = {
@@ -44,9 +62,6 @@
       };
     };
 
-    thermald.enable = true;
-    power-profiles-daemon.enable = false;
-
     libinput = {
       enable = true;
       touchpad = {
@@ -60,23 +75,17 @@
       };
     };
 
-    fprintd.enable = true;
-    udisks2.enable = true;
-    gvfs.enable = true;
-    fstrim.enable = true;
-
-    logind = {
-      lidSwitch = "suspend";
-      lidSwitchDocked = "ignore";
-      lidSwitchExternalPower = "suspend";
-
-      extraConfig = ''
-        HandlePowerKey=suspend
-        LockSessions=yes
-				IdleAction=suspend
-        IdleActionSec=30min
-      '';
+		earlyoom = {
+      enable = true;
+      freeMemThreshold = 5;
     };
+		
+		fprintd.enable = true;
+    fstrim.enable = true;
+    gvfs.enable = true;
+    power-profiles-daemon.enable = false;
+    thermald.enable = true;
+    udisks2.enable = true;
   };
 
 	fonts.packages = with pkgs; [
