@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 {
   imports = [
     ./base.nix
@@ -12,7 +11,15 @@
     ../system/hardware/graphics.nix
   ];
 
-  fonts.packages = with pkgs; [
+  hardware.enableRedistributableFirmware = true;
+
+  services = {
+    udisks2.enable = true;
+    gvfs.enable = true;
+    fstrim.enable = true;
+  };
+
+	fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-color-emoji
@@ -22,19 +29,4 @@
     font-awesome
     jetbrains-mono
   ];
-
-  hardware = {
-    enableRedistributableFirmware = true;
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-    };
-  };
-
-  services = {
-    udisks2.enable = true;
-    gvfs.enable = true;
-    fstrim.enable = true;
-    fwupd.enable = true;
-  };
 }
