@@ -6,13 +6,11 @@
 
     base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
 
-    image = /home/f/wallpaper.jpg;
-
     polarity = "dark";
 
     fonts = {
       monospace = {
-        package = pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; };
+        package = pkgs.nerd-fonts.jetbrains-mono;
         name = "JetBrainsMono Nerd Font Mono";
       };
       sansSerif = {
@@ -50,8 +48,6 @@
       grub.enable = true;
 
       gtk.enable = true;
-
-      firefox.enable = true;
     };
   };
 }

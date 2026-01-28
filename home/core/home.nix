@@ -5,9 +5,5 @@
     ../software/programs.nix
   ];
 
-  home = {
-    username = "f";
-    homeDirectory = "/home/f";
-    stateVersion = "25.05";
-  };
+  home.stateVersion = "25.05";
 }

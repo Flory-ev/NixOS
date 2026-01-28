@@ -15,10 +15,6 @@
       enable = true;
     };
 
-    home = {
-      enable = true;
-    };
-
     steam = {
       enable = true;
       remotePlay.openFirewall = true;

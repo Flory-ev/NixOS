@@ -25,6 +25,7 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./hosts/vortex
+            stylix.nixosModules.stylix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;

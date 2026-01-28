@@ -6,10 +6,18 @@
 }:
 {
   imports = [
+    ../home/core/users.nix
     ../system/core/boot.nix
     ../system/core/settings.nix
     ../system/core/locale.nix
     ../system/core/security.nix
     ../system/software/packages.nix
+    ../system/software/programs.nix
+    ../system/software/services.nix
+    ../system/hardware/networking.nix
+    ../system/hardware/bluetooth.nix
+    ../system/hardware/virtualization.nix
+    ../system/desktop/desktop.nix
+    ../system/desktop/stylix.nix
   ];
 }

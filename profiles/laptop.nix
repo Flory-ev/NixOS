@@ -90,12 +90,16 @@
     lidSwitchDocked = "ignore";
     lidSwitchExternalPower = "suspend";
 
-    extraConfig = ''
-      HandlePowerKey=suspend
-      IdleAction=suspend
-      IdleActionSec=30min
-    '';
+    settings.Login = {
+      HandlePowerKey = "suspend";
+      IdleAction = "suspend";
+      IdleActionSec = "30min";
+    };
   };
+
+  # TLP conflicts with power-profiles-daemon; explicitly disable
+  # the latter since we manage power with TLP on laptops.
+  services.power-profiles-daemon.enable = false;
 
   hardware.enableRedistributableFirmware = true;
 

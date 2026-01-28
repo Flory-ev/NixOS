@@ -1,4 +1,4 @@
-{ user, ... }:
+{ config, pkgs, ... }:
 
 {
   programs = {
@@ -25,7 +25,7 @@
 
     nh = {
       enable = true;
-      flake = "/home/${user}/nixos";
+      flake = "/home/${config.home.username}/nixos";
       clean = {
         enable = true;
         extraArgs = "--keep-since 4d --keep 3";
