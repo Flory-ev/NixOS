@@ -1,6 +1,6 @@
 # NixOS Configuration
 
-[![NixOS](https://img.shields.io/badge/NixOS-25.11-blue?logo=nixos&logoColor=white)](https://nixos.org)
+[![NixOS](https://img.shields.io/badge/NixOS-Unstable-blue?logo=nixos&logoColor=white)](https://nixos.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flake](https://img.shields.io/badge/Flake-Enabled-brightgreen?logo=nixos)](https://nixos.wiki/wiki/Flakes)
 
