@@ -251,6 +251,13 @@
       enable = true;
       libraries = with pkgs; [ stdenv.cc.cc zlib ];
     };
+
+    # Nix Helper
+    nh = {
+      enable = true;
+      flake = "/home/f/nixos";
+    };
+
   };
 
   # ============================================================================
@@ -263,7 +270,6 @@
     eza
     fd
     fzf
-    nh
     wget
     zoxide
   ];
