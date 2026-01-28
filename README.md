@@ -128,6 +128,7 @@ nh clean all
 
 ### Host Information
 
+|  |  |
 |----------|-------|
 | **User** | `f` |
 | **Hostname** | `vortex` |
