@@ -132,8 +132,7 @@ nh clean all
 |----------|-------|
 | **Hostname** | `vortex` |
 | **Profile** | Laptop |
-| **Primary DE** | Plasma 6 |
-| **Secondary DE** | COSMIC |
+| **Desktop Environment** | COSMIC |
 | **Display Manager** | COSMIC Greeter |
 | **Theme** | Gruvbox Dark Hard (Stylix) |
 | **Shell** | Zsh + Oh My Zsh |
