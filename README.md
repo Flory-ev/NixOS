@@ -130,13 +130,13 @@ nh clean all
 
 | Property | Value |
 |----------|-------|
+| **User** | `f` |
 | **Hostname** | `vortex` |
 | **Profile** | Laptop |
-| **Desktop Environment** | COSMIC |
+| **Desktop Environment** | Computer Operating System Main Interface Components |
 | **Display Manager** | COSMIC Greeter |
+| **Shell** | Zsh |
 | **Theme** | Gruvbox Dark Hard (Stylix) |
-| **Shell** | Zsh + Oh My Zsh |
-| **User** | `f` |
 
 ### Key Features
 
@@ -166,29 +166,29 @@ nh clean all
 1. **Install NixOS** using the graphical or minimal ISO
 
 2. **Enable Flakes** (if not already):
-   ```bash
+   ```shell
    sudo nix-shell -p nixFlakes
    ```
 
 3. **Clone this repository**:
-   ```bash
+   ```shell
    git clone https://github.com/IIFlory/NixOS-Configuration.git ~/nixos
    cd ~/nixos
    ```
 
 4. **Generate hardware config** (for new hosts):
-   ```bash
+   ```shell
    sudo nixos-generate-config --show-hardware-config > hosts/$(hostname)/hardware-configuration.nix
    ```
 
 5. **Build and switch**:
-   ```bash
+   ```shell
    sudo nixos-rebuild switch --flake .#$(hostname)
    ```
 
 ### Adding to Existing NixOS
 
-```bash
+```shell
 # Backup existing config
 sudo mv /etc/nixos /etc/nixos.backup
 
