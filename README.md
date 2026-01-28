@@ -128,12 +128,12 @@ nh clean all
 
 ### Host Information
 
-|  |  |
-|----------|-------|
+|          |     |
+|----------|-----|
 | **User** | `f` |
 | **Hostname** | `vortex` |
 | **Profile** | Laptop |
-| **Desktop Environment** | Computer Operating System Main Interface Components |
+| **Desktop Environment** | COSMIC |
 | **Display Manager** | COSMIC Greeter |
 | **Shell** | Zsh |
 | **Theme** | Gruvbox Dark Hard (Stylix) |
