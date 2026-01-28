@@ -29,17 +29,17 @@
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-      
+
       CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-      
+
       # Пороги зарядки батареи (продлевает жизнь батареи)
       START_CHARGE_THRESH_BAT0 = 20;
       STOP_CHARGE_THRESH_BAT0 = 80;
-      
+
       # Отключение USB в режиме батареи для экономии
       USB_AUTOSUSPEND = 1;
-      
+
       # Управление дисками
       DISK_DEVICES = "nvme0n1 sda";
       DISK_APM_LEVEL_ON_AC = "254 254";
@@ -67,7 +67,7 @@
 
   # Управление яркостью экрана
   programs.light.enable = true;
-  
+
   # Добавление пользователя в группу video для управления яркостью
   users.users = lib.mkDefault {
     # Это нужно будет адаптировать под ваше имя пользователя
@@ -103,10 +103,10 @@
 
   # Утилиты для ноутбука
   environment.systemPackages = with pkgs; [
-    powertop          # Мониторинг энергопотребления
-    acpi              # Информация о батарее и температуре
-    brightnessctl     # Управление яркостью
-    usbutils          # Утилиты для USB
+    powertop # Мониторинг энергопотребления
+    acpi # Информация о батарее и температуре
+    brightnessctl # Управление яркостью
+    usbutils # Утилиты для USB
   ];
 
   # Suspend при закрытии крышки
@@ -114,7 +114,7 @@
     lidSwitch = "suspend";
     lidSwitchDocked = "ignore";
     lidSwitchExternalPower = "suspend";
-    
+
     extraConfig = ''
       HandlePowerKey=suspend
       IdleAction=suspend

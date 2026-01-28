@@ -6,7 +6,6 @@
     bitwarden-desktop
     chromium
     discord
-    firefox
     kitty
     lutris
     ncdu
