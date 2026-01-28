@@ -1,6 +1,6 @@
 # NixOS Configuration
 
-[![NixOS](https://img.shields.io/badge/NixOS-24.11-blue?logo=nixos&logoColor=white)](https://nixos.org)
+[![NixOS](https://img.shields.io/badge/NixOS-25.11-blue?logo=nixos&logoColor=white)](https://nixos.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flake](https://img.shields.io/badge/Flake-Enabled-brightgreen?logo=nixos)](https://nixos.wiki/wiki/Flakes)
 
@@ -50,7 +50,7 @@
 
 ```bash
 # Clone the repository
-git clone <your-repo-url> ~/nixos
+git clone https://github.com/IIFlory/NixOS-Configuration.git ~/nixos
 cd ~/nixos
 
 # Rebuild the system (replace 'vortex' with your hostname)
@@ -205,7 +205,7 @@ nh clean all
 
 3. **Clone this repository**:
    ```bash
-   git clone <your-repo-url> ~/nixos
+   git clone https://github.com/IIFlory/NixOS-Configuration.git ~/nixos
    cd ~/nixos
    ```
 
@@ -499,7 +499,7 @@ sudo nixos-rebuild switch --rollback
 ### Official Documentation
 
 - [NixOS Manual](https://nixos.org/manual/nixos/stable/)
-- [Nix Pills](https://nixos.org/guides/nix-pills/) – Learn Nix step by step
+- [Nix Pills](https://nixos.org/guides/nix-pills/)
 - [Home Manager Manual](https://nix-community.github.io/home-manager/)
 
 ### Configuration References
