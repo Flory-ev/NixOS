@@ -4,14 +4,13 @@
   pkgs,
   ...
 }:
+
 {
   imports = [
     ./base.nix
-    ../modules/system/audio.nix
-    ../modules/system/graphics.nix
+    ../system/hardware/audio.nix
+    ../system/hardware/graphics.nix
   ];
-
-  programs.dconf.enable = true;
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -20,5 +19,22 @@
     liberation_ttf
     fira-code
     fira-code-symbols
+    font-awesome
+    jetbrains-mono
   ];
+
+  hardware = {
+    enableRedistributableFirmware = true;
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+  };
+
+  services = {
+    udisks2.enable = true;
+    gvfs.enable = true;
+    fstrim.enable = true;
+    fwupd.enable = true;
+  };
 }

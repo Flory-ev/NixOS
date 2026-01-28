@@ -4,16 +4,14 @@
   pkgs,
   ...
 }:
+
 {
   imports = [
     ./base.nix
-    ../modules/system/audio.nix
-    ../modules/system/graphics.nix
+    ../system/hardware/audio.nix
+    ../system/hardware/graphics.nix
   ];
 
-  programs.dconf.enable = true;
-
-  # Шрифты
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk-sans
@@ -21,9 +19,10 @@
     liberation_ttf
     fira-code
     fira-code-symbols
+    font-awesome
+    jetbrains-mono
   ];
 
-  # Управление питанием для ноутбука
   services.tlp = {
     enable = true;
     settings = {
@@ -33,48 +32,37 @@
       CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
 
-      # Пороги зарядки батареи (продлевает жизнь батареи)
       START_CHARGE_THRESH_BAT0 = 20;
       STOP_CHARGE_THRESH_BAT0 = 80;
 
-      # Отключение USB в режиме батареи для экономии
-      USB_AUTOSUSPEND = 1;
+      USB_AUTOSUSPEND = true;
 
-      # Управление дисками
       DISK_DEVICES = "nvme0n1 sda";
       DISK_APM_LEVEL_ON_AC = "254 254";
       DISK_APM_LEVEL_ON_BAT = "128 128";
+
+      WIFI_PWR_ON_AC = "off";
+      WIFI_PWR_ON_BAT = "on";
     };
   };
 
-  # Автоматическое управление частотой CPU
-  services.auto-cpufreq.enable = true;
-
-  # Управление температурой (для Intel процессоров)
   services.thermald.enable = true;
 
-  # Поддержка тачпада
   services.libinput = {
     enable = true;
     touchpad = {
       naturalScrolling = true;
       tapping = true;
-      disableWhileTyping = true;
-      accelSpeed = "0.3";
+      disableWhileTyping = false;
+      accelSpeed = "0.5";
       clickMethod = "clickfinger";
+      tappingDragLock = false;
+      scrollMethod = "twofinger";
     };
   };
 
-  # Управление яркостью экрана
   programs.light.enable = true;
 
-  # Добавление пользователя в группу video для управления яркостью
-  users.users = lib.mkDefault {
-    # Это нужно будет адаптировать под ваше имя пользователя
-    # или можно использовать в конкретной конфигурации хоста
-  };
-
-  # Bluetooth
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
@@ -87,29 +75,16 @@
   };
   services.blueman.enable = true;
 
-  # Поддержка сканера отпечатков пальцев (если есть)
-  # services.fprintd.enable = true;
+  services.fprintd.enable = true;
 
-  # Ускорение графики для ноутбуков
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
-  # Автоматическое монтирование USB и внешних дисков
   services.udisks2.enable = true;
   services.gvfs.enable = true;
 
-  # Утилиты для ноутбука
-  environment.systemPackages = with pkgs; [
-    powertop # Мониторинг энергопотребления
-    acpi # Информация о батарее и температуре
-    brightnessctl # Управление яркостью
-    usbutils # Утилиты для USB
-  ];
-
-  # Suspend при закрытии крышки
   services.logind = {
     lidSwitch = "suspend";
     lidSwitchDocked = "ignore";
@@ -122,9 +97,11 @@
     '';
   };
 
-  # Включение firmware для Wi-Fi и других устройств
   hardware.enableRedistributableFirmware = true;
 
-  # Оптимизация для SSD/NVMe (если используется)
+  services.fwupd.enable = true;
+
   services.fstrim.enable = true;
+
+  boot.kernelParams = [ "nvme_core.default_ps_max_latency_us=0" ];
 }
