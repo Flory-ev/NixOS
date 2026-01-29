@@ -1,7 +1,7 @@
 # NixOS Configuration
 
-[![NixOS](https://img.shields.io/badge/NixOS-Unstable-blue?logo=nixos&logoColor=white)](https://nixos.org)
-[![Flake](https://img.shields.io/badge/Flake-Enabled-brightgreen?logo=nixos)](https://wiki.nixos.org/wiki/Flakes)
+[![NixOS](https://img.shields.io/badge/NixOS-25.05-blue?logo=nixos&logoColor=white)](https://nixos.org)
+[![Flake](https://img.shields.io/badge/Flake-Enabled-green?logo=nixos)](https://wiki.nixos.org/wiki/Flakes)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > A modular, reproducible, and declarative NixOS configuration with support for multiple machine profiles.
