@@ -21,19 +21,6 @@
 	};
 
   services = {
-		logind = {
-      lidSwitch = "suspend";
-      lidSwitchDocked = "ignore";
-      lidSwitchExternalPower = "suspend";
-
-      extraConfig = ''
-        HandlePowerKey=suspend
-        LockSessions=yes
-				IdleAction=suspend
-        IdleActionSec=30min
-      '';
-    };
-
     tlp = {
       enable = true;
       settings = {

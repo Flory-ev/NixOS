@@ -32,7 +32,6 @@
 | 📦 **Modular Design** | Clean separation of concerns across hosts, profiles, and modules |
 | 🖥️ **Multi-Host** | Single configuration for multiple machines |
 | 🔋 **Laptop Optimized** | Power management, battery care, and thermal controls |
-| 🎨 **Unified Theming** | System-wide Gruvbox theme via Stylix |
 | 🏠 **Home Manager** | Declarative user environment management |
 | ⚡ **Auto-Cleanup** | Automatic garbage collection and store optimization |
 | 🔐 **Security Hardened** | Firewall, DNSSEC, and fingerprint authentication |
@@ -103,10 +102,6 @@ nh clean all
 │   │   ├── networking.nix          # NetworkManager & firewall
 │   │   └── virtualization.nix      # QEMU/KVM & libvirt
 │   │
-│   ├── desktop/                    # Desktop environment
-│   │   ├── desktop.nix             # COSMIC + Plasma 6 DE
-│   │   └── stylix.nix              # System-wide theming
-│   │
 │   └── software/                   # System software
 │       ├── packages.nix            # System-wide packages
 │       ├── programs.nix            # Program configurations
@@ -116,10 +111,14 @@ nh clean all
     ├── core/
     │   ├── home.nix                # Home Manager entry
     │   └── users.nix               # User definitions
+
+    ├── desktop/                    # Desktop environment & theming
+    │   ├── desktop.nix             # COSMIC + Plasma 6 DE
+    │   └── stylix.nix              # Stylix theming (colors, fonts, cursors)
     │
     └── software/
         ├── packages.nix            # User packages
-        └── programs.nix            # User programs (zsh, git, etc.)
+        └── programs.nix            # User programs
 ```
 
 ---
@@ -136,7 +135,6 @@ nh clean all
 | **Desktop Environment** | COSMIC |
 | **Display Manager** | COSMIC Greeter |
 | **Shell** | Zsh |
-| **Theme** | Gruvbox Dark Hard (Stylix) |
 
 ### Key Features
 
@@ -202,26 +200,6 @@ sudo nixos-rebuild switch --flake ~/nixos#vortex
 ---
 
 ## 🎨 Customization
-
-### 🖌️ Theming with Stylix
-
-Edit `system/desktop/stylix.nix`:
-
-```nix
-{
-  stylix = {
-    # Change color scheme
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-    
-    # Or try another theme
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/dracula.yaml";
-    
-    polarity = "dark";  # or "light"
-  };
-}
-```
-
-> 📚 [Available themes](https://github.com/tinted-theming/base16-schemes)
 
 ### 🖥️ Desktop Environment
 
@@ -471,8 +449,6 @@ sudo nixos-rebuild switch --rollback
 
 ### Configuration References
 
-- [Stylix Documentation](https://danth.github.io/stylix/)
-- [Base16 Themes](https://github.com/base16-project/base16-schemes)
 - [NixOS Packages](https://search.nixos.org/packages)
 - [NixOS Options](https://search.nixos.org/options)
 

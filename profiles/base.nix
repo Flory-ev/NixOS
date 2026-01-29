@@ -17,7 +17,6 @@
     ../system/hardware/networking.nix
     ../system/hardware/bluetooth.nix
     ../system/hardware/virtualization.nix
-    ../system/desktop/desktop.nix
-    ../system/desktop/stylix.nix
+    ../home/desktop/desktop.nix
   ];
 }

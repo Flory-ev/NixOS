@@ -5,17 +5,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
   outputs =
     {
       self,
       nixpkgs,
       home-manager,
-      stylix,
       ...
     }@inputs:
     {
@@ -25,7 +20,6 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./hosts/vortex
-            stylix.nixosModules.stylix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;

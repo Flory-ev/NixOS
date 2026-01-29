@@ -11,8 +11,6 @@
     ../system/hardware/graphics.nix
   ];
 
-  hardware.enableRedistributableFirmware = true;
-
   services = {
     udisks2.enable = true;
     gvfs.enable = true;
