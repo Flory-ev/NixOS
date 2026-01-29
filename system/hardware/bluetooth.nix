@@ -11,6 +11,4 @@
       };
     };
   };
-
-  services.blueman.enable = true;
 }
