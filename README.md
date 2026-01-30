@@ -391,54 +391,6 @@ Extends base for stationary workstations:
 
 ---
 
-## 🐛 Troubleshooting
-
-### NVMe SSD Freezes
-
-**Symptom**: System freezes during I/O operations
-
-**Fix**: Already included in `profiles/laptop.nix`:
-```nix
-boot.kernelParams = [ "nvme_core.default_ps_max_latency_us=0" ];
-```
-
-Remove if using desktop or if not experiencing issues.
-
-### Battery Stops at 80%
-
-**This is intentional** – extends battery longevity.
-
-To charge to 100%, temporarily disable TLP:
-```bash
-sudo tlp fullcharge
-```
-
-Or adjust thresholds in `profiles/laptop.nix`.
-
-### Desktop Session Won't Change
-
-After changing `defaultSession`, clear the previous selection:
-
-1. Log out
-2. At the login screen, click the session selector
-3. Choose your desired session
-4. Log in
-
-### Rebuild Fails
-
-```bash
-# Check for syntax errors
-nix flake check
-
-# Show detailed errors
-sudo nixos-rebuild switch --flake .#vortex --show-trace
-
-# Rollback to previous generation
-sudo nixos-rebuild switch --rollback
-```
-
----
-
 ## 📄 License
 
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
