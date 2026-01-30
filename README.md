@@ -439,33 +439,6 @@ sudo nixos-rebuild switch --rollback
 
 ---
 
-## 📚 Resources
-
-### Official Documentation
-
-- [NixOS Manual](https://nixos.org/manual/nixos/stable/)
-- [Nix Pills](https://nixos.org/guides/nix-pills/)
-- [Home Manager Manual](https://nix-community.github.io/home-manager/)
-
-### Configuration References
-
-- [NixOS Packages](https://search.nixos.org/packages)
-- [NixOS Options](https://search.nixos.org/options)
-
-### Community
-
-- [NixOS Discourse](https://discourse.nixos.org/)
-- [r/NixOS](https://reddit.com/r/NixOS)
-- [NixOS Wiki](https://nixos.wiki/)
-
----
-
 ## 📄 License
 
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
-
----
-
-<p align="center">
-  <sub>Built with ❄️ NixOS</sub>
-</p>
