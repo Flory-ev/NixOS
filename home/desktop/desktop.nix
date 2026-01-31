@@ -1,5 +1,4 @@
 { pkgs, variables, ... }:
-
 {
   environment = {
     cosmic.excludePackages = with pkgs; [
