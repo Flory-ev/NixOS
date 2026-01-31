@@ -1,5 +1,4 @@
 { variables, ... }:
-
 {
   time.timeZone = variables.timezone;
 
