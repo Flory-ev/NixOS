@@ -20,8 +20,7 @@
     git = {
       enable = true;
       settings = {
-        init.defaultBranch = variables.git.defaultBranch;
-        user = {
+       user = {
           name = variables.fullName;
           email = variables.email;
         };
