@@ -214,5 +214,3 @@ enableCosmic = true;
 - [NixOS Wiki](https://nixos.wiki/)
 
 ---
-
-*Happy Nixing! 🎉*
