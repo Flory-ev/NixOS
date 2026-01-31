@@ -25,11 +25,4 @@
       };
     };
   };
-
-  # ─────────────────────────────────────────────────────────────────────────────
-  # BLUEMAN
-  # GUI for managing Bluetooth devices (appears in system tray)
-  # ─────────────────────────────────────────────────────────────────────────────
-
-  services.blueman.enable = variables.hardware.bluetooth;
 }

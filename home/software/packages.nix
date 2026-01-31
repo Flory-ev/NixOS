@@ -68,7 +68,7 @@
       else if variables.editor == "helix" then
         helix
       else
-        vscodium
+        antigravity
     )
 
     # Browser - from variables.nix (additional to Firefox)
