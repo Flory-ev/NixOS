@@ -12,6 +12,4 @@
   ];
 
   networking.hostName = variables.hostname;
-
-  home-manager.backupFileExtension = "hm-bak";
 }
