@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  variables,
   ...
 }:
 {
@@ -10,7 +11,7 @@
     ../../profiles/laptop.nix
   ];
 
-  networking.hostName = "vortex";
+  networking.hostName = variables.hostname;
 
   home-manager.backupFileExtension = "hm-bak";
 }

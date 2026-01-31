@@ -1,16 +1,16 @@
-{ pkgs, ... }:
+{ pkgs, variables, ... }:
 
 {
-  users.users.f = {
+  users.users.${variables.username} = {
     isNormalUser = true;
     isSystemUser = false;
     shell = pkgs.zsh;
-    group = "f";
-		extraGroups = [
+    group = variables.username;
+    extraGroups = [
       "wheel"
       "networkmanager"
     ];
   };
 
-  users.groups.f = { };
+  users.groups.${variables.username} = { };
 }

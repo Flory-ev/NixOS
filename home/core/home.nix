@@ -1,9 +1,14 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  variables,
+  ...
+}:
 {
   imports = [
     ../software/packages.nix
     ../software/programs.nix
   ];
 
-  home.stateVersion = "25.05";
+  home.stateVersion = variables.stateVersion;
 }

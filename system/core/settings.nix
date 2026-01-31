@@ -1,4 +1,4 @@
-{ ... }:
+{ variables, ... }:
 
 {
   nix = {
@@ -14,11 +14,11 @@
       ];
     };
 
-		gc = {
-		  automatic = true;
-		  dates = "weekly";
-		  options = "--delete-older-than 7d";
-		};
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
 
     optimise = {
       automatic = true;
@@ -28,5 +28,5 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  system.stateVersion = "25.05";
+  system.stateVersion = variables.stateVersion;
 }

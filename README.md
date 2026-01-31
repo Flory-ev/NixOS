@@ -77,6 +77,7 @@ nh clean all
 .
 ├── 📄 flake.nix                    # Flake entry point & inputs
 ├── 🔒 flake.lock                   # Locked dependency versions
+├── ⚙️ variables.nix                # Central configuration (edit this!)
 │
 ├── 🖥️ hosts/                       # Host-specific configurations
 │   └── vortex/
@@ -87,6 +88,7 @@ nh clean all
 │   ├── base.nix                    # Base config (all machines)
 │   ├── desktop.nix                 # Desktop workstation profile
 │   └── laptop.nix                  # Laptop profile (power management)
+
 │
 ├── ⚙️ system/                      # System-level NixOS modules
 │   ├── core/                       # Essential system settings
@@ -201,15 +203,59 @@ sudo nixos-rebuild switch --flake ~/nixos#vortex
 
 ## 🎨 Customization
 
-### 🖥️ Desktop Environment
+### ⚙️ Central Configuration (`variables.nix`)
 
-Edit `system/desktop/desktop.nix`:
+**This is the main file to edit!** All common settings are centralized here:
 
 ```nix
-# Set default session
-services.displayManager.defaultSession = "plasma";  # or "cosmic"
+{
+  # User Configuration
+  username = "f";
+  fullName = "F";
+  email = "vladislavtkachuk@yahoo.com";
 
-# Enable/disable desktop environments
+  # System Configuration
+  hostname = "vortex";
+  system = "x86_64-linux";
+  stateVersion = "25.05";
+
+  # Locale & Regional Settings
+  timezone = "Europe/Copenhagen";
+  locale = "en_US.UTF-8";
+
+  # Keyboard configuration
+  keyboard = {
+    layout = "us,ru";
+    variant = "dvorak";
+    options = "grp:alt_shift_toggle";
+  };
+
+  # Desktop Configuration
+  defaultSession = "plasma";  # or "cosmic"
+
+  # Git Configuration
+  git = {
+    defaultBranch = "main";
+  };
+
+  # Paths
+  flakePath = "/home/f/nixos";
+}
+```
+
+Simply edit `variables.nix` and rebuild to apply changes across the entire system.
+
+### 🖥️ Desktop Environment
+
+The default session is set in `variables.nix`:
+
+```nix
+defaultSession = "plasma";  # or "cosmic"
+```
+
+To enable/disable desktop environments, edit `home/desktop/desktop.nix`:
+
+```nix
 services.desktopManager.plasma6.enable = true;
 services.desktopManager.cosmic.enable = true;
 ```

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, variables, ... }:
 
 {
   environment = {
@@ -14,7 +14,7 @@
   services = {
     displayManager = {
       cosmic-greeter.enable = true;
-      defaultSession = "plasma";
+      defaultSession = variables.defaultSession;
     };
 
     desktopManager = {

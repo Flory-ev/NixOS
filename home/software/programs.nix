@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  variables,
+  ...
+}:
 
 {
   programs = {
@@ -15,17 +20,17 @@
     git = {
       enable = true;
       settings = {
-        init.defaultBranch = "main";
+        init.defaultBranch = variables.git.defaultBranch;
         user = {
-          name = "F";
-          email = "vladislavtkachuk@yahoo.com";
+          name = variables.fullName;
+          email = variables.email;
         };
       };
     };
 
     nh = {
       enable = true;
-      flake = "/home/${config.home.username}/nixos";
+      flake = variables.flakePath;
       clean = {
         enable = true;
         extraArgs = "--keep-since 4d --keep 3";

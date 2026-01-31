@@ -1,26 +1,26 @@
-{ ... }:
+{ variables, ... }:
 
 {
-  time.timeZone = "Europe/Copenhagen";
+  time.timeZone = variables.timezone;
 
   i18n = {
-    defaultLocale = "en_US.UTF-8";
+    defaultLocale = variables.locale;
     extraLocaleSettings = {
-      LC_ADDRESS = "en_US.UTF-8";
-      LC_IDENTIFICATION = "en_US.UTF-8";
-      LC_MEASUREMENT = "en_US.UTF-8";
-      LC_MONETARY = "en_US.UTF-8";
-      LC_NAME = "en_US.UTF-8";
-      LC_NUMERIC = "en_US.UTF-8";
-      LC_PAPER = "en_US.UTF-8";
-      LC_TELEPHONE = "en_US.UTF-8";
-      LC_TIME = "en_US.UTF-8";
+      LC_ADDRESS = variables.locale;
+      LC_IDENTIFICATION = variables.locale;
+      LC_MEASUREMENT = variables.locale;
+      LC_MONETARY = variables.locale;
+      LC_NAME = variables.locale;
+      LC_NUMERIC = variables.locale;
+      LC_PAPER = variables.locale;
+      LC_TELEPHONE = variables.locale;
+      LC_TIME = variables.locale;
     };
   };
 
   services.xserver.xkb = {
-    layout = "us,ru";
-    variant = "dvorak";
-    options = "grp:alt_shift_toggle";
+    layout = variables.keyboard.layout;
+    variant = variables.keyboard.variant;
+    options = variables.keyboard.options;
   };
 }
