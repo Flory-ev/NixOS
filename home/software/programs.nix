@@ -4,7 +4,6 @@
   variables,
   ...
 }:
-
 {
   programs = {
     direnv = {
