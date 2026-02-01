@@ -16,6 +16,11 @@
   ...
 }:
 
+let
+  # Auto-detect laptop by checking for battery presence
+  isLaptop = variables.laptop.enable || (builtins.pathExists /sys/class/power_supply/BAT0);
+in
+
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -157,12 +162,13 @@
   # Systemd-resolved for DNS
   services.resolved = {
     enable = true;
-    dnssec = "true";
-    dnsovertls = "opportunistic";
-    fallbackDns = [
-      "1.1.1.1"
-      "8.8.8.8"
-    ];
+    settings = {
+      Resolve = {
+        DNSSEC = "true";
+        DNSOverTLS = "opportunistic";
+        FallbackDNS = "1.1.1.1 8.8.8.8";
+      };
+    };
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -204,7 +210,7 @@
     extraPackages =
       with pkgs;
       lib.optionals variables.hardware.videoAcceleration [
-        vaapiVdpau
+        libva-vdpau-driver
         libvdpau-va-gl
       ];
   };
@@ -238,15 +244,6 @@
       package = pkgs.qemu_kvm;
       runAsRoot = true;
       swtpm.enable = true;
-      ovmf = {
-        enable = true;
-        packages = [
-          (pkgs.OVMF.override {
-            secureBoot = true;
-            tpmSupport = true;
-          }).fd
-        ];
-      };
     };
   };
 
@@ -269,11 +266,8 @@
   # LAPTOP-SPECIFIC
   # ═══════════════════════════════════════════════════════════════════════════
 
-  # Auto-detect laptop by checking for battery
-  config.laptop.enable = lib.mkDefault (builtins.pathExists /sys/class/power_supply/BAT0);
-
   # Power management
-  services.tlp = lib.mkIf config.laptop.enable {
+  services.tlp = lib.mkIf isLaptop {
     enable = true;
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
@@ -290,13 +284,11 @@
     };
   };
 
-  # Power profiles daemon (alternative to TLP)
-  services.power-profiles-daemon.enable = lib.mkIf (
-    config.laptop.enable && !config.services.tlp.enable
-  ) true;
+  # Power profiles daemon (conflicts with TLP and auto-cpufreq)
+  services.power-profiles-daemon.enable = lib.mkForce false;
 
   # Touchpad
-  services.libinput = lib.mkIf config.laptop.enable {
+  services.libinput = lib.mkIf isLaptop {
     enable = true;
     touchpad = {
       naturalScrolling = true;
@@ -308,15 +300,18 @@
   };
 
   # Better memory management for laptops
-  services.earlyoom = lib.mkIf config.laptop.enable {
+  services.earlyoom = lib.mkIf isLaptop {
     enable = true;
     freeMemThreshold = 5;
     freeSwapThreshold = 10;
-    preferRegex = "^(Web Content|Isolated Web Co)$";
+    extraArgs = [
+      "--prefer"
+      "^(Web Content|Isolated Web Co)$"
+    ];
   };
 
   # Auto-cpufreq for dynamic CPU frequency scaling
-  services.auto-cpufreq = lib.mkIf config.laptop.enable {
+  services.auto-cpufreq = lib.mkIf isLaptop {
     enable = true;
     settings = {
       charger = {
@@ -351,7 +346,7 @@
   };
 
   # GNOME
-  services.xserver.desktopManager.gnome = {
+  services.desktopManager.gnome = {
     enable = variables.desktopEnvironment == "gnome";
   };
   services.gnome = lib.mkIf (variables.desktopEnvironment == "gnome") {
@@ -468,7 +463,6 @@
       experimental-features = [
         "nix-command"
         "flakes"
-        "repl-flake"
       ];
       warn-dirty = false;
       auto-optimise-store = true;
@@ -578,8 +572,7 @@
       binfmt = true;
     };
 
-    # Flatpak
-    flatpak.enable = true;
+    # Flatpak is managed under services.flatpak
 
     # Git
     git = {
@@ -664,7 +657,7 @@
     # Firefox
     firefox = {
       enable = true;
-      nativeMessagingHosts.packages = [ pkgs.plasma-browser-integration ];
+      nativeMessagingHosts.packages = [ pkgs.kdePackages.plasma-browser-integration ];
     };
   };
 
@@ -673,7 +666,11 @@
   # ═══════════════════════════════════════════════════════════════════════════
 
   # Flatpak repo
-  services.flatpak.packages = [ ];
+  # Flatpak
+  services.flatpak = {
+    enable = true;
+    packages = [ ];
+  };
 
   # Flatpak remotes
   services.flatpak.remotes = lib.mkIf config.services.flatpak.enable [
@@ -687,7 +684,6 @@
   services.locate = {
     enable = true;
     package = pkgs.plocate;
-    localuser = null;
     interval = "daily";
     prunePaths = [
       "/tmp"
@@ -729,7 +725,7 @@
   };
 
   # Thermald for thermal management
-  services.thermald.enable = config.laptop.enable;
+  services.thermald.enable = isLaptop;
 
   # ═══════════════════════════════════════════════════════════════════════════
   # BACKUP
@@ -788,7 +784,7 @@
     doc.enable = true;
     man.enable = true;
     info.enable = true;
-    nixos.includeAllModules = true;
+    nixos.includeAllModules = false;
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -839,7 +835,7 @@
     packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk-sans
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       liberation_ttf
       fira-code
       fira-code-symbols

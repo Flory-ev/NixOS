@@ -12,7 +12,7 @@
   config,
   pkgs,
   lib,
-  inputs ? {},
+  inputs ? { },
   variables,
   ...
 }:
@@ -20,23 +20,27 @@
 let
   # Helper function for conditional packages
   mkIfPkg = cond: pkg: lib.optionals cond [ pkg ];
-  
+
   # Theme colors based on style
-  themeColors = if variables.theme.style == "dark" then {
-    bg = "#1a1b26";
-    fg = "#c0caf5";
-    accent = "#7aa2f7";
-    success = "#9ece6a";
-    warning = "#e0af68";
-    error = "#f7768e";
-  } else {
-    bg = "#eff1f5";
-    fg = "#4c4f69";
-    accent = "#1e66f5";
-    success = "#40a02b";
-    warning = "#df8e1d";
-    error = "#d20f39";
-  };
+  themeColors =
+    if variables.theme.style == "dark" then
+      {
+        bg = "#1a1b26";
+        fg = "#c0caf5";
+        accent = "#7aa2f7";
+        success = "#9ece6a";
+        warning = "#e0af68";
+        error = "#f7768e";
+      }
+    else
+      {
+        bg = "#eff1f5";
+        fg = "#4c4f69";
+        accent = "#1e66f5";
+        success = "#40a02b";
+        warning = "#df8e1d";
+        error = "#d20f39";
+      };
 in
 {
   # ═══════════════════════════════════════════════════════════════════════════
@@ -53,8 +57,6 @@ in
       ".config/nixpkgs/config.nix".text = ''
         { allowUnfree = true; }
       '';
-      ".local/share/applications".source = config.lib.file.mkOutOfStoreSymlink 
-        "${config.home.homeDirectory}/.local/share/applications";
     };
 
     # Session variables
@@ -93,160 +95,215 @@ in
   # USER PACKAGES
   # ═══════════════════════════════════════════════════════════════════════════
 
-  home.packages = with pkgs; lib.flatten [
-    # ═════════════════════════════════════════════════════════════════════════
-    # Browsers
-    # ═════════════════════════════════════════════════════════════════════════
-    (if variables.browser == "chromium" then chromium
-     else if variables.browser == "firefox" then firefox
-     else if variables.browser == "brave" then brave
-     else if variables.browser == "librewolf" then librewolf
-     else if variables.browser == "qutebrowser" then qutebrowser
-     else chromium)
-    
-    # Browser extensions/tools
-    (mkIfPkg (variables.browser == "firefox") firefox-extensions.ublock-origin)
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # Development
-    # ═════════════════════════════════════════════════════════════════════════
-    (if variables.editor == "vscodium" then vscodium
-     else if variables.editor == "vscode" then vscode
-     else if variables.editor == "neovim" then neovim
-     else if variables.editor == "vim" then vim
-     else if variables.editor == "helix" then helix
-     else if variables.editor == "emacs" then emacs
-     else vscodium)
-    
-    # Language support
-    nodejs_20
-    python3
-    rustc
-    cargo
-    go
-    lua
-    nixd
-    nixpkgs-fmt
-    alejandra
-    
-    # Version managers
-    fnm  # Fast Node Manager
-    
-    # Development tools
-    git-credential-manager
-    gh  # GitHub CLI
-    lazygit
-    gitui
-    difftastic
-    tokei  # Code statistics
-    hyperfine  # Benchmarking
-    just  # Command runner
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # Terminal
-    # ═════════════════════════════════════════════════════════════════════════
-    (if variables.terminal == "kitty" then kitty
-     else if variables.terminal == "alacritty" then alacritty
-     else if variables.terminal == "wezterm" then wezterm
-     else if variables.terminal == "foot" then foot
-     else if variables.terminal == "ghostty" then ghostty
-     else kitty)
-    
-    # Terminal multiplexers
-    tmux
-    zellij
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # Communication
-    # ═════════════════════════════════════════════════════════════════════════
-    (mkIfPkg variables.apps.discord discord)
-    (mkIfPkg variables.apps.discord discord-canary)
-    (mkIfPkg variables.apps.telegram telegram-desktop)
-    (mkIfPkg variables.apps.slack slack)
-    (mkIfPkg variables.apps.thunderbird thunderbird)
-    (mkIfPkg variables.apps.element element-desktop)
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # Media
-    # ═════════════════════════════════════════════════════════════════════════
-    (mkIfPkg variables.apps.vlc vlc)
-    (mkIfPkg variables.apps.mpv mpv)
-    (mkIfPkg variables.apps.spotify spotify)
-    (mkIfPkg variables.apps.obs obs-studio)
-    (mkIfPkg variables.apps.ffmpeg ffmpeg)
-    
-    # Image editing
-    (mkIfPkg variables.apps.gimp gimp)
-    (mkIfPkg variables.apps.inkscape inkscape)
-    (mkIfPkg variables.apps.krita krita)
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # Office & Productivity
-    # ═════════════════════════════════════════════════════════════════════════
-    (mkIfPkg variables.apps.libreoffice libreoffice-qt6-fresh)
-    obsidian
-    zathura  # PDF viewer
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # Utilities
-    # ═════════════════════════════════════════════════════════════════════════
-    gnome-calculator
-    gnome-disk-utility
-    baobab  # Disk usage analyzer
-    gnome-system-monitor
-    file-roller
-    
-    # Clipboard managers
-    (mkIfPkg (variables.desktopEnvironment == "hyprland") wl-clipboard)
-    (mkIfPkg (variables.desktopEnvironment == "hyprland") cliphist)
-    
-    # Screenshot tools
-    (mkIfPkg (variables.desktopEnvironment == "hyprland") grimblast)
-    (mkIfPkg (variables.desktopEnvironment == "hyprland") swappy)
-    
-    # Notification daemon
-    (mkIfPkg (variables.desktopEnvironment == "hyprland") mako)
-    (mkIfPkg (variables.desktopEnvironment == "hyprland") libnotify)
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # Gaming
-    # ═════════════════════════════════════════════════════════════════════════
-    (mkIfPkg variables.gaming.steam steam)
-    (mkIfPkg variables.gaming.lutris lutris)
-    (mkIfPkg variables.gaming.heroic heroic)
-    (mkIfPkg variables.gaming.prismLauncher prismlauncher)
-    (mkIfPkg variables.gaming.mangohud mangohud)
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # System Tools
-    # ═════════════════════════════════════════════════════════════════════════
-    pavucontrol  # PulseAudio volume control
-    qpwgraph  # PipeWire graph editor
-    blueman  # Bluetooth manager
-    networkmanagerapplet
-    
-    # File managers
-    nautilus  # GNOME Files
-    nemo  # Cinnamon Files
-    
-    # Archive tools
-    p7zip
-    unzip
-    unrar
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # Fun & Extras
-    # ═════════════════════════════════════════════════════════════════════════
-    (mkIfPkg variables.extras.cava cava)  # Audio visualizer
-    (mkIfPkg variables.extras.pipes pipes)  # Pipe screensaver
-    (mkIfPkg variables.extras.cmatrix cmatrix)
-    (mkIfPkg variables.extras.asciiquarium asciiquarium)
-    
-    # ═════════════════════════════════════════════════════════════════════════
-    # Fonts
-    # ═════════════════════════════════════════════════════════════════════════
-    (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode" "NerdFontsSymbolsOnly" ]; })
-  ];
+  home.packages =
+    with pkgs;
+    lib.flatten [
+      # ═════════════════════════════════════════════════════════════════════════
+      # Browsers
+      # ═════════════════════════════════════════════════════════════════════════
+      (
+        if variables.browser == "chromium" then
+          chromium
+        else if variables.browser == "firefox" then
+          firefox
+        else if variables.browser == "brave" then
+          brave
+        else if variables.browser == "librewolf" then
+          librewolf
+        else if variables.browser == "qutebrowser" then
+          qutebrowser
+        else
+          chromium
+      )
+
+      # Browser extensions/tools
+      (mkIfPkg (variables.browser == "firefox") firefox-extensions.ublock-origin)
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # Development
+      # ═════════════════════════════════════════════════════════════════════════
+      (
+        if variables.editor == "vscodium" then
+          vscodium
+        else if variables.editor == "vscode" then
+          vscode
+        else if variables.editor == "neovim" then
+          neovim
+        else if variables.editor == "vim" then
+          vim
+        else if variables.editor == "helix" then
+          helix
+        else if variables.editor == "emacs" then
+          emacs
+        else
+          vscodium
+      )
+
+      # Language support
+      nodejs_20
+      python3
+      rustc
+      cargo
+      go
+      lua
+      nixd
+      nixpkgs-fmt
+      alejandra
+
+      # Version managers
+      fnm # Fast Node Manager
+
+      # Development tools
+      git-credential-manager
+      gh # GitHub CLI
+      lazygit
+      gitui
+      difftastic
+      tokei # Code statistics
+      hyperfine # Benchmarking
+      just # Command runner
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # Terminal
+      # ═════════════════════════════════════════════════════════════════════════
+      (
+        if variables.terminal == "kitty" then
+          kitty
+        else if variables.terminal == "alacritty" then
+          alacritty
+        else if variables.terminal == "wezterm" then
+          wezterm
+        else if variables.terminal == "foot" then
+          foot
+        else if variables.terminal == "ghostty" then
+          ghostty
+        else
+          kitty
+      )
+
+      # Terminal multiplexers
+      tmux
+      zellij
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # Communication
+      # ═════════════════════════════════════════════════════════════════════════
+      (mkIfPkg variables.apps.discord discord)
+      (mkIfPkg variables.apps.discord discord-canary)
+      (mkIfPkg variables.apps.telegram telegram-desktop)
+      (mkIfPkg variables.apps.slack slack)
+      (mkIfPkg variables.apps.thunderbird thunderbird)
+      (mkIfPkg variables.apps.element element-desktop)
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # Media
+      # ═════════════════════════════════════════════════════════════════════════
+      (mkIfPkg variables.apps.vlc vlc)
+      (mkIfPkg variables.apps.mpv mpv)
+      (mkIfPkg variables.apps.spotify spotify)
+      (mkIfPkg variables.apps.obs obs-studio)
+      (mkIfPkg variables.apps.ffmpeg ffmpeg)
+
+      # Image editing
+      (mkIfPkg variables.apps.gimp gimp)
+      (mkIfPkg variables.apps.inkscape inkscape)
+      (mkIfPkg variables.apps.krita krita)
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # Office & Productivity
+      # ═════════════════════════════════════════════════════════════════════════
+      (mkIfPkg variables.apps.libreoffice libreoffice-qt6-fresh)
+      obsidian
+      zathura # PDF viewer
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # Utilities
+      # ═════════════════════════════════════════════════════════════════════════
+      gnome-calculator
+      gnome-disk-utility
+      baobab # Disk usage analyzer
+      gnome-system-monitor
+      file-roller
+
+      # Clipboard managers
+      (mkIfPkg (variables.desktopEnvironment == "hyprland") wl-clipboard)
+      (mkIfPkg (variables.desktopEnvironment == "hyprland") cliphist)
+
+      # Screenshot tools
+      (mkIfPkg (variables.desktopEnvironment == "hyprland") grimblast)
+      (mkIfPkg (variables.desktopEnvironment == "hyprland") swappy)
+
+      # Notification daemon
+      (mkIfPkg (variables.desktopEnvironment == "hyprland") mako)
+      (mkIfPkg (variables.desktopEnvironment == "hyprland") libnotify)
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # Gaming
+      # ═════════════════════════════════════════════════════════════════════════
+      (mkIfPkg variables.gaming.steam steam)
+      (mkIfPkg variables.gaming.lutris lutris)
+      (mkIfPkg variables.gaming.heroic heroic)
+      (mkIfPkg variables.gaming.prismLauncher prismlauncher)
+      (mkIfPkg variables.gaming.mangohud mangohud)
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # System Tools
+      # ═════════════════════════════════════════════════════════════════════════
+      pavucontrol # PulseAudio volume control
+      qpwgraph # PipeWire graph editor
+      blueman # Bluetooth manager
+      networkmanagerapplet
+
+      # File managers
+      nautilus # GNOME Files
+      nemo # Cinnamon Files
+
+      # Archive tools
+      p7zip
+      unzip
+      unrar
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # Fun & Extras
+      # ═════════════════════════════════════════════════════════════════════════
+      (mkIfPkg variables.extras.cava cava) # Audio visualizer
+      (mkIfPkg variables.extras.pipes pipes) # Pipe screensaver
+      (mkIfPkg variables.extras.cmatrix cmatrix)
+      (mkIfPkg variables.extras.asciiquarium asciiquarium)
+
+      # ═════════════════════════════════════════════════════════════════════════
+      # Fonts
+      # ═════════════════════════════════════════════════════════════════════════
+      pkgs.nerd-fonts.jetbrains-mono
+      pkgs.nerd-fonts.fira-code
+      pkgs.nerd-fonts.symbols-only
+    ];
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # DELTA CONFIGURATION
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  programs.delta = {
+    enable = true;
+    options = {
+      features = "side-by-side line-numbers decorations";
+      syntax-theme = variables.theme.style;
+      plus-style = "syntax #003800";
+      minus-style = "syntax #380000";
+      decorations = {
+        commit-decoration-style = "bold yellow box ul";
+        file-style = "bold yellow ul";
+        file-decoration-style = "none";
+        hunk-header-decoration-style = "cyan box ul";
+      };
+      line-numbers = {
+        line-numbers-left-style = "cyan";
+        line-numbers-right-style = "cyan";
+        line-numbers-minus-style = "124";
+        line-numbers-plus-style = "28";
+      };
+    };
+  };
 
   # ═══════════════════════════════════════════════════════════════════════════
   # GIT CONFIGURATION
@@ -255,14 +312,16 @@ in
   programs.git = {
     enable = true;
     package = pkgs.gitFull;
-    
-    userName = variables.fullName;
-    userEmail = variables.email;
-    
-    extraConfig = {
+
+    settings = {
+      user = {
+        name = variables.fullName;
+        email = variables.email;
+        signingkey = lib.mkIf variables.git.gpgSign variables.git.gpgKey;
+      };
+
       init.defaultBranch = variables.git.defaultBranch;
       commit.gpgsign = variables.git.gpgSign;
-      user.signingkey = lib.mkIf variables.git.gpgSign variables.git.gpgKey;
       core = {
         editor = variables.editor;
         autocrlf = "input";
@@ -308,51 +367,57 @@ in
         autoupdate = true;
       };
       url = {
-        "https://github.com/".insteadOf = [ "gh:" "github:" ];
-        "https://gitlab.com/".insteadOf = [ "gl:" "gitlab:" ];
+        "https://github.com/".insteadOf = [
+          "gh:"
+          "github:"
+        ];
+        "https://gitlab.com/".insteadOf = [
+          "gl:"
+          "gitlab:"
+        ];
       };
-    };
 
-    aliases = {
-      # Basic
-      st = "status -sb";
-      co = "checkout";
-      br = "branch";
-      ci = "commit";
-      cp = "cherry-pick";
-      
-      # Information
-      last = "log -1 HEAD --stat";
-      visual = "log --graph --oneline --all --decorate";
-      lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-      whoami = "config user.email";
-      
-      # Undo
-      unstage = "reset HEAD --";
-      undo = "reset --soft HEAD~1";
-      amend = "commit --amend --no-edit";
-      
-      # Branch management
-      bd = "branch -d";
-      bD = "branch -D";
-      bm = "branch -m";
-      
-      # Stash
-      ss = "stash save";
-      sp = "stash pop";
-      sl = "stash list";
-      sa = "stash apply";
-      
-      # Remote
-      rv = "remote -v";
-      pl = "pull";
-      ps = "push";
-      pf = "push --force-with-lease";
-      
-      # Worktree
-      wa = "worktree add";
-      wr = "worktree remove";
-      wl = "worktree list";
+      alias = {
+        # Basic
+        st = "status -sb";
+        co = "checkout";
+        br = "branch";
+        ci = "commit";
+        cp = "cherry-pick";
+
+        # Information
+        last = "log -1 HEAD --stat";
+        visual = "log --graph --oneline --all --decorate";
+        lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        whoami = "config user.email";
+
+        # Undo
+        unstage = "reset HEAD --";
+        undo = "reset --soft HEAD~1";
+        amend = "commit --amend --no-edit";
+
+        # Branch management
+        bd = "branch -d";
+        bD = "branch -D";
+        bm = "branch -m";
+
+        # Stash
+        ss = "stash save";
+        sp = "stash pop";
+        sl = "stash list";
+        sa = "stash apply";
+
+        # Remote
+        rv = "remote -v";
+        pl = "pull";
+        ps = "push";
+        pf = "push --force-with-lease";
+
+        # Worktree
+        wa = "worktree add";
+        wr = "worktree remove";
+        wl = "worktree list";
+      };
     };
 
     ignores = [
@@ -363,51 +428,29 @@ in
       "*.swo"
       "*~"
       ".DS_Store"
-      
+
       # Build artifacts
       "build/"
       "dist/"
       "target/"
       "node_modules/"
       ".cache/"
-      
+
       # Logs
       "*.log"
       "logs/"
-      
+
       # Environment
       ".env"
       ".env.local"
       ".env.*.local"
-      
+
       # Temporary files
       "tmp/"
       "temp/"
       "*.tmp"
       "*.temp"
     ];
-
-    delta = {
-      enable = true;
-      options = {
-        features = "side-by-side line-numbers decorations";
-        syntax-theme = variables.theme.style;
-        plus-style = "syntax #003800";
-        minus-style = "syntax #380000";
-        decorations = {
-          commit-decoration-style = "bold yellow box ul";
-          file-style = "bold yellow ul";
-          file-decoration-style = "none";
-          hunk-header-decoration-style = "cyan box ul";
-        };
-        line-numbers = {
-          line-numbers-left-style = "cyan";
-          line-numbers-right-style = "cyan";
-          line-numbers-minus-style = "124";
-          line-numbers-plus-style = "28";
-        };
-      };
-    };
 
     lfs.enable = true;
   };
@@ -427,7 +470,7 @@ in
     "...." = "cd ../../..";
     "~" = "cd ~";
     "-" = "cd -";
-    
+
     # List
     ls = "eza --icons --group-directories-first";
     l = "eza --icons --group-directories-first";
@@ -435,7 +478,7 @@ in
     ll = "eza -lah --icons --group-directories-first";
     lt = "eza --tree --icons";
     llt = "eza -lah --tree --icons";
-    
+
     # File operations
     cat = "bat --paging=never";
     less = "bat";
@@ -446,14 +489,14 @@ in
     ps = "procs";
     top = "btop";
     htop = "btop";
-    
+
     # Nix
     rebuild = "nh os switch";
     update = "nh os switch --update";
     nix-clean = "nix-collect-garbage -d";
     nix-search = "nix search nixpkgs";
     nix-info = "nix-shell -p nix-info --run 'nix-info -m'";
-    
+
     # Git shortcuts
     g = "git";
     gs = "git status";
@@ -462,33 +505,33 @@ in
     gp = "git push";
     gl = "git pull";
     gd = "git diff";
-    
+
     # Utilities
     c = "clear";
     q = "exit";
     ":q" = "exit";
-    
+
     # Safety
     rm = "rm -i";
     cp = "cp -i";
     mv = "mv -i";
     mkdir = "mkdir -p";
-    
+
     # Archives
     untar = "tar -xvf";
     untargz = "tar -xzvf";
     ungz = "gunzip";
-    
+
     # Network
     ip = "ip -color=auto";
     ping = "ping -c 5";
     ports = "ss -tulanp";
-    
+
     # Editor
     v = variables.editor;
     vi = variables.editor;
     vim = variables.editor;
-    
+
     # System
     shutdown = "systemctl poweroff";
     reboot = "systemctl reboot";
@@ -499,7 +542,7 @@ in
     enable = true;
     enableCompletion = true;
     enableVteIntegration = true;
-    
+
     bashrcExtra = ''
       # History settings
       HISTSIZE=100000
@@ -508,23 +551,23 @@ in
       HISTIGNORE="ls:ll:cd:exit:clear:history"
       shopt -s histappend
       shopt -s cmdhist
-      
+
       # Better directory navigation
       shopt -s autocd
       shopt -s dirspell
       shopt -s cdspell
-      
+
       # Check window size after each command
       shopt -s checkwinsize
-      
+
       # Enable globstar
       shopt -s globstar 2>/dev/null
-      
+
       # FZF integration
       if command -v fzf &> /dev/null; then
         eval "$(fzf --bash)"
       fi
-      
+
       # Zoxide integration
       if command -v zoxide &> /dev/null; then
         eval "$(zoxide init bash)"
@@ -534,39 +577,49 @@ in
 
   programs.fish = lib.mkIf (variables.defaultShell == "fish") {
     enable = true;
-    
+
     interactiveShellInit = ''
       # Disable greeting
       set -g fish_greeting
-      
+
       # Vi mode
       fish_vi_key_bindings
-      
+
       # FZF integration
       if command -v fzf &> /dev/null
         fzf --fish | source
       end
-      
+
       # Zoxide integration
       if command -v zoxide &> /dev/null
         zoxide init fish | source
       end
     '';
-    
+
     plugins = [
-      { name = "autopair"; src = pkgs.fishPlugins.autopair.src; }
-      { name = "done"; src = pkgs.fishPlugins.done.src; }
-      { name = "sponge"; src = pkgs.fishPlugins.sponge.src; }
+      {
+        name = "autopair";
+        src = pkgs.fishPlugins.autopair.src;
+      }
+      {
+        name = "done";
+        src = pkgs.fishPlugins.done.src;
+      }
+      {
+        name = "sponge";
+        src = pkgs.fishPlugins.sponge.src;
+      }
     ];
   };
 
   programs.zsh = lib.mkIf (variables.defaultShell == "zsh") {
     enable = true;
+    dotDir = "${config.home.homeDirectory}/.config/zsh";
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     enableVteIntegration = true;
-    
+
     history = {
       size = 100000;
       save = 100000;
@@ -578,45 +631,45 @@ in
       extended = true;
       path = "${config.xdg.dataHome}/zsh/history";
     };
-    
-    initExtra = ''
+
+    initContent = ''
       # Better history search
       bindkey "^[[A" history-search-backward
       bindkey "^[[B" history-search-forward
-      
+
       # FZF integration
       if command -v fzf &> /dev/null; then
         eval "$(fzf --zsh)"
       fi
-      
+
       # Zoxide integration
       if command -v zoxide &> /dev/null; then
         eval "$(zoxide init zsh)"
       fi
-      
+
       # Directory navigation
       setopt AUTO_CD
       setopt AUTO_PUSHD
       setopt PUSHD_IGNORE_DUPS
       setopt PUSHD_SILENT
     '';
-    
+
     oh-my-zsh = {
       enable = true;
       theme = variables.zsh.theme;
-      customPkgs = [ pkgs.zsh-autosuggestions pkgs.zsh-syntax-highlighting ];
-      plugins = [ 
-        "git" 
-        "sudo" 
-        "z" 
-        "extract" 
-        "copypath" 
-        "copyfile" 
+      plugins = [
+        "git"
+        "sudo"
+        "z"
+        "extract"
+        "copypath"
+        "copyfile"
         "copybuffer"
         "dirhistory"
         "history"
         "command-not-found"
-      ] ++ variables.zsh.extraPlugins;
+      ]
+      ++ variables.zsh.extraPlugins;
     };
   };
 
@@ -629,11 +682,11 @@ in
     enableBashIntegration = true;
     enableFishIntegration = true;
     enableZshIntegration = true;
-    
+
     settings = {
       add_newline = false;
       command_timeout = 1000;
-      
+
       format = lib.concatStrings [
         "$username"
         "$hostname"
@@ -646,13 +699,13 @@ in
         "$line_break"
         "$character"
       ];
-      
+
       character = {
         success_symbol = "[➜](bold ${themeColors.success})";
         error_symbol = "[✗](bold ${themeColors.error})";
         vicmd_symbol = "[❮](bold ${themeColors.accent})";
       };
-      
+
       directory = {
         truncation_length = 3;
         truncate_to_repo = true;
@@ -661,13 +714,13 @@ in
         read_only = " 🔒";
         read_only_style = "${themeColors.warning}";
       };
-      
+
       git_branch = {
         format = "[$symbol$branch]($style) ";
         symbol = "🌱 ";
         style = "bold ${themeColors.success}";
       };
-      
+
       git_status = {
         format = "([$all_status$ahead_behind]($style)) ";
         style = "${themeColors.warning}";
@@ -679,36 +732,36 @@ in
         untracked = "?$count";
         deleted = "✘$count";
       };
-      
+
       nix_shell = {
         format = "[$symbol$state]($style) ";
         symbol = "❄️ ";
         style = "bold cyan";
         heuristic = true;
       };
-      
+
       container = {
         format = "[$symbol $name]($style) ";
         symbol = "⬢";
         style = "bold red dimmed";
       };
-      
+
       username = {
         format = "[$user]($style) ";
         style_user = "${themeColors.fg}";
         show_always = false;
       };
-      
+
       hostname = {
         format = "[$hostname]($style) ";
         style = "dimmed ${themeColors.fg}";
         ssh_only = true;
       };
-      
+
       line_break = {
         disabled = false;
       };
-      
+
       # Disable unused modules
       aws.disabled = true;
       gcloud.disabled = true;
@@ -727,7 +780,7 @@ in
     enableBashIntegration = true;
     enableFishIntegration = true;
     enableZshIntegration = true;
-    
+
     defaultOptions = [
       "--height 40%"
       "--layout=reverse"
@@ -735,41 +788,48 @@ in
       "--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
       "--bind 'ctrl-/:toggle-preview'"
     ];
-    
+
     defaultCommand = "fd --type f --hidden --follow --exclude .git";
     fileWidgetCommand = "fd --type f --hidden --follow --exclude .git";
     fileWidgetOptions = [ "--preview 'bat --color=always --style=numbers {}'" ];
     changeDirWidgetCommand = "fd --type d --hidden --follow --exclude .git";
     changeDirWidgetOptions = [ "--preview 'eza --tree --level=2 --icons {}'" ];
-    historyWidgetOptions = [ "--sort" "--exact" ];
-    
-    colors = if variables.theme.style == "dark" then {
-      bg = "#1a1b26";
-      "bg+" = "#24283b";
-      fg = "#c0caf5";
-      "fg+" = "#a9b1d6";
-      hl = "#7aa2f7";
-      "hl+" = "#7aa2f7";
-      info = "#e0af68";
-      prompt = "#7aa2f7";
-      pointer = "#bb9af7";
-      marker = "#9ece6a";
-      spinner = "#e0af68";
-      header = "#73daca";
-    } else {
-      bg = "#eff1f5";
-      "bg+" = "#e6e9ef";
-      fg = "#4c4f69";
-      "fg+" = "#5c5f77";
-      hl = "#1e66f5";
-      "hl+" = "#1e66f5";
-      info = "#df8e1d";
-      prompt = "#1e66f5";
-      pointer = "#8839ef";
-      marker = "#40a02b";
-      spinner = "#df8e1d";
-      header = "#179299";
-    };
+    historyWidgetOptions = [
+      "--sort"
+      "--exact"
+    ];
+
+    colors =
+      if variables.theme.style == "dark" then
+        {
+          bg = "#1a1b26";
+          "bg+" = "#24283b";
+          fg = "#c0caf5";
+          "fg+" = "#a9b1d6";
+          hl = "#7aa2f7";
+          "hl+" = "#7aa2f7";
+          info = "#e0af68";
+          prompt = "#7aa2f7";
+          pointer = "#bb9af7";
+          marker = "#9ece6a";
+          spinner = "#e0af68";
+          header = "#73daca";
+        }
+      else
+        {
+          bg = "#eff1f5";
+          "bg+" = "#e6e9ef";
+          fg = "#4c4f69";
+          "fg+" = "#5c5f77";
+          hl = "#1e66f5";
+          "hl+" = "#1e66f5";
+          info = "#df8e1d";
+          prompt = "#1e66f5";
+          pointer = "#8839ef";
+          marker = "#40a02b";
+          spinner = "#df8e1d";
+          header = "#179299";
+        };
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -795,7 +855,13 @@ in
       style = "numbers,changes,grid";
       paging = "never";
     };
-    extraPackages = with pkgs.bat-extras; [ batdiff batman batgrep batwatch ];  };
+    extraPackages = with pkgs.bat-extras; [
+      batdiff
+      batman
+      batgrep
+      batwatch
+    ];
+  };
 
   # ═══════════════════════════════════════════════════════════════════════════
   # EZA - Better ls
@@ -839,7 +905,10 @@ in
     settings = {
       gui = {
         theme = {
-          activeBorderColor = [ "#7aa2f7" "bold" ];
+          activeBorderColor = [
+            "#7aa2f7"
+            "bold"
+          ];
           inactiveBorderColor = [ "#565f89" ];
           optionsTextColor = [ "#7aa2f7" ];
           selectedLineBgColor = [ "#283457" ];
@@ -886,7 +955,7 @@ in
     keyMode = "vi";
     mouse = true;
     terminal = "tmux-256color";
-    
+
     plugins = with pkgs.tmuxPlugins; [
       sensible
       vim-tmux-navigator
@@ -914,47 +983,47 @@ in
         '';
       }
     ];
-    
+
     extraConfig = ''
       # Better split bindings
       bind | split-window -h -c "#{pane_current_path}"
       bind - split-window -v -c "#{pane_current_path}"
       bind c new-window -c "#{pane_current_path}"
-      
+
       # Better pane navigation
       bind h select-pane -L
       bind j select-pane -D
       bind k select-pane -U
       bind l select-pane -R
-      
+
       # Better pane resizing
       bind -r H resize-pane -L 5
       bind -r J resize-pane -D 5
       bind -r K resize-pane -U 5
       bind -r L resize-pane -R 5
-      
+
       # Copy mode
       bind-key -T copy-mode-vi v send-keys -X begin-selection
       bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
       bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
-      
+
       # Status bar
       set -g status-position top
       set -g status-interval 5
-      
+
       # True color support
       set -ag terminal-overrides ",$TERM:RGB"
-      
+
       # Focus events
       set -g focus-events on
-      
+
       # Renumber windows
       set -g renumber-windows on
-      
+
       # Monitor activity
       setw -g monitor-activity on
       set -g visual-activity off
-      
+
       # Clock
       setw -g clock-mode-colour colour4
     '';
@@ -969,7 +1038,7 @@ in
     enableBashIntegration = true;
     enableFishIntegration = true;
     enableZshIntegration = true;
-    
+
     settings = {
       theme = if variables.theme.style == "dark" then "tokyo-night" else "catppuccin-latte";
       default_layout = "compact";
@@ -993,14 +1062,14 @@ in
     enableFishIntegration = true;
     enableZshIntegration = true;
     nix-direnv.enable = true;
-    
+
     config = {
       global = {
         load_dotenv = true;
         strict_env = true;
       };
       whitelist = {
-        prefix = [ 
+        prefix = [
           "${config.home.homeDirectory}/projects"
           "${config.home.homeDirectory}/work"
         ];
@@ -1037,7 +1106,7 @@ in
     maxCacheTtl = 7200;
     enableSshSupport = true;
     sshKeys = variables.gpg.sshKeys;
-    pinentryPackage = pkgs.pinentry-curses;
+    pinentry.package = pkgs.pinentry-curses;
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -1046,8 +1115,11 @@ in
 
   programs.ssh = {
     enable = true;
-    addKeysToAgent = "yes";
+    enableDefaultConfig = false;
     matchBlocks = {
+      "*" = {
+        addKeysToAgent = "yes";
+      };
       "github.com" = {
         hostname = "github.com";
         user = "git";
@@ -1077,9 +1149,9 @@ in
 
   programs.kitty = lib.mkIf (variables.terminal == "kitty") {
     enable = true;
-    
-    theme = if variables.theme.style == "dark" then "Tokyo Night" else "Catppuccin-Latte";
-    
+
+    themeFile = if variables.theme.style == "dark" then "Tokyo Night" else "Catppuccin-Latte";
+
     settings = {
       # Font
       font_family = variables.theme.font.mono;
@@ -1087,75 +1159,75 @@ in
       italic_font = "auto";
       bold_italic_font = "auto";
       font_size = variables.theme.font.size;
-      
+
       # Cursor
       cursor_shape = "block";
       cursor_blink_interval = 0;
       cursor_stop_blinking_after = 0;
-      
+
       # Scrollback
       scrollback_lines = 10000;
       scrollback_pager = "less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER";
-      
+
       # Performance
       repaint_delay = 10;
       input_delay = 3;
       sync_to_monitor = true;
-      
+
       # Bell
       enable_audio_bell = false;
       visual_bell_duration = 0.0;
       window_alert_on_bell = true;
       bell_on_tab = true;
-      
+
       # Window
       remember_window_size = true;
-      initial_window_width = 120c;
-      initial_window_height = 40c;
+      initial_window_width = "120c";
+      initial_window_height = "40c";
       window_padding_width = 8;
       window_margin_width = 0;
-      
+
       # Tabs
       tab_bar_edge = "top";
       tab_bar_style = "powerline";
       tab_powerline_style = "slanted";
       tab_title_template = "{title}{' :{}:'.format(num_windows) if num_windows > 1 else ''}";
-      
+
       # Layout
       enabled_layouts = "*";
-      
+
       # Colors
       background_opacity = "0.95";
       background_blur = 0;
-      
+
       # Mouse
       mouse_hide_wait = 3.0;
       focus_follows_mouse = true;
-      
+
       # URLs
       url_style = "curly";
       url_color = "#0087bd";
       detect_urls = true;
-      
+
       # Clipboard
       copy_on_select = true;
       strip_trailing_spaces = "smart";
-      
+
       # Shell integration
       shell_integration = "enabled";
-      
+
       # macOS specific
       macos_option_as_alt = "both";
       macos_hide_from_tasks = false;
       macos_quit_when_last_window_closed = false;
       macos_window_resizable = true;
-      
+
       # Advanced
       update_check_interval = 0;
       allow_remote_control = true;
       listen_on = "unix:/tmp/kitty";
     };
-    
+
     keybindings = {
       # Tabs
       "ctrl+shift+t" = "new_tab";
@@ -1167,7 +1239,7 @@ in
       "ctrl+shift+3" = "goto_tab 3";
       "ctrl+shift+4" = "goto_tab 4";
       "ctrl+shift+5" = "goto_tab 5";
-      
+
       # Windows
       "ctrl+shift+enter" = "new_window";
       "ctrl+shift+]" = "next_window";
@@ -1176,24 +1248,24 @@ in
       "ctrl+shift+b" = "move_window_backward";
       "ctrl+shift+`" = "move_window_to_top";
       "ctrl+shift+r" = "start_resizing_window";
-      
+
       # Layouts
       "ctrl+shift+l" = "next_layout";
-      
+
       # Font size
       "ctrl+shift+equal" = "increase_font_size";
       "ctrl+shift+minus" = "decrease_font_size";
       "ctrl+shift+backspace" = "restore_font_size";
-      
+
       # Clipboard
       "ctrl+shift+c" = "copy_to_clipboard";
       "ctrl+shift+v" = "paste_from_clipboard";
       "ctrl+shift+s" = "paste_from_selection";
-      
+
       # Scrollback
       "ctrl+shift+h" = "show_scrollback";
       "ctrl+shift+g" = "show_last_command_output";
-      
+
       # Misc
       "ctrl+shift+e" = "kitten hints";
       "ctrl+shift+p>f" = "kitten hints --type path --program -";
@@ -1204,7 +1276,7 @@ in
       "ctrl+shift+p>n" = "kitten hints --type linenum";
       "ctrl+shift+p>y" = "kitten hints --type hyperlink";
     };
-    
+
     extraConfig = ''
       # Include local config if it exists
       include ${config.xdg.configHome}/kitty/local.conf
@@ -1213,7 +1285,7 @@ in
 
   programs.alacritty = lib.mkIf (variables.terminal == "alacritty") {
     enable = true;
-    
+
     settings = {
       font = {
         normal.family = variables.theme.font.mono;
@@ -1222,7 +1294,7 @@ in
         bold_italic.family = variables.theme.font.mono;
         size = variables.theme.font.size;
       };
-      
+
       window = {
         opacity = 0.95;
         padding = {
@@ -1233,18 +1305,18 @@ in
         startup_mode = "Windowed";
         dynamic_title = true;
       };
-      
+
       scrolling = {
         history = 10000;
         multiplier = 3;
       };
-      
+
       cursor = {
         style = "Block";
         unfocused_hollow = true;
         thickness = 0.15;
       };
-      
+
       mouse = {
         double_click = {
           threshold = 300;
@@ -1254,107 +1326,137 @@ in
         };
         hide_when_typing = true;
       };
-      
+
       selection = {
-        semantic_escape_chars = ",│`|:"'"' ()[]{}<>";
+        semantic_escape_chars = ",│`|:\"' ()[]{}<>";
         save_to_clipboard = true;
       };
-      
+
       keyboard = {
         bindings = [
-          { key = "V"; mods = "Control|Shift"; action = "Paste"; }
-          { key = "C"; mods = "Control|Shift"; action = "Copy"; }
-          { key = "Insert"; mods = "Shift"; action = "PasteSelection"; }
-          { key = "Key0"; mods = "Control"; action = "ResetFontSize"; }
-          { key = "Equals"; mods = "Control"; action = "IncreaseFontSize"; }
-          { key = "Minus"; mods = "Control"; action = "DecreaseFontSize"; }
+          {
+            key = "V";
+            mods = "Control|Shift";
+            action = "Paste";
+          }
+          {
+            key = "C";
+            mods = "Control|Shift";
+            action = "Copy";
+          }
+          {
+            key = "Insert";
+            mods = "Shift";
+            action = "PasteSelection";
+          }
+          {
+            key = "Key0";
+            mods = "Control";
+            action = "ResetFontSize";
+          }
+          {
+            key = "Equals";
+            mods = "Control";
+            action = "IncreaseFontSize";
+          }
+          {
+            key = "Minus";
+            mods = "Control";
+            action = "DecreaseFontSize";
+          }
         ];
       };
-      
-      colors = if variables.theme.style == "dark" then {
-        primary = {
-          background = "#1a1b26";
-          foreground = "#c0caf5";
-        };
-        cursor = {
-          text = "#1a1b26";
-          cursor = "#c0caf5";
-        };
-        selection = {
-          text = "CellForeground";
-          background = "#283457";
-        };
-        normal = {
-          black = "#15161e";
-          red = "#f7768e";
-          green = "#9ece6a";
-          yellow = "#e0af68";
-          blue = "#7aa2f7";
-          magenta = "#bb9af7";
-          cyan = "#7dcfff";
-          white = "#a9b1d6";
-        };
-        bright = {
-          black = "#414868";
-          red = "#f7768e";
-          green = "#9ece6a";
-          yellow = "#e0af68";
-          blue = "#7aa2f7";
-          magenta = "#bb9af7";
-          cyan = "#7dcfff";
-          white = "#c0caf5";
-        };
-      } else {
-        primary = {
-          background = "#eff1f5";
-          foreground = "#4c4f69";
-        };
-        cursor = {
-          text = "#eff1f5";
-          cursor = "#4c4f69";
-        };
-        selection = {
-          text = "CellForeground";
-          background = "#ccd0da";
-        };
-        normal = {
-          black = "#5c5f77";
-          red = "#d20f39";
-          green = "#40a02b";
-          yellow = "#df8e1d";
-          blue = "#1e66f5";
-          magenta = "#8839ef";
-          cyan = "#179299";
-          white = "#acb0be";
-        };
-        bright = {
-          black = "#6c6f85";
-          red = "#d20f39";
-          green = "#40a02b";
-          yellow = "#df8e1d";
-          blue = "#1e66f5";
-          magenta = "#8839ef";
-          cyan = "#179299";
-          white = "#bcc0cc";
-        };
-      };
+
+      colors =
+        if variables.theme.style == "dark" then
+          {
+            primary = {
+              background = "#1a1b26";
+              foreground = "#c0caf5";
+            };
+            cursor = {
+              text = "#1a1b26";
+              cursor = "#c0caf5";
+            };
+            selection = {
+              text = "CellForeground";
+              background = "#283457";
+            };
+            normal = {
+              black = "#15161e";
+              red = "#f7768e";
+              green = "#9ece6a";
+              yellow = "#e0af68";
+              blue = "#7aa2f7";
+              magenta = "#bb9af7";
+              cyan = "#7dcfff";
+              white = "#a9b1d6";
+            };
+            bright = {
+              black = "#414868";
+              red = "#f7768e";
+              green = "#9ece6a";
+              yellow = "#e0af68";
+              blue = "#7aa2f7";
+              magenta = "#bb9af7";
+              cyan = "#7dcfff";
+              white = "#c0caf5";
+            };
+          }
+        else
+          {
+            primary = {
+              background = "#eff1f5";
+              foreground = "#4c4f69";
+            };
+            cursor = {
+              text = "#eff1f5";
+              cursor = "#4c4f69";
+            };
+            selection = {
+              text = "CellForeground";
+              background = "#ccd0da";
+            };
+            normal = {
+              black = "#5c5f77";
+              red = "#d20f39";
+              green = "#40a02b";
+              yellow = "#df8e1d";
+              blue = "#1e66f5";
+              magenta = "#8839ef";
+              cyan = "#179299";
+              white = "#acb0be";
+            };
+            bright = {
+              black = "#6c6f85";
+              red = "#d20f39";
+              green = "#40a02b";
+              yellow = "#df8e1d";
+              blue = "#1e66f5";
+              magenta = "#8839ef";
+              cyan = "#179299";
+              white = "#bcc0cc";
+            };
+          };
     };
   };
 
   programs.wezterm = lib.mkIf (variables.terminal == "wezterm") {
     enable = true;
-    
+
     extraConfig = ''
       local wezterm = require 'wezterm'
       local config = {}
-      
+
       -- Font
       config.font = wezterm.font '${variables.theme.font.mono}'
       config.font_size = ${toString variables.theme.font.size}
-      
+
       -- Color scheme
-      config.color_scheme = '${if variables.theme.style == "dark" then "Tokyo Night" else "Catppuccin Latte"}'
-      
+      config.color_scheme = '${
+        if variables.theme.style == "dark" then "Tokyo Night" else "Catppuccin Latte"
+      }'
+
       -- Window
       config.window_background_opacity = 0.95
       config.window_padding = {
@@ -1365,21 +1467,21 @@ in
       }
       config.window_decorations = 'RESIZE'
       config.hide_tab_bar_if_only_one_tab = true
-      
+
       -- Cursor
       config.default_cursor_style = 'BlinkingBlock'
       config.cursor_blink_rate = 500
-      
+
       -- Scrollback
       config.scrollback_lines = 10000
-      
+
       -- Enable wayland on Linux
       config.enable_wayland = true
-      
+
       -- Tab bar
       config.use_fancy_tab_bar = true
       config.tab_bar_at_bottom = false
-      
+
       -- Key bindings
       config.keys = {
         {
@@ -1403,7 +1505,7 @@ in
           action = wezterm.action.ActivateTabRelative(-1),
         },
       }
-      
+
       return config
     '';
   };
@@ -1418,13 +1520,13 @@ in
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
-    
+
     plugins = with pkgs.vimPlugins; [
       # Essential
       nvim-treesitter
       nvim-treesitter.withAllGrammars
       plenary-nvim
-      
+
       # LSP
       nvim-lspconfig
       nvim-cmp
@@ -1434,29 +1536,29 @@ in
       cmp-cmdline
       luasnip
       cmp_luasnip
-      
+
       # UI
       telescope-nvim
       nvim-tree-lua
       lualine-nvim
       bufferline-nvim
       nvim-web-devicons
-      
+
       # Themes
       tokyonight-nvim
       catppuccin-nvim
-      
+
       # Editing
       nvim-autopairs
       comment-nvim
       gitsigns-nvim
       indent-blankline-nvim
-      
+
       # Navigation
       which-key-nvim
       vim-tmux-navigator
     ];
-    
+
     extraConfig = ''
       -- Basic settings
       vim.opt.number = true
@@ -1478,42 +1580,44 @@ in
       vim.opt.cursorline = true
       vim.opt.scrolloff = 10
       vim.opt.hlsearch = true
-      
+
       -- Theme
-      vim.cmd[[colorscheme ${if variables.theme.style == "dark" then "tokyonight-night" else "catppuccin-latte"}]]
-      
+      vim.cmd[[colorscheme ${
+        if variables.theme.style == "dark" then "tokyonight-night" else "catppuccin-latte"
+      }]]
+
       -- Keymaps
       vim.g.mapleader = ' '
       vim.g.maplocalleader = ' '
-      
+
       -- Telescope
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
       vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
       vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
       vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-      
+
       -- Nvim-tree
       require('nvim-tree').setup()
       vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', {})
-      
+
       -- Lualine
       require('lualine').setup {
         options = {
           theme = '${if variables.theme.style == "dark" then "tokyonight" else "catppuccin"}'
         }
       }
-      
+
       -- Treesitter
       require('nvim-treesitter.configs').setup {
         highlight = { enable = true },
         indent = { enable = true },
       }
-      
+
       -- LSP
       local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      
+
       -- Enable LSP servers
       local servers = { 'nixd', 'rust_analyzer', 'tsserver', 'pyright', 'gopls', 'lua_ls' }
       for _, lsp in ipairs(servers) do
@@ -1521,7 +1625,7 @@ in
           capabilities = capabilities,
         }
       end
-      
+
       -- Completion
       local cmp = require('cmp')
       cmp.setup {
@@ -1546,19 +1650,19 @@ in
           { name = 'path' },
         },
       }
-      
+
       -- Autopairs
       require('nvim-autopairs').setup {}
-      
+
       -- Comments
       require('Comment').setup()
-      
+
       -- Gitsigns
       require('gitsigns').setup()
-      
+
       -- Indent blankline
       require('ibl').setup()
-      
+
       -- Which-key
       require('which-key').setup {}
     '';
@@ -1568,7 +1672,7 @@ in
   programs.helix = lib.mkIf (variables.editor == "helix") {
     enable = true;
     defaultEditor = true;
-    
+
     settings = {
       theme = if variables.theme.style == "dark" then "tokyonight" else "catppuccin_latte";
       editor = {
@@ -1576,7 +1680,10 @@ in
         cursorline = true;
         color-modes = true;
         bufferline = "multiple";
-        rulers = [ 80 120 ];
+        rulers = [
+          80
+          120
+        ];
         indent-guides.render = true;
         soft-wrap.enable = true;
         completion-trigger-len = 1;
@@ -1593,10 +1700,13 @@ in
         "C-s" = ":w";
         "C-q" = ":q";
         "#" = "toggle_comments";
-        esc = [ "collapse_selection" "keep_primary_selection" ];
+        esc = [
+          "collapse_selection"
+          "keep_primary_selection"
+        ];
       };
     };
-    
+
     languages = {
       language-server.nixd = {
         command = "nixd";
@@ -1636,366 +1746,374 @@ in
   programs.vscode = lib.mkIf (variables.editor == "vscodium" || variables.editor == "vscode") {
     enable = true;
     package = if variables.editor == "vscodium" then pkgs.vscodium else pkgs.vscode;
-    
-    userSettings = {
-      # Theme
-      "workbench.colorTheme" = if variables.theme.style == "dark" then "Tokyo Night" else "GitHub Light";
-      "workbench.iconTheme" = "material-icon-theme";
-      
-      # Font
-      "editor.fontFamily" = "'${variables.theme.font.mono}', 'monospace'";
-      "editor.fontSize" = 13;
-      "editor.fontLigatures" = true;
-      "terminal.integrated.fontFamily" = "'${variables.theme.font.mono}'";
-      "terminal.integrated.fontSize" = 12;
-      
-      # Editor behavior
-      "editor.formatOnSave" = true;
-      "editor.formatOnPaste" = true;
-      "editor.minimap.enabled" = false;
-      "editor.lineNumbers" = "relative";
-      "editor.cursorBlinking" = "solid";
-      "editor.cursorSmoothCaretAnimation" = "on";
-      "editor.smoothScrolling" = true;
-      "editor.scrollBeyondLastLine" = false;
-      "editor.wordWrap" = "on";
-      "editor.rulers" = [ 80 120 ];
-      "editor.tabSize" = 2;
-      "editor.insertSpaces" = true;
-      "editor.detectIndentation" = true;
-      "editor.trimAutoWhitespace" = true;
-      "editor.renderWhitespace" = "boundary";
-      "editor.guides.indentation" = true;
-      "editor.bracketPairColorization.enabled" = true;
-      "editor.guides.bracketPairs" = "active";
-      
-      # Files
-      "files.autoSave" = "afterDelay";
-      "files.autoSaveDelay" = 1000;
-      "files.trimTrailingWhitespace" = true;
-      "files.insertFinalNewline" = true;
-      "files.trimFinalNewlines" = true;
-      "files.exclude" = {
-        "**/.git" = true;
-        "**/.DS_Store" = true;
-        "**/node_modules" = true;
-        "**/target" = true;
-        "**/build" = true;
-        "**/dist" = true;
+
+    profiles.default = {
+      userSettings = {
+        # Theme
+        "workbench.colorTheme" = if variables.theme.style == "dark" then "Tokyo Night" else "GitHub Light";
+        "workbench.iconTheme" = "material-icon-theme";
+
+        # Font
+        "editor.fontFamily" = "'${variables.theme.font.mono}', 'monospace'";
+        "editor.fontSize" = 13;
+        "editor.fontLigatures" = true;
+        "terminal.integrated.fontFamily" = "'${variables.theme.font.mono}'";
+        "terminal.integrated.fontSize" = 12;
+
+        # Editor behavior
+        "editor.formatOnSave" = true;
+        "editor.formatOnPaste" = true;
+        "editor.minimap.enabled" = false;
+        "editor.lineNumbers" = "relative";
+        "editor.cursorBlinking" = "solid";
+        "editor.cursorSmoothCaretAnimation" = "on";
+        "editor.smoothScrolling" = true;
+        "editor.scrollBeyondLastLine" = false;
+        "editor.wordWrap" = "on";
+        "editor.rulers" = [
+          80
+          120
+        ];
+        "editor.tabSize" = 2;
+        "editor.insertSpaces" = true;
+        "editor.detectIndentation" = true;
+        "editor.trimAutoWhitespace" = true;
+        "editor.renderWhitespace" = "boundary";
+        "editor.guides.indentation" = true;
+        "editor.bracketPairColorization.enabled" = true;
+        "editor.guides.bracketPairs" = "active";
+
+        # Files
+        "files.autoSave" = "afterDelay";
+        "files.autoSaveDelay" = 1000;
+        "files.trimTrailingWhitespace" = true;
+        "files.insertFinalNewline" = true;
+        "files.trimFinalNewlines" = true;
+        "files.exclude" = {
+          "**/.git" = true;
+          "**/.DS_Store" = true;
+          "**/node_modules" = true;
+          "**/target" = true;
+          "**/build" = true;
+          "**/dist" = true;
+        };
+
+        # Search
+        "search.exclude" = {
+          "**/node_modules" = true;
+          "**/target" = true;
+          "**/build" = true;
+          "**/dist" = true;
+          "**/.git" = true;
+        };
+
+        # Terminal
+        "terminal.integrated.defaultProfile.linux" = variables.defaultShell;
+        "terminal.integrated.cursorBlinking" = false;
+        "terminal.integrated.cursorStyle" = "block";
+        "terminal.integrated.scrollback" = 10000;
+        "terminal.integrated.enablePersistentSessions" = true;
+
+        # Git
+        "git.enableSmartCommit" = true;
+        "git.confirmSync" = false;
+        "git.openRepositoryInParentFolders" = "always";
+        "scm.defaultViewMode" = "tree";
+
+        # Extensions
+        "extensions.autoCheckUpdates" = false;
+        "extensions.autoUpdate" = false;
+
+        # Telemetry
+        "telemetry.telemetryLevel" = "off";
+        "workbench.enableExperiments" = false;
+        "workbench.settings.enableNaturalLanguageSearch" = false;
+
+        # Updates
+        "update.mode" = "none";
+        "update.showReleaseNotes" = false;
+
+        # Window
+        "window.restoreWindows" = "none";
+        "window.newWindowDimensions" = "inherit";
+        "workbench.startupEditor" = "none";
+        "workbench.editor.enablePreview" = false;
+        "workbench.editor.tabSizing" = "shrink";
+        "breadcrumbs.enabled" = true;
+
+        # Nix
+        "nix.enableLanguageServer" = true;
+        "nix.serverPath" = "nixd";
+        "nix.formatterPath" = "alejandra";
+        "[nix]".editor.defaultFormatter = "jnoortheen.nix-ide";
+
+        # Language specific
+        "[javascript]".editor.defaultFormatter = "esbenp.prettier-vscode";
+        "[typescript]".editor.defaultFormatter = "esbenp.prettier-vscode";
+        "[json]".editor.defaultFormatter = "esbenp.prettier-vscode";
+        "[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
+        "[python]".editor.defaultFormatter = "ms-python.black-formatter";
+        "[go]".editor.defaultFormatter = "golang.go";
+
+        # Prettier
+        "prettier.singleQuote" = true;
+        "prettier.trailingComma" = "es5";
+        "prettier.tabWidth" = 2;
+        "prettier.semi" = true;
+
+        # ESLint
+        "eslint.format.enable" = true;
+        "eslint.lintTask.enable" = true;
+
+        # Rust
+        "rust-analyzer.checkOnSave.command" = "clippy";
+        "rust-analyzer.cargo.features" = "all";
+
+        # Python
+        "python.analysis.typeCheckingMode" = "basic";
+        "python.analysis.autoImportCompletions" = true;
+
+        # Go
+        "gopls" = {
+          "formatting.gofumpt" = true;
+          "ui.semanticTokens" = true;
+        };
+
+        # Remote
+        "remote.SSH.useLocalServer" = true;
+        "remote.SSH.connectTimeout" = 60;
+
+        # Explorer
+        "explorer.confirmDelete" = false;
+        "explorer.confirmDragAndDrop" = false;
+        "explorer.confirmPasteNative" = false;
+        "explorer.fileNesting.enabled" = true;
+        "explorer.fileNesting.patterns" = {
+          "*.ts" = "\${capture}.js, \${capture}.d.ts, \${capture}.js.map";
+          "*.js" = "\${capture}.js.map, \${capture}.min.js, \${capture}.d.ts";
+          "*.jsx" = "\${capture}.js";
+          "*.tsx" = "\${capture}.ts";
+          "tsconfig.json" = "tsconfig.*.json";
+          "package.json" = "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb";
+          ".eslintrc.*" = ".eslintignore";
+          ".prettierrc.*" = ".prettierignore";
+          "README*" = "CHANGELOG*, LICENSE*, CONTRIBUTING*";
+        };
+
+        # Testing
+        "testing.autoRun.delay" = 1000;
+
+        # Debug
+        "debug.console.fontFamily" = "'${variables.theme.font.mono}'";
+        "debug.console.fontSize" = 12;
+
+        # Comments
+        "editor.inlineSuggest.enabled" = true;
       };
-      
-      # Search
-      "search.exclude" = {
-        "**/node_modules" = true;
-        "**/target" = true;
-        "**/build" = true;
-        "**/dist" = true;
-        "**/.git" = true;
-      };
-      
-      # Terminal
-      "terminal.integrated.defaultProfile.linux" = variables.defaultShell;
-      "terminal.integrated.cursorBlinking" = false;
-      "terminal.integrated.cursorStyle" = "block";
-      "terminal.integrated.scrollback" = 10000;
-      "terminal.integrated.enablePersistentSessions" = true;
-      
-      # Git
-      "git.enableSmartCommit" = true;
-      "git.confirmSync" = false;
-      "git.openRepositoryInParentFolders" = "always";
-      "scm.defaultViewMode" = "tree";
-      
-      # Extensions
-      "extensions.autoCheckUpdates" = false;
-      "extensions.autoUpdate" = false;
-      
-      # Telemetry
-      "telemetry.telemetryLevel" = "off";
-      "workbench.enableExperiments" = false;
-      "workbench.settings.enableNaturalLanguageSearch" = false;
-      
-      # Updates
-      "update.mode" = "none";
-      "update.showReleaseNotes" = false;
-      
-      # Window
-      "window.restoreWindows" = "none";
-      "window.newWindowDimensions" = "inherit";
-      "workbench.startupEditor" = "none";
-      "workbench.editor.enablePreview" = false;
-      "workbench.editor.tabSizing" = "shrink";
-      "breadcrumbs.enabled" = true;
-      
-      # Nix
-      "nix.enableLanguageServer" = true;
-      "nix.serverPath" = "nixd";
-      "nix.formatterPath" = "alejandra";
-      "[nix]".editor.defaultFormatter = "jnoortheen.nix-ide";
-      
-      # Language specific
-      "[javascript]".editor.defaultFormatter = "esbenp.prettier-vscode";
-      "[typescript]".editor.defaultFormatter = "esbenp.prettier-vscode";
-      "[json]".editor.defaultFormatter = "esbenp.prettier-vscode";
-      "[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
-      "[python]".editor.defaultFormatter = "ms-python.black-formatter";
-      "[go]".editor.defaultFormatter = "golang.go";
-      
-      # Prettier
-      "prettier.singleQuote" = true;
-      "prettier.trailingComma" = "es5";
-      "prettier.tabWidth" = 2;
-      "prettier.semi" = true;
-      
-      # ESLint
-      "eslint.format.enable" = true;
-      "eslint.lintTask.enable" = true;
-      
-      # Rust
-      "rust-analyzer.checkOnSave.command" = "clippy";
-      "rust-analyzer.cargo.features" = "all";
-      
-      # Python
-      "python.analysis.typeCheckingMode" = "basic";
-      "python.analysis.autoImportCompletions" = true;
-      
-      # Go
-      "gopls" = {
-        "formatting.gofumpt" = true;
-        "ui.semanticTokens" = true;
-      };
-      
-      # Remote
-      "remote.SSH.useLocalServer" = true;
-      "remote.SSH.connectTimeout" = 60;
-      
-      # Explorer
-      "explorer.confirmDelete" = false;
-      "explorer.confirmDragAndDrop" = false;
-      "explorer.confirmPasteNative" = false;
-      "explorer.fileNesting.enabled" = true;
-      "explorer.fileNesting.patterns" = {
-        "*.ts" = "${'${capture}'}.js, ${'${capture}'}.d.ts, ${'${capture}'}.js.map";
-        "*.js" = "${'${capture}'}.js.map, ${'${capture}'}.min.js, ${'${capture}'}.d.ts";
-        "*.jsx" = "${'${capture}'}.js";
-        "*.tsx" = "${'${capture}'}.ts";
-        "tsconfig.json" = "tsconfig.*.json";
-        "package.json" = "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb";
-        ".eslintrc.*" = ".eslintignore";
-        ".prettierrc.*" = ".prettierignore";
-        "README*" = "CHANGELOG*, LICENSE*, CONTRIBUTING*";
-      };
-      
-      # Testing
-      "testing.autoRun.delay" = 1000;
-      
-      # Debug
-      "debug.console.fontFamily" = "'${variables.theme.font.mono}'";
-      "debug.console.fontSize" = 12;
-      
-      # Comments
-      "editor.inlineSuggest.enabled" = true;
+
+      keybindings = [
+        {
+          key = "ctrl+k ctrl+s";
+          command = "workbench.action.openGlobalKeybindings";
+        }
+        {
+          key = "ctrl+shift+n";
+          command = "workbench.action.newWindow";
+        }
+        {
+          key = "ctrl+shift+w";
+          command = "workbench.action.closeWindow";
+        }
+        {
+          key = "ctrl+k ctrl+w";
+          command = "workbench.action.closeAllEditors";
+        }
+        {
+          key = "ctrl+tab";
+          command = "workbench.action.nextEditor";
+        }
+        {
+          key = "ctrl+shift+tab";
+          command = "workbench.action.previousEditor";
+        }
+        {
+          key = "ctrl+1";
+          command = "workbench.action.openEditorAtIndex1";
+        }
+        {
+          key = "ctrl+2";
+          command = "workbench.action.openEditorAtIndex2";
+        }
+        {
+          key = "ctrl+3";
+          command = "workbench.action.openEditorAtIndex3";
+        }
+        {
+          key = "ctrl+4";
+          command = "workbench.action.openEditorAtIndex4";
+        }
+        {
+          key = "ctrl+5";
+          command = "workbench.action.openEditorAtIndex5";
+        }
+        {
+          key = "ctrl+`";
+          command = "workbench.action.terminal.toggleTerminal";
+        }
+        {
+          key = "ctrl+shift+`";
+          command = "workbench.action.terminal.new";
+        }
+        {
+          key = "f12";
+          command = "editor.action.goToDeclaration";
+        }
+        {
+          key = "ctrl+f12";
+          command = "editor.action.goToImplementation";
+        }
+        {
+          key = "shift+f12";
+          command = "editor.action.goToReferences";
+        }
+        {
+          key = "ctrl+shift+f";
+          command = "workbench.action.findInFiles";
+        }
+        {
+          key = "ctrl+shift+h";
+          command = "workbench.action.replaceInFiles";
+        }
+        {
+          key = "ctrl+shift+g";
+          command = "workbench.view.scm";
+        }
+        {
+          key = "ctrl+shift+e";
+          command = "workbench.view.explorer";
+        }
+        {
+          key = "ctrl+shift+x";
+          command = "workbench.view.extensions";
+        }
+        {
+          key = "ctrl+shift+d";
+          command = "workbench.view.debug";
+        }
+        {
+          key = "ctrl+shift+u";
+          command = "workbench.view.output";
+        }
+        {
+          key = "ctrl+shift+m";
+          command = "workbench.view.problems";
+        }
+        {
+          key = "ctrl+shift+y";
+          command = "workbench.debug.action.toggleRepl";
+        }
+        {
+          key = "ctrl+shift+o";
+          command = "workbench.action.gotoSymbol";
+        }
+        {
+          key = "ctrl+t";
+          command = "workbench.action.showAllSymbols";
+        }
+        {
+          key = "ctrl+shift+p";
+          command = "workbench.action.showCommands";
+        }
+        {
+          key = "ctrl+p";
+          command = "workbench.action.quickOpen";
+        }
+        {
+          key = "ctrl+=";
+          command = "editor.action.fontZoomIn";
+        }
+        {
+          key = "ctrl+-";
+          command = "editor.action.fontZoomOut";
+        }
+        {
+          key = "ctrl+0";
+          command = "editor.action.fontZoomReset";
+        }
+      ];
+
+      extensions =
+        with pkgs.vscode-extensions;
+        [
+          # Nix
+          jnoortheen.nix-ide
+          arrterian.nix-env-selector
+
+          # Python
+          ms-python.python
+          ms-python.vscode-pylance
+          ms-python.black-formatter
+          ms-python.isort
+
+          # Rust
+          rust-lang.rust-analyzer
+
+          # JavaScript/TypeScript
+          esbenp.prettier-vscode
+          dbaeumer.vscode-eslint
+          bradlc.vscode-tailwindcss
+
+          # Go
+          golang.go
+
+          # Lua
+          sumneko.lua
+
+          # General
+          github.copilot
+          github.copilot-chat
+          eamodio.gitlens
+          usernamehw.errorlens
+          gruntfuggly.todo-tree
+          aaron-bond.better-comments
+
+          # UI
+          pkief.material-icon-theme
+          enkia.tokyo-night
+          catppuccin.catppuccin-vsc
+
+          # Productivity
+          formulahendry.auto-rename-tag
+          christian-kohler.path-intellisense
+          streetsidesoftware.code-spell-checker
+
+          # Markdown
+          yzhang.markdown-all-in-one
+          davidanson.vscode-markdownlint
+
+          # YAML/TOML/JSON
+          redhat.vscode-yaml
+          tamasfe.even-better-toml
+
+          # Docker
+          ms-azuretools.vscode-docker
+
+          # Remote
+          ms-vscode-remote.remote-ssh
+
+          # Testing
+          # vitest.explorer
+        ]
+        ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+          # Additional extensions not in nixpkgs
+          # {
+          #   name = "catppuccin-vsc-icons";
+          #   publisher = "catppuccin";
+          #   version = "1.13.0";
+          #   sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          # }
+        ];
     };
-    
-    keybindings = [
-      {
-        key = "ctrl+k ctrl+s";
-        command = "workbench.action.openGlobalKeybindings";
-      }
-      {
-        key = "ctrl+shift+n";
-        command = "workbench.action.newWindow";
-      }
-      {
-        key = "ctrl+shift+w";
-        command = "workbench.action.closeWindow";
-      }
-      {
-        key = "ctrl+k ctrl+w";
-        command = "workbench.action.closeAllEditors";
-      }
-      {
-        key = "ctrl+tab";
-        command = "workbench.action.nextEditor";
-      }
-      {
-        key = "ctrl+shift+tab";
-        command = "workbench.action.previousEditor";
-      }
-      {
-        key = "ctrl+1";
-        command = "workbench.action.openEditorAtIndex1";
-      }
-      {
-        key = "ctrl+2";
-        command = "workbench.action.openEditorAtIndex2";
-      }
-      {
-        key = "ctrl+3";
-        command = "workbench.action.openEditorAtIndex3";
-      }
-      {
-        key = "ctrl+4";
-        command = "workbench.action.openEditorAtIndex4";
-      }
-      {
-        key = "ctrl+5";
-        command = "workbench.action.openEditorAtIndex5";
-      }
-      {
-        key = "ctrl+`";
-        command = "workbench.action.terminal.toggleTerminal";
-      }
-      {
-        key = "ctrl+shift+`";
-        command = "workbench.action.terminal.new";
-      }
-      {
-        key = "f12";
-        command = "editor.action.goToDeclaration";
-      }
-      {
-        key = "ctrl+f12";
-        command = "editor.action.goToImplementation";
-      }
-      {
-        key = "shift+f12";
-        command = "editor.action.goToReferences";
-      }
-      {
-        key = "ctrl+shift+f";
-        command = "workbench.action.findInFiles";
-      }
-      {
-        key = "ctrl+shift+h";
-        command = "workbench.action.replaceInFiles";
-      }
-      {
-        key = "ctrl+shift+g";
-        command = "workbench.view.scm";
-      }
-      {
-        key = "ctrl+shift+e";
-        command = "workbench.view.explorer";
-      }
-      {
-        key = "ctrl+shift+x";
-        command = "workbench.view.extensions";
-      }
-      {
-        key = "ctrl+shift+d";
-        command = "workbench.view.debug";
-      }
-      {
-        key = "ctrl+shift+u";
-        command = "workbench.view.output";
-      }
-      {
-        key = "ctrl+shift+m";
-        command = "workbench.view.problems";
-      }
-      {
-        key = "ctrl+shift+y";
-        command = "workbench.debug.action.toggleRepl";
-      }
-      {
-        key = "ctrl+shift+o";
-        command = "workbench.action.gotoSymbol";
-      }
-      {
-        key = "ctrl+t";
-        command = "workbench.action.showAllSymbols";
-      }
-      {
-        key = "ctrl+shift+p";
-        command = "workbench.action.showCommands";
-      }
-      {
-        key = "ctrl+p";
-        command = "workbench.action.quickOpen";
-      }
-      {
-        key = "ctrl+=";
-        command = "editor.action.fontZoomIn";
-      }
-      {
-        key = "ctrl+-";
-        command = "editor.action.fontZoomOut";
-      }
-      {
-        key = "ctrl+0";
-        command = "editor.action.fontZoomReset";
-      }
-    ];
-    
-    extensions = with pkgs.vscode-extensions; [
-      # Nix
-      jnoortheen.nix-ide
-      arrterian.nix-env-selector
-      
-      # Python
-      ms-python.python
-      ms-python.vscode-pylance
-      ms-python.black-formatter
-      ms-python.isort
-      
-      # Rust
-      rust-lang.rust-analyzer
-      
-      # JavaScript/TypeScript
-      esbenp.prettier-vscode
-      dbaeumer.vscode-eslint
-      bradlc.vscode-tailwindcss
-      
-      # Go
-      golang.go
-      
-      # Lua
-      sumneko.lua
-      
-      # General
-      github.copilot
-      github.copilot-chat
-      eamodio.gitlens
-      usernamehw.errorlens
-      gruntfuggly.todo-tree
-      aaron-bond.better-comments
-      
-      # UI
-      pkief.material-icon-theme
-      enkia.tokyo-night
-      catppuccin.catppuccin-vsc
-      
-      # Productivity
-      formulahendry.auto-rename-tag
-      christian-kohler.path-intellisense
-      streetsidesoftware.code-spell-checker
-      
-      # Markdown
-      yzhang.markdown-all-in-one
-      davidanson.vscode-markdownlint
-      
-      # YAML/TOML/JSON
-      redhat.vscode-yaml
-      tamasfe.even-better-toml
-      
-      # Docker
-      ms-azuretools.vscode-docker
-      
-      # Remote
-      ms-vscode-remote.remote-ssh
-      
-      # Testing
-      vitest.explorer
-    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-      # Additional extensions not in nixpkgs
-      {
-        name = "catppuccin-vsc-icons";
-        publisher = "catppuccin";
-        version = "1.13.0";
-        sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-      }
-    ];
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -2005,31 +2123,31 @@ in
   programs.firefox = lib.mkIf (variables.browser == "firefox" || variables.browser == "librewolf") {
     enable = true;
     package = if variables.browser == "librewolf" then pkgs.librewolf else pkgs.firefox;
-    
+
     profiles.${variables.username} = {
       name = variables.username;
       isDefault = true;
-      
+
       settings = {
         # Homepage
         "browser.startup.homepage" = "about:home";
         "browser.startup.page" = 1;
         "browser.newtabpage.enabled" = true;
-        
+
         # Privacy
         "privacy.donottrackheader.enabled" = true;
         "privacy.trackingprotection.enabled" = true;
         "privacy.trackingprotection.socialtracking.enabled" = true;
         "privacy.partition.network_state.ocsp_cache" = true;
-        
+
         # Search
         "browser.search.defaultenginename" = "DuckDuckGo";
         "browser.search.selectedEngine" = "DuckDuckGo";
-        
+
         # Downloads
         "browser.download.useDownloadDir" = false;
         "browser.download.always_ask_before_handling_new_types" = true;
-        
+
         # UI
         "browser.compactmode.show" = true;
         "browser.uidensity" = 1;
@@ -2038,15 +2156,15 @@ in
         "browser.urlbar.suggest.bookmark" = true;
         "browser.urlbar.suggest.history" = true;
         "browser.urlbar.suggest.openpage" = true;
-        
+
         # Performance
         "browser.sessionstore.resume_from_crash" = true;
         "browser.sessionstore.interval" = 30000;
-        
+
         # Security
         "dom.security.https_only_mode" = true;
         "dom.security.https_only_mode_ever_enabled" = true;
-        
+
         # Smooth scrolling
         "general.smoothScroll" = true;
         "general.smoothScroll.lines.durationMaxMS" = 125;
@@ -2064,14 +2182,14 @@ in
         "mousewheel.system_scroll_override_on_root_content.vertical.factor" = 175;
         "toolkit.scrollbox.horizontalScrollDistance" = 6;
         "toolkit.scrollbox.verticalScrollDistance" = 2;
-        
+
         # Hardware acceleration
         "layers.acceleration.force-enabled" = true;
         "gfx.webrender.all" = true;
         "gfx.webrender.enabled" = true;
         "layout.css.backdrop-filter.enabled" = true;
         "svg.context-properties.content.enabled" = true;
-        
+
         # Disable telemetry
         "browser.newtabpage.activity-stream.feeds.telemetry" = false;
         "browser.newtabpage.activity-stream.telemetry" = false;
@@ -2092,55 +2210,77 @@ in
         "toolkit.telemetry.unified" = false;
         "toolkit.telemetry.updatePing.enabled" = false;
       };
-      
+
       search = {
         force = true;
         default = "DuckDuckGo";
-        order = [ "DuckDuckGo" "Google" ];
+        order = [
+          "DuckDuckGo"
+          "Google"
+        ];
         engines = {
           "DuckDuckGo" = {
-            urls = [{
-              template = "https://duckduckgo.com/";
-              params = [
-                { name = "q"; value = "{searchTerms}"; }
-              ];
-            }];
+            urls = [
+              {
+                template = "https://duckduckgo.com/";
+                params = [
+                  {
+                    name = "q";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
             definedAliases = [ "@ddg" ];
           };
           "Nix Packages" = {
-            urls = [{
-              template = "https://search.nixos.org/packages";
-              params = [
-                { name = "type"; value = "packages"; }
-                { name = "query"; value = "{searchTerms}"; }
-              ];
-            }];
+            urls = [
+              {
+                template = "https://search.nixos.org/packages";
+                params = [
+                  {
+                    name = "type";
+                    value = "packages";
+                  }
+                  {
+                    name = "query";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
             icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
             definedAliases = [ "@nix" ];
           };
           "NixOS Wiki" = {
-            urls = [{
-              template = "https://nixos.wiki/index.php?search={searchTerms}";
-            }];
+            urls = [
+              {
+                template = "https://nixos.wiki/index.php?search={searchTerms}";
+              }
+            ];
             iconUpdateURL = "https://nixos.wiki/favicon.png";
             updateInterval = 24 * 60 * 60 * 1000;
             definedAliases = [ "@nixwiki" ];
           };
           "Home Manager" = {
-            urls = [{
-              template = "https://home-manager-options.extranix.com/?query={searchTerms}&release=master";
-            }];
+            urls = [
+              {
+                template = "https://home-manager-options.extranix.com/?query={searchTerms}&release=master";
+              }
+            ];
             definedAliases = [ "@hm" ];
           };
           "GitHub" = {
-            urls = [{
-              template = "https://github.com/search?q={searchTerms}&type=repositories";
-            }];
+            urls = [
+              {
+                template = "https://github.com/search?q={searchTerms}&type=repositories";
+              }
+            ];
             definedAliases = [ "@gh" ];
           };
         };
       };
-      
+
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
         ublock-origin
         bitwarden
@@ -2153,18 +2293,18 @@ in
         return-youtube-dislike
         indie-wiki-buddy
       ];
-      
+
       userChrome = ''
         /* Hide tab bar when using Tree Style Tab */
         #TabsToolbar {
           visibility: collapse !important;
         }
-        
+
         /* Compact UI */
         :root {
           --tab-min-height: 28px !important;
         }
-        
+
         /* Hide title bar */
         #titlebar {
           appearance: none !important;
@@ -2179,7 +2319,7 @@ in
 
   xdg = {
     enable = true;
-    
+
     configFile = {
       "npm/npmrc".text = ''
         prefix=''${XDG_DATA_HOME}/npm
@@ -2195,7 +2335,7 @@ in
         set completion-ignore-case on
       '';
     };
-    
+
     userDirs = {
       enable = true;
       createDirectories = true;
@@ -2218,12 +2358,12 @@ in
         "x-scheme-handler/https" = "${variables.browser}.desktop";
         "x-scheme-handler/about" = "${variables.browser}.desktop";
         "x-scheme-handler/unknown" = "${variables.browser}.desktop";
-        
+
         # Text
         "text/plain" = "${variables.editor}.desktop";
         "text/markdown" = "${variables.editor}.desktop";
         "text/x-markdown" = "${variables.editor}.desktop";
-        
+
         # Code
         "text/x-python" = "${variables.editor}.desktop";
         "text/javascript" = "${variables.editor}.desktop";
@@ -2232,26 +2372,26 @@ in
         "text/x-rust" = "${variables.editor}.desktop";
         "text/x-go" = "${variables.editor}.desktop";
         "text/x-shellscript" = "${variables.editor}.desktop";
-        
+
         # Documents
         "application/pdf" = "org.pwmt.zathura.desktop";
         "application/epub+zip" = "org.pwmt.zathura.desktop";
         "application/x-mobipocket-ebook" = "org.pwmt.zathura.desktop";
-        
+
         # Images
         "image/png" = "org.gnome.eog.desktop";
         "image/jpeg" = "org.gnome.eog.desktop";
         "image/gif" = "org.gnome.eog.desktop";
         "image/webp" = "org.gnome.eog.desktop";
         "image/svg+xml" = "org.gnome.eog.desktop";
-        
+
         # Archives
         "application/zip" = "org.gnome.FileRoller.desktop";
         "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
         "application/x-rar" = "org.gnome.FileRoller.desktop";
         "application/x-tar" = "org.gnome.FileRoller.desktop";
         "application/gzip" = "org.gnome.FileRoller.desktop";
-        
+
         # Media
         "video/mp4" = "vlc.desktop";
         "video/x-matroska" = "vlc.desktop";
@@ -2259,7 +2399,7 @@ in
         "audio/mpeg" = "vlc.desktop";
         "audio/ogg" = "vlc.desktop";
         "audio/flac" = "vlc.desktop";
-        
+
         # Office
         "application/vnd.oasis.opendocument.text" = "libreoffice.desktop";
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = "libreoffice.desktop";
@@ -2277,33 +2417,40 @@ in
 
   gtk = {
     enable = true;
-    
+
     theme = {
-      name = if variables.theme.style == "dark" then "Catppuccin-Mocha-Compact-Mauve-Dark" else "Catppuccin-Latte-Compact-Mauve-Light";
+      name =
+        if variables.theme.style == "dark" then
+          "Catppuccin-Mocha-Compact-Mauve-Dark"
+        else
+          "Catppuccin-Latte-Compact-Mauve-Light";
       package = pkgs.catppuccin-gtk.override {
         accents = [ "mauve" ];
         size = "compact";
-        tweaks = [ "rimless" "black" ];
+        tweaks = [
+          "rimless"
+          "black"
+        ];
         variant = if variables.theme.style == "dark" then "mocha" else "latte";
       };
     };
-    
+
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
-    
+
     cursorTheme = {
       name = "Bibata-Modern-Ice";
       package = pkgs.bibata-cursors;
       size = 24;
     };
-    
+
     font = {
       name = variables.theme.font.sans;
       size = 11;
     };
-    
+
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = if variables.theme.style == "dark" then 1 else 0;
       gtk-xft-antialias = 1;
@@ -2312,7 +2459,7 @@ in
       gtk-xft-rgba = "rgb";
       gtk-decoration-layout = "menu:minimize,maximize,close";
     };
-    
+
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = if variables.theme.style == "dark" then 1 else 0;
     };
@@ -2327,7 +2474,7 @@ in
     platformTheme.name = "kvantum";
     style = {
       name = "kvantum";
-      package = pkgs.kvantum;
+      package = pkgs.kdePackages.qtstyleplugin-kvantum;
     };
   };
 
@@ -2355,31 +2502,33 @@ in
 
   services.mako = lib.mkIf (variables.desktopEnvironment == "hyprland") {
     enable = true;
-    font = "${variables.theme.font.sans} 11";
-    padding = "10";
-    margin = "10";
-    borderSize = 2;
-    borderRadius = 8;
-    backgroundColor = if variables.theme.style == "dark" then "#1e1e2e" else "#eff1f5";
-    textColor = if variables.theme.style == "dark" then "#cdd6f4" else "#4c4f69";
-    borderColor = if variables.theme.style == "dark" then "#cba6f7" else "#8839ef";
-    progressColor = if variables.theme.style == "dark" then "#313244" else "#ccd0da";
-    icons = true;
-    maxIconSize = 64;
-    defaultTimeout = 5000;
-    ignoreTimeout = false;
-    maxVisible = 5;
-    layer = "overlay";
-    anchor = "top-right";
-    sort = "+time";
-    
+    settings = {
+      font = "${variables.theme.font.sans} 11";
+      padding = "10";
+      margin = "10";
+      border-size = 2;
+      border-radius = 8;
+      background-color = if variables.theme.style == "dark" then "#1e1e2e" else "#eff1f5";
+      text-color = if variables.theme.style == "dark" then "#cdd6f4" else "#4c4f69";
+      border-color = if variables.theme.style == "dark" then "#cba6f7" else "#8839ef";
+      progress-color = if variables.theme.style == "dark" then "#313244" else "#ccd0da";
+      icons = true;
+      max-icon-size = 64;
+      default-timeout = 5000;
+      ignore-timeout = false;
+      max-visible = 5;
+      layer = "overlay";
+      anchor = "top-right";
+      sort = "+time";
+    };
+
     extraConfig = ''
       [urgency=low]
       border-color=#6c7086
-      
+
       [urgency=normal]
       border-color=#cba6f7
-      
+
       [urgency=critical]
       border-color=#f38ba8
       default-timeout=0
@@ -2401,7 +2550,7 @@ in
   services.syncthing = lib.mkIf variables.sync.syncthing.enable {
     enable = true;
     tray.enable = false;
-    
+
     settings = {
       devices = variables.sync.syncthing.devices;
       folders = variables.sync.syncthing.folders;
@@ -2421,7 +2570,11 @@ in
 
   services.gnome-keyring = {
     enable = true;
-    components = [ "secrets" "ssh" "pkcs11" ];
+    components = [
+      "secrets"
+      "ssh"
+      "pkcs11"
+    ];
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -2473,83 +2626,85 @@ in
   # DUNST (notification daemon - alternative to mako)
   # ═══════════════════════════════════════════════════════════════════════════
 
-  services.dunst = lib.mkIf (variables.desktopEnvironment != "hyprland" && variables.desktopEnvironment != "plasma") {
-    enable = true;
-    
-    settings = {
-      global = {
-        font = "${variables.theme.font.sans} 11";
-        frame_width = 2;
-        frame_color = if variables.theme.style == "dark" then "#cba6f7" else "#8839ef";
-        separator_color = "frame";
-        separator_height = 2;
-        padding = 10;
-        horizontal_padding = 10;
-        text_icon_padding = 10;
-        icon_position = "left";
-        min_icon_size = 32;
-        max_icon_size = 64;
-        progress_bar = true;
-        progress_bar_height = 10;
-        progress_bar_frame_width = 1;
-        progress_bar_min_width = 150;
-        progress_bar_max_width = 300;
-        indicate_hidden = "yes";
-        transparency = 5;
-        corner_radius = 8;
-        gap_size = 10;
-        offset = "10x10";
-        origin = "top-right";
-        notification_limit = 5;
-        idle_threshold = 120;
-        history_length = 20;
-        show_age_threshold = 60;
-        markup = "full";
-        plain_text = "no";
-        format = "<b>%s</b>\n%b";
-        alignment = "left";
-        vertical_alignment = "center";
-        ellipsize = "middle";
-        ignore_newline = "no";
-        stack_duplicates = true;
-        hide_duplicate_count = false;
-        show_indicators = "yes";
-        dmenu = "${pkgs.wofi}/bin/wofi --dmenu";
-        browser = variables.browser;
-        always_run_script = true;
-        title = "Dunst";
-        class = "Dunst";
-        force_xinerama = false;
-        follow = "mouse";
-        sticky_history = "yes";
-        enable_recursive_icon_lookup = true;
-        icon_theme = "Papirus-Dark";
+  services.dunst =
+    lib.mkIf (variables.desktopEnvironment != "hyprland" && variables.desktopEnvironment != "plasma")
+      {
+        enable = true;
+
+        settings = {
+          global = {
+            font = "${variables.theme.font.sans} 11";
+            frame_width = 2;
+            frame_color = if variables.theme.style == "dark" then "#cba6f7" else "#8839ef";
+            separator_color = "frame";
+            separator_height = 2;
+            padding = 10;
+            horizontal_padding = 10;
+            text_icon_padding = 10;
+            icon_position = "left";
+            min_icon_size = 32;
+            max_icon_size = 64;
+            progress_bar = true;
+            progress_bar_height = 10;
+            progress_bar_frame_width = 1;
+            progress_bar_min_width = 150;
+            progress_bar_max_width = 300;
+            indicate_hidden = "yes";
+            transparency = 5;
+            corner_radius = 8;
+            gap_size = 10;
+            offset = "10x10";
+            origin = "top-right";
+            notification_limit = 5;
+            idle_threshold = 120;
+            history_length = 20;
+            show_age_threshold = 60;
+            markup = "full";
+            plain_text = "no";
+            format = "<b>%s</b>\n%b";
+            alignment = "left";
+            vertical_alignment = "center";
+            ellipsize = "middle";
+            ignore_newline = "no";
+            stack_duplicates = true;
+            hide_duplicate_count = false;
+            show_indicators = "yes";
+            dmenu = "${pkgs.wofi}/bin/wofi --dmenu";
+            browser = variables.browser;
+            always_run_script = true;
+            title = "Dunst";
+            class = "Dunst";
+            force_xinerama = false;
+            follow = "mouse";
+            sticky_history = "yes";
+            enable_recursive_icon_lookup = true;
+            icon_theme = "Papirus-Dark";
+          };
+
+          urgency_low = {
+            background = if variables.theme.style == "dark" then "#1e1e2e" else "#eff1f5";
+            foreground = if variables.theme.style == "dark" then "#cdd6f4" else "#4c4f69";
+            timeout = 5;
+          };
+
+          urgency_normal = {
+            background = if variables.theme.style == "dark" then "#1e1e2e" else "#eff1f5";
+            foreground = if variables.theme.style == "dark" then "#cdd6f4" else "#4c4f69";
+            timeout = 10;
+          };
+
+          urgency_critical = {
+            background = if variables.theme.style == "dark" then "#1e1e2e" else "#eff1f5";
+            foreground = if variables.theme.style == "dark" then "#f38ba8" else "#d20f39";
+            frame_color = if variables.theme.style == "dark" then "#f38ba8" else "#d20f39";
+            timeout = 0;
+          };
+
+          fullscreen_delay_everything = {
+            fullscreen = "delay";
+          };
+        };
       };
-      
-      urgency_low = {
-        background = if variables.theme.style == "dark" then "#1e1e2e" else "#eff1f5";
-        foreground = if variables.theme.style == "dark" then "#cdd6f4" else "#4c4f69";
-        timeout = 5;
-      };
-      
-      urgency_normal = {
-        background = if variables.theme.style == "dark" then "#1e1e2e" else "#eff1f5";
-        foreground = if variables.theme.style == "dark" then "#cdd6f4" else "#4c4f69";
-        timeout = 10;
-      };
-      
-      urgency_critical = {
-        background = if variables.theme.style == "dark" then "#1e1e2e" else "#eff1f5";
-        foreground = if variables.theme.style == "dark" then "#f38ba8" else "#d20f39";
-        frame_color = if variables.theme.style == "dark" then "#f38ba8" else "#d20f39";
-        timeout = 0;
-      };
-      
-      fullscreen_delay_everything = {
-        fullscreen = "delay";
-      };
-    };
-  };
 
   # ═══════════════════════════════════════════════════════════════════════════
   # RANDOM BACKGROUND
@@ -2565,16 +2720,18 @@ in
   # HYPRPAPER (Hyprland wallpaper)
   # ═══════════════════════════════════════════════════════════════════════════
 
-  services.hyprpaper = lib.mkIf (variables.desktopEnvironment == "hyprland" && !variables.desktop.wallpaper.random) {
-    enable = true;
-    settings = {
-      ipc = "on";
-      splash = false;
-      splash_offset = 2.0;
-      preload = [ variables.desktop.wallpaper.path ];
-      wallpaper = ",${variables.desktop.wallpaper.path}";
-    };
-  };
+  services.hyprpaper =
+    lib.mkIf (variables.desktopEnvironment == "hyprland" && !variables.desktop.wallpaper.random)
+      {
+        enable = true;
+        settings = {
+          ipc = "on";
+          splash = false;
+          splash_offset = 2.0;
+          preload = [ variables.desktop.wallpaper.path ];
+          wallpaper = ",${variables.desktop.wallpaper.path}";
+        };
+      };
 
   # ═══════════════════════════════════════════════════════════════════════════
   # WAYBAR (Hyprland status bar)
@@ -2583,29 +2740,36 @@ in
   programs.waybar = lib.mkIf (variables.desktopEnvironment == "hyprland") {
     enable = true;
     systemd.enable = true;
-    
+
     settings = {
       mainBar = {
         layer = "top";
         position = "top";
         height = 30;
         spacing = 4;
-        output = [ "eDP-1" "HDMI-A-1" "DP-1" ];
-        
-        modules-left = [ "hyprland/workspaces" "hyprland/window" ];
-        modules-center = [ "clock" ];
-        modules-right = [ 
-          "tray" 
-          "idle_inhibitor" 
-          "pulseaudio" 
-          "network" 
-          "cpu" 
-          "memory" 
-          "temperature" 
-          "battery" 
-          "custom/power" 
+        output = [
+          "eDP-1"
+          "HDMI-A-1"
+          "DP-1"
         ];
-        
+
+        modules-left = [
+          "hyprland/workspaces"
+          "hyprland/window"
+        ];
+        modules-center = [ "clock" ];
+        modules-right = [
+          "tray"
+          "idle_inhibitor"
+          "pulseaudio"
+          "network"
+          "cpu"
+          "memory"
+          "temperature"
+          "battery"
+          "custom/power"
+        ];
+
         "hyprland/workspaces" = {
           disable-scroll = true;
           all-outputs = true;
@@ -2621,16 +2785,16 @@ in
             "default" = "󰧞";
           };
         };
-        
+
         "hyprland/window" = {
           max-length = 50;
           separate-outputs = true;
         };
-        
+
         tray = {
           spacing = 10;
         };
-        
+
         clock = {
           timezone = variables.timezone;
           format = "{:%Y-%m-%d %H:%M:%S}";
@@ -2642,26 +2806,26 @@ in
           format-calendar-weeks = "<span color='#a6adc8'><b>W{}</b></span>";
           format-calendar-weekdays = "<span color='#f9e2af'><b>{}</b></span>";
         };
-        
+
         cpu = {
           format = "{usage}% ";
           tooltip = true;
           interval = 1;
         };
-        
+
         memory = {
           format = "{}% ";
           tooltip = true;
           interval = 1;
         };
-        
+
         temperature = {
           critical-threshold = 80;
           format = "{temperatureC}°C ";
           format-critical = "{temperatureC}°C ";
           tooltip = true;
         };
-        
+
         battery = {
           states = {
             warning = 30;
@@ -2671,9 +2835,15 @@ in
           format-charging = "{capacity}% ";
           format-plugged = "{capacity}% ";
           format-alt = "{time} {icon}";
-          format-icons = [ " " " " " " " " " " ];
+          format-icons = [
+            " "
+            " "
+            " "
+            " "
+            " "
+          ];
         };
-        
+
         network = {
           format-wifi = "{essid} ({signalStrength}%) ";
           format-ethernet = "{ipaddr}/{cidr} ";
@@ -2682,7 +2852,7 @@ in
           format-disconnected = "Disconnected ";
           format-alt = "{ifname}: {ipaddr}/{cidr}";
         };
-        
+
         pulseaudio = {
           format = "{volume}% {icon}";
           format-bluetooth = "{volume}% {icon}";
@@ -2695,11 +2865,15 @@ in
             phone = "";
             portable = "";
             car = "";
-            default = [ "" "" "" ];
+            default = [
+              ""
+              ""
+              ""
+            ];
           };
           on-click = "pavucontrol";
         };
-        
+
         idle_inhibitor = {
           format = "{icon}";
           format-icons = {
@@ -2707,7 +2881,7 @@ in
             deactivated = "";
           };
         };
-        
+
         "custom/power" = {
           format = " ";
           on-click = "wofi-power-menu";
@@ -2715,14 +2889,14 @@ in
         };
       };
     };
-    
+
     style = ''
       * {
         font-family: "${variables.theme.font.sans}";
         font-size: 13px;
         min-height: 0;
       }
-      
+
       window#waybar {
         background-color: #1e1e2e;
         color: #cdd6f4;
@@ -2730,11 +2904,11 @@ in
         transition-duration: .5s;
         border-radius: 0;
       }
-      
+
       window#waybar.hidden {
         opacity: 0.2;
       }
-      
+
       #workspaces button {
         padding: 0 10px;
         color: #cdd6f4;
@@ -2743,21 +2917,21 @@ in
         border: none;
         border-radius: 0;
       }
-      
+
       #workspaces button:hover {
         background: rgba(0, 0, 0, 0.2);
         box-shadow: inset 0 -3px #cdd6f4;
       }
-      
+
       #workspaces button.focused {
         background-color: #313244;
         box-shadow: inset 0 -3px #cba6f7;
       }
-      
+
       #workspaces button.urgent {
         background-color: #f38ba8;
       }
-      
+
       #clock,
       #battery,
       #cpu,
@@ -2771,42 +2945,42 @@ in
         padding: 0 10px;
         color: #cdd6f4;
       }
-      
+
       #window,
       #workspaces {
         margin: 0 4px;
       }
-      
+
       .modules-left > widget:first-child > #workspaces {
         margin-left: 0;
       }
-      
+
       .modules-right > widget:last-child > #custom-power {
         margin-right: 0;
       }
-      
+
       #clock {
         background-color: #313244;
         border-radius: 8px;
       }
-      
+
       #battery {
         background-color: #313244;
         border-radius: 8px;
       }
-      
+
       #battery.charging, #battery.plugged {
         color: #a6e3a1;
         background-color: #313244;
       }
-      
+
       @keyframes blink {
         to {
           background-color: #f38ba8;
           color: #1e1e2e;
         }
       }
-      
+
       #battery.critical:not(.charging) {
         background-color: #f38ba8;
         color: #1e1e2e;
@@ -2816,69 +2990,69 @@ in
         animation-iteration-count: infinite;
         animation-direction: alternate;
       }
-      
+
       #cpu {
         background-color: #313244;
         border-radius: 8px;
       }
-      
+
       #memory {
         background-color: #313244;
         border-radius: 8px;
       }
-      
+
       #temperature {
         background-color: #313244;
         border-radius: 8px;
       }
-      
+
       #temperature.critical {
         background-color: #f38ba8;
       }
-      
+
       #network {
         background-color: #313244;
         border-radius: 8px;
       }
-      
+
       #network.disconnected {
         background-color: #f38ba8;
       }
-      
+
       #pulseaudio {
         background-color: #313244;
         border-radius: 8px;
       }
-      
+
       #pulseaudio.muted {
         background-color: #313244;
         color: #6c7086;
       }
-      
+
       #tray {
         background-color: #313244;
         border-radius: 8px;
       }
-      
+
       #tray > .passive {
         -gtk-icon-effect: dim;
       }
-      
+
       #tray > .needs-attention {
         -gtk-icon-effect: highlight;
         background-color: #f38ba8;
       }
-      
+
       #idle_inhibitor {
         background-color: #313244;
         border-radius: 8px;
       }
-      
+
       #idle_inhibitor.activated {
         background-color: #cba6f7;
         color: #1e1e2e;
       }
-      
+
       #custom-power {
         background-color: #f38ba8;
         color: #1e1e2e;
@@ -2894,7 +3068,7 @@ in
 
   programs.wofi = lib.mkIf (variables.desktopEnvironment == "hyprland") {
     enable = true;
-    
+
     settings = {
       width = 600;
       height = 400;
@@ -2912,13 +3086,13 @@ in
       image_size = 32;
       gtk_dark = variables.theme.style == "dark";
     };
-    
+
     style = ''
       * {
         font-family: "${variables.theme.font.sans}";
         font-size: 14px;
       }
-      
+
       window {
         margin: 0px;
         border: 2px solid #cba6f7;
@@ -2926,7 +3100,7 @@ in
         background-color: #1e1e2e;
         color: #cdd6f4;
       }
-      
+
       #input {
         margin: 10px;
         padding: 10px;
@@ -2935,45 +3109,45 @@ in
         background-color: #313244;
         color: #cdd6f4;
       }
-      
+
       #input:focus {
         border: 2px solid #cba6f7;
       }
-      
+
       #inner-box {
         margin: 10px;
         border: none;
         background-color: transparent;
       }
-      
+
       #outer-box {
         margin: 10px;
         border: none;
         background-color: transparent;
       }
-      
+
       #scroll {
         margin: 0px;
         border: none;
       }
-      
+
       #text {
         margin: 5px;
         border: none;
         color: #cdd6f4;
       }
-      
+
       #entry {
         padding: 8px;
         border-radius: 8px;
         background-color: transparent;
       }
-      
+
       #entry:selected {
         background-color: #313244;
         border: 2px solid #cba6f7;
       }
-      
+
       #entry:hover {
         background-color: #313244;
       }
@@ -2986,7 +3160,7 @@ in
 
   programs.swaylock = lib.mkIf (variables.desktopEnvironment == "hyprland") {
     enable = true;
-    
+
     settings = {
       color = "1e1e2e";
       font = variables.theme.font.sans;
@@ -3034,7 +3208,7 @@ in
 
   services.hypridle = lib.mkIf (variables.desktopEnvironment == "hyprland") {
     enable = true;
-    
+
     settings = {
       general = {
         lock_cmd = "pidof swaylock || swaylock";
@@ -3044,7 +3218,7 @@ in
         ignore_dbus_inhibit = false;
         ignore_systemd_inhibit = false;
       };
-      
+
       listener = [
         {
           timeout = 300;
@@ -3076,10 +3250,10 @@ in
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
-    
+
     settings = {
       monitor = variables.hyprland.monitors;
-      
+
       exec-once = [
         "waybar"
         "mako"
@@ -3090,7 +3264,7 @@ in
         "nm-applet"
         "blueman-applet"
       ];
-      
+
       env = [
         "XCURSOR_SIZE,24"
         "HYPRCURSOR_SIZE,24"
@@ -3098,7 +3272,7 @@ in
         "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
         "MOZ_ENABLE_WAYLAND,1"
       ];
-      
+
       general = {
         gaps_in = 5;
         gaps_out = 10;
@@ -3109,7 +3283,7 @@ in
         allow_tearing = false;
         layout = "dwindle";
       };
-      
+
       decoration = {
         rounding = 10;
         active_opacity = 1.0;
@@ -3127,7 +3301,7 @@ in
           vibrancy = 0.1696;
         };
       };
-      
+
       animations = {
         enabled = true;
         bezier = [
@@ -3156,21 +3330,21 @@ in
           "workspacesOut, 1, 1.94, almostLinear, fade"
         ];
       };
-      
+
       dwindle = {
         pseudotile = true;
         preserve_split = true;
       };
-      
+
       master = {
         new_status = "master";
       };
-      
+
       misc = {
         force_default_wallpaper = -1;
         disable_hyprland_logo = false;
       };
-      
+
       input = {
         kb_layout = variables.keyboard.layout;
         kb_variant = variables.keyboard.variant;
@@ -3185,19 +3359,19 @@ in
           clickfinger_behavior = true;
         };
       };
-      
+
       gestures = {
         workspace_swipe = true;
         workspace_swipe_fingers = 3;
       };
-      
+
       device = {
         name = "epic-mouse-v1";
         sensitivity = -0.5;
       };
-      
+
       "$mainMod" = "SUPER";
-      
+
       bind = [
         # Basic
         "$mainMod, Q, exec, ${variables.terminal}"
@@ -3210,19 +3384,19 @@ in
         "$mainMod, J, togglesplit,"
         "$mainMod, L, exec, swaylock"
         "$mainMod, F, fullscreen,"
-        
+
         # Focus
         "$mainMod, left, movefocus, l"
         "$mainMod, right, movefocus, r"
         "$mainMod, up, movefocus, u"
         "$mainMod, down, movefocus, d"
-        
+
         # Move windows
         "$mainMod SHIFT, left, movewindow, l"
         "$mainMod SHIFT, right, movewindow, r"
         "$mainMod SHIFT, up, movewindow, u"
         "$mainMod SHIFT, down, movewindow, d"
-        
+
         # Workspaces
         "$mainMod, 1, workspace, 1"
         "$mainMod, 2, workspace, 2"
@@ -3234,7 +3408,7 @@ in
         "$mainMod, 8, workspace, 8"
         "$mainMod, 9, workspace, 9"
         "$mainMod, 0, workspace, 10"
-        
+
         # Move to workspace
         "$mainMod SHIFT, 1, movetoworkspace, 1"
         "$mainMod SHIFT, 2, movetoworkspace, 2"
@@ -3246,39 +3420,39 @@ in
         "$mainMod SHIFT, 8, movetoworkspace, 8"
         "$mainMod SHIFT, 9, movetoworkspace, 9"
         "$mainMod SHIFT, 0, movetoworkspace, 10"
-        
+
         # Special workspace
         "$mainMod, S, togglespecialworkspace, magic"
         "$mainMod SHIFT, S, movetoworkspace, special:magic"
-        
+
         # Scroll through workspaces
         "$mainMod, mouse_down, workspace, e+1"
         "$mainMod, mouse_up, workspace, e-1"
-        
+
         # Screenshots
         ", Print, exec, grimblast copy area"
         "SHIFT, Print, exec, grimblast save area"
         "CTRL, Print, exec, grimblast copy active"
         "CTRL SHIFT, Print, exec, grimblast save active"
-        
+
         # Clipboard history
         "$mainMod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
-        
+
         # Lock screen
         "CTRL ALT, L, exec, swaylock"
-        
+
         # Application shortcuts
         "$mainMod, B, exec, ${variables.browser}"
         "$mainMod, T, exec, ${variables.terminal}"
         "$mainMod, N, exec, nautilus"
         "$mainMod, M, exec, spotify"
       ];
-      
+
       bindm = [
         "$mainMod, mouse:272, movewindow"
         "$mainMod, mouse:273, resizewindow"
       ];
-      
+
       bindel = [
         ",XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
         ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
@@ -3287,14 +3461,14 @@ in
         ",XF86MonBrightnessUp, exec, brightnessctl s 10%+"
         ",XF86MonBrightnessDown, exec, brightnessctl s 10%-"
       ];
-      
+
       bindl = [
         ",XF86AudioNext, exec, playerctl next"
         ",XF86AudioPause, exec, playerctl play-pause"
         ",XF86AudioPlay, exec, playerctl play-pause"
         ",XF86AudioPrev, exec, playerctl previous"
       ];
-      
+
       windowrulev2 = [
         "suppressevent maximize, class:.*"
         "nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
@@ -3302,7 +3476,7 @@ in
         "size 800 600,class:^(pavucontrol|blueman-manager|nm-connection-editor)$"
         "center,class:^(pavucontrol|blueman-manager|nm-connection-editor)$"
       ];
-      
+
       layerrule = [
         "blur, waybar"
         "ignorezero, waybar"

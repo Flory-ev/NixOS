@@ -58,7 +58,6 @@
     # Flatpak support for NixOS
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # ─────────────────────────────────────────────────────────────────────────
@@ -134,7 +133,6 @@
     stylix = {
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
     };
 
     # Spicetify - Spotify theming
@@ -210,7 +208,7 @@
             allowUnsupportedSystem = false;
           };
           overlays = [
-            inputs.nur.overlay
+            inputs.nur.overlays.default
             inputs.nh.overlays.default
             inputs.catppuccin.overlays.default
           ]
@@ -250,7 +248,7 @@
         }
 
         # NUR (Nix User Repository)
-        { nixpkgs.overlays = [ inputs.nur.overlay ]; }
+        { nixpkgs.overlays = [ inputs.nur.overlays.default ]; }
 
         # SOPS secrets management (optional)
         inputs.sops-nix.nixosModules.sops
@@ -276,21 +274,21 @@
         ${variables.hostname} = nixpkgs.lib.nixosSystem {
           system = variables.system;
           specialArgs = specialArgs;
-          modules = commonNixosModules ++ [
-            # Main system configuration
-            ./configuration.nix
+          modules =
+            commonNixosModules
+            ++ [
+              # Main system configuration
+              ./configuration.nix
 
-            # Hardware configuration (auto-generated)
-            ./hardware-configuration.nix
-
-            # Optional: COSMIC desktop
-            (nixpkgs.lib.mkIf (
+              # Hardware configuration (auto-generated)
+              ./hardware-configuration.nix
+            ]
+            ++ nixpkgs.lib.optional (
               variables.desktopEnvironment == "cosmic"
-            ) inputs.nixos-cosmic.nixosModules.default)
-
-            # Optional: Hyprland
-            (nixpkgs.lib.mkIf (variables.desktopEnvironment == "hyprland") inputs.hyprland.nixosModules.default)
-          ];
+            ) inputs.nixos-cosmic.nixosModules.default
+            ++ nixpkgs.lib.optional (
+              variables.desktopEnvironment == "hyprland"
+            ) inputs.hyprland.nixosModules.default;
         };
 
         # Example: Additional host configuration
