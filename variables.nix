@@ -71,10 +71,10 @@
 
   # Primary desktop environment
   # Options: "plasma", "gnome", "cosmic", "hyprland", "none"
-  desktopEnvironment = "hyprland";
+  desktopEnvironment = "plasma";
 
   # Default session at login (must match an enabled DE)
-  defaultSession = "hyprland";
+  defaultSession = "plasma";
 
   # Display manager theme
   # Options: "breeze", "elarun", "maldives", "mountain", "sugar-candy"

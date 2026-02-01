@@ -210,7 +210,6 @@
           overlays = [
             inputs.nur.overlays.default
             inputs.nh.overlays.default
-            inputs.catppuccin.overlays.default
           ]
           ++ variables.nix.overlays;
         };
