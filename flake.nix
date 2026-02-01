@@ -27,11 +27,11 @@
     # Core NixOS Packages
     # ─────────────────────────────────────────────────────────────────────────
     # The main NixOS package repository
-    # Channels: nixos-unstable, nixos-24.11, nixos-24.05, etc.
+    # Channels: nixos-unstable, nixos-25.05, nixos-25.11, etc.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Alternative nixpkgs for specific use cases
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
     # ─────────────────────────────────────────────────────────────────────────
     # Home Manager
@@ -181,7 +181,13 @@
   # ============================================================================
   # This section defines how inputs are combined to create your system.
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
     let
       # ───────────────────────────────────────────────────────────────────────
       # Load Configuration Variables
@@ -194,24 +200,27 @@
       # ───────────────────────────────────────────────────────────────────────
 
       # Create nixpkgs instance with overlays
-      mkPkgs = system: import nixpkgs {
-        inherit system;
-        config = {
-          allowUnfree = true;
-          allowBroken = false;
-          allowUnsupportedSystem = false;
+      mkPkgs =
+        system:
+        import nixpkgs {
+          inherit system;
+          config = {
+            allowUnfree = true;
+            allowBroken = false;
+            allowUnsupportedSystem = false;
+          };
+          overlays = [
+            inputs.nur.overlay
+            inputs.nh.overlays.default
+            inputs.catppuccin.overlays.default
+          ]
+          ++ variables.nix.overlays;
         };
-        overlays = [
-          inputs.nur.overlay
-          inputs.nh.overlays.default
-          inputs.catppuccin.overlays.default
-        ] ++ variables.nix.overlays;
-      };
 
       # Supported systems
       systems = [
-        "x86_64-linux"
         "aarch64-linux"
+        "x86_64-linux"
       ];
 
       # Helper to map over systems
@@ -275,12 +284,12 @@
             ./hardware-configuration.nix
 
             # Optional: COSMIC desktop
-            (nixpkgs.lib.mkIf (variables.desktopEnvironment == "cosmic")
-              inputs.nixos-cosmic.nixosModules.default)
+            (nixpkgs.lib.mkIf (
+              variables.desktopEnvironment == "cosmic"
+            ) inputs.nixos-cosmic.nixosModules.default)
 
             # Optional: Hyprland
-            (nixpkgs.lib.mkIf (variables.desktopEnvironment == "hyprland")
-              inputs.hyprland.nixosModules.default)
+            (nixpkgs.lib.mkIf (variables.desktopEnvironment == "hyprland") inputs.hyprland.nixosModules.default)
           ];
         };
 
@@ -318,7 +327,8 @@
       # ───────────────────────────────────────────────────────────────────────
       # Shell environments for working on this configuration
 
-      devShells = forAllSystems (system:
+      devShells = forAllSystems (
+        system:
         let
           pkgs = mkPkgs system;
         in
@@ -378,64 +388,62 @@
               nixpkgs-fmt
             ];
           };
-        });
+        }
+      );
 
       # ───────────────────────────────────────────────────────────────────────
       # Packages
       # ───────────────────────────────────────────────────────────────────────
       # Custom packages exposed by this flake
 
-      packages = forAllSystems (system:
+      packages = forAllSystems (
+        system:
         let
           pkgs = mkPkgs system;
         in
         {
           # Example: Custom package
           # my-script = pkgs.callPackage ./pkgs/my-script { };
-        });
+        }
+      );
 
       # ───────────────────────────────────────────────────────────────────────
       # Formatter
       # ───────────────────────────────────────────────────────────────────────
       # Default formatter for this flake
 
-      formatter = forAllSystems (system:
-        (mkPkgs system).nixpkgs-fmt);
+      formatter = forAllSystems (system: (mkPkgs system).nixpkgs-fmt);
 
       # ───────────────────────────────────────────────────────────────────────
       # Checks
       # ───────────────────────────────────────────────────────────────────────
       # Pre-commit hooks and CI checks
 
-      checks = forAllSystems (system:
+      checks = forAllSystems (
+        system:
         let
           pkgs = mkPkgs system;
         in
         {
           # Nix formatting check
-          formatting = pkgs.runCommand "check-formatting"
-            { buildInputs = [ pkgs.nixpkgs-fmt ]; }
-            ''
-              ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check ${./.}
-              touch $out
-            '';
+          formatting = pkgs.runCommand "check-formatting" { buildInputs = [ pkgs.nixpkgs-fmt ]; } ''
+            ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check ${./.}
+            touch $out
+          '';
 
           # Statix linting
-          statix = pkgs.runCommand "check-statix"
-            { buildInputs = [ pkgs.statix ]; }
-            ''
-              ${pkgs.statix}/bin/statix check ${./.}
-              touch $out
-            '';
+          statix = pkgs.runCommand "check-statix" { buildInputs = [ pkgs.statix ]; } ''
+            ${pkgs.statix}/bin/statix check ${./.}
+            touch $out
+          '';
 
           # Dead code detection
-          deadnix = pkgs.runCommand "check-deadnix"
-            { buildInputs = [ pkgs.deadnix ]; }
-            ''
-              ${pkgs.deadnix}/bin/deadnix ${./.}
-              touch $out
-            '';
-        });
+          deadnix = pkgs.runCommand "check-deadnix" { buildInputs = [ pkgs.deadnix ]; } ''
+            ${pkgs.deadnix}/bin/deadnix ${./.}
+            touch $out
+          '';
+        }
+      );
 
       # ───────────────────────────────────────────────────────────────────────
       # Templates

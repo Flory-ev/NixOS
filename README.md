@@ -140,7 +140,6 @@ All your settings are controlled through `variables.nix`. Here's a complete refe
 | `system` | CPU architecture | `"x86_64-linux"` |
 | `stateVersion` | NixOS compatibility version | `"25.05"` |
 | `flakePath` | Path to this configuration | `"/home/f/nixos"` |
-| `windowsDualBoot` | Enable if dual-booting Windows | `false` |
 
 ### 🖼️ Desktop Environment
 

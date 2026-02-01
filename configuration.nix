@@ -11,7 +11,7 @@
   config,
   lib,
   pkgs,
-  inputs ? {},
+  inputs ? { },
   variables,
   ...
 }:
@@ -36,8 +36,8 @@
       systemd-boot = {
         enable = true;
         configurationLimit = variables.boot.configLimit;
-        editor = false;  # Disable editor for security
-        consoleMode = "max";  # Use max resolution
+        editor = false; # Disable editor for security
+        consoleMode = "max"; # Use max resolution
       };
       efi.canTouchEfiVariables = true;
       timeout = variables.boot.timeout;
@@ -46,7 +46,7 @@
     # Kernel
     kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = lib.optionals variables.hardware.bluetooth [ "btusb" ];
-    
+
     # Kernel hardening options
     kernel.sysctl = lib.mkIf variables.security.hardening {
       "kernel.dmesg_restrict" = true;
@@ -55,17 +55,19 @@
       "kernel.unprivileged_bpf_disabled" = 1;
       "net.core.bpf_jit_harden" = 2;
     };
-    
+
     # Silent boot
     consoleLogLevel = if variables.boot.silent then 0 else 3;
-    kernelParams = lib.optionals variables.boot.silent [
-      "quiet"
-      "splash"
-      "vga=current"
-      "rd.systemd.show_status=false"
-      "rd.udev.log_level=3"
-      "udev.log_priority=3"
-    ] ++ lib.optionals variables.boot.mitigations [ "mitigations=auto" ];
+    kernelParams =
+      lib.optionals variables.boot.silent [
+        "quiet"
+        "splash"
+        "vga=current"
+        "rd.systemd.show_status=false"
+        "rd.udev.log_level=3"
+        "udev.log_priority=3"
+      ]
+      ++ lib.optionals variables.boot.mitigations [ "mitigations=auto" ];
 
     # Plymouth boot splash
     plymouth = {
@@ -75,7 +77,7 @@
 
     # Clean /tmp on boot
     tmp.cleanOnBoot = true;
-    
+
     # Initrd configuration
     initrd = {
       systemd.enable = true;
@@ -88,7 +90,6 @@
   # ═══════════════════════════════════════════════════════════════════════════
 
   time.timeZone = variables.timezone;
-  time.hardwareClockInLocalTime = lib.mkIf variables.windowsDualBoot true;
 
   i18n = {
     defaultLocale = variables.locale;
@@ -130,14 +131,16 @@
         powersave = variables.laptop.enable;
       };
     };
-    
+
     # Use systemd-resolved for DNS resolution
-    nameservers = lib.mkIf (!config.services.resolved.enable) 
-      [ variables.dns.primary variables.dns.secondary ];
-    
+    nameservers = lib.mkIf (!config.services.resolved.enable) [
+      variables.dns.primary
+      variables.dns.secondary
+    ];
+
     # Enable systemd-resolved for better DNS handling
     resolvconf.enable = false;
-    
+
     # Firewall
     firewall = {
       enable = variables.firewall.enable;
@@ -146,7 +149,7 @@
       allowPing = variables.firewall.allowPing;
       logRefusedConnections = variables.firewall.logRefused;
     };
-    
+
     # Enable WireGuard if configured
     wireguard.enable = variables.vpn.wireguard.enable;
   };
@@ -156,7 +159,10 @@
     enable = true;
     dnssec = "true";
     dnsovertls = "opportunistic";
-    fallbackDns = [ "1.1.1.1" "8.8.8.8" ];
+    fallbackDns = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -174,7 +180,7 @@
     jack.enable = true;
     wireplumber.enable = true;
   };
-  
+
   # Ensure PipeWire is used instead of PulseAudio
   services.pulseaudio.enable = false;
 
@@ -195,18 +201,23 @@
   hardware.graphics = lib.mkIf variables.hardware.graphics {
     enable = true;
     enable32Bit = true;
-    extraPackages = with pkgs; lib.optionals variables.hardware.videoAcceleration [
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
+    extraPackages =
+      with pkgs;
+      lib.optionals variables.hardware.videoAcceleration [
+        vaapiVdpau
+        libvdpau-va-gl
+      ];
   };
 
   # Printing
   services.printing = lib.mkIf variables.hardware.printing {
     enable = true;
-    drivers = with pkgs; [ gutenprint hplip ];
+    drivers = with pkgs; [
+      gutenprint
+      hplip
+    ];
   };
-  
+
   # Enable CUPS browsing
   services.avahi = lib.mkIf variables.hardware.printing {
     enable = true;
@@ -240,14 +251,14 @@
   };
 
   programs.virt-manager.enable = variables.hardware.virtualization;
-  
+
   # Docker
   virtualisation.docker = lib.mkIf variables.containers.docker {
     enable = true;
     storageDriver = variables.containers.dockerStorageDriver;
     enableOnBoot = variables.containers.dockerAutoStart;
   };
-  
+
   # Podman
   virtualisation.podman = lib.mkIf variables.containers.podman {
     enable = true;
@@ -280,8 +291,9 @@
   };
 
   # Power profiles daemon (alternative to TLP)
-  services.power-profiles-daemon.enable = lib.mkIf 
-    (config.laptop.enable && !config.services.tlp.enable) true;
+  services.power-profiles-daemon.enable = lib.mkIf (
+    config.laptop.enable && !config.services.tlp.enable
+  ) true;
 
   # Touchpad
   services.libinput = lib.mkIf config.laptop.enable {
@@ -322,8 +334,6 @@
   # DESKTOP ENVIRONMENT
   # ═══════════════════════════════════════════════════════════════════════════
 
-  services.xserver.enable = true;
-  
   # Display Manager
   services.displayManager = {
     sddm = {
@@ -377,17 +387,20 @@
   users.users.${variables.username} = {
     isNormalUser = true;
     description = variables.fullName;
-    extraGroups = [ 
-      "wheel" 
-      "networkmanager" 
+    extraGroups = [
+      "wheel"
+      "networkmanager"
       "video"
       "audio"
-    ] 
+    ]
     ++ lib.optionals variables.hardware.virtualization [ "libvirtd" ]
     ++ lib.optionals variables.containers.docker [ "docker" ]
     ++ lib.optionals variables.containers.podman [ "podman" ]
     ++ lib.optionals variables.hardware.printing [ "lp" ]
-    ++ lib.optionals variables.hardware.scanning [ "scanner" "lp" ];
+    ++ lib.optionals variables.hardware.scanning [
+      "scanner"
+      "lp"
+    ];
     shell = pkgs.${variables.defaultShell};
     hashedPassword = variables.hashedPassword;
     openssh.authorizedKeys.keys = variables.sshAuthorizedKeys;
@@ -403,19 +416,29 @@
       wheelNeedsPassword = variables.security.sudoNeedsPassword;
       execWheelOnly = true;
     };
-    
+
     # PAM configuration
     pam = {
-      services.swaylock = lib.mkIf (variables.desktopEnvironment == "hyprland") {};
+      services.swaylock = lib.mkIf (variables.desktopEnvironment == "hyprland") { };
       loginLimits = [
-        { domain = "@wheel"; item = "nofile"; type = "soft"; value = "524288"; }
-        { domain = "@wheel"; item = "nofile"; type = "hard"; value = "524288"; }
+        {
+          domain = "@wheel";
+          item = "nofile";
+          type = "soft";
+          value = "524288";
+        }
+        {
+          domain = "@wheel";
+          item = "nofile";
+          type = "hard";
+          value = "524288";
+        }
       ];
     };
-    
+
     # rtkit for realtime audio
     rtkit.enable = variables.hardware.audio;
-    
+
     # AppArmor
     apparmor = lib.mkIf variables.security.apparmor {
       enable = true;
@@ -442,13 +465,17 @@
   nix = {
     # Modern Nix features
     settings = {
-      experimental-features = [ "nix-command" "flakes" "repl-flake" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+        "repl-flake"
+      ];
       warn-dirty = false;
       auto-optimise-store = true;
       keep-outputs = true;
       keep-derivations = true;
       max-jobs = "auto";
-      cores = 0;  # Use all available cores
+      cores = 0; # Use all available cores
       substituters = variables.nix.substituters;
       trusted-public-keys = variables.nix.trustedPublicKeys;
     };
@@ -488,54 +515,54 @@
     git
     vim
     nano
-    
+
     # Modern CLI replacements
-    eza       # Better ls
-    fd        # Better find
-    ripgrep   # Better grep
-    bat       # Better cat
-    btop      # System monitor
+    eza # Better ls
+    fd # Better find
+    ripgrep # Better grep
+    bat # Better cat
+    btop # System monitor
     fastfetch # System info
-    dust      # Better du
-    duf       # Better df
-    procs     # Better ps
-    sd        # Better sed
-    choose    # Better cut/awk
-    
+    dust # Better du
+    duf # Better df
+    procs # Better ps
+    sd # Better sed
+    choose # Better cut/awk
+
     # File management
     rsync
     tree
     fzf
     zoxide
-    
+
     # Archives
     zip
     unzip
     p7zip
     unrar
-    
+
     # System tools
     pciutils
     usbutils
     lshw
     dmidecode
     smartmontools
-    
+
     # Network tools
     iperf3
     nmap
     tcpdump
     bind
-    
+
     # Process management
     lsof
     strace
     htop
-    
+
     # NH (Nix Helper)
     nh
     nix-output-monitor
-    
+
     # Editor
     helix
   ];
@@ -575,18 +602,18 @@
       enable = (variables.defaultShell == "fish");
       useBabelfish = true;
     };
-    
+
     zsh = {
       enable = (variables.defaultShell == "zsh");
       enableCompletion = true;
       autosuggestions.enable = true;
       syntaxHighlighting.enable = true;
     };
-    
+
     bash = {
       completion.enable = true;
     };
-    
+
     # Nix-ld for running unpatched binaries
     nix-ld = {
       enable = true;
@@ -601,15 +628,15 @@
         expat
       ];
     };
-    
+
     # Dconf for GNOME settings
     dconf.enable = true;
-    
+
     # KDE Connect
     kdeconnect = {
       enable = variables.desktopEnvironment == "plasma";
     };
-    
+
     # Steam
     steam = lib.mkIf variables.gaming.steam {
       enable = true;
@@ -618,7 +645,7 @@
       localNetworkGameTransfers.openFirewall = true;
       gamescopeSession.enable = variables.gaming.gamescope;
     };
-    
+
     # Gamemode for gaming performance
     gamemode = lib.mkIf variables.gaming.enable {
       enable = true;
@@ -633,7 +660,7 @@
         };
       };
     };
-    
+
     # Firefox
     firefox = {
       enable = true;
@@ -647,10 +674,13 @@
 
   # Flatpak repo
   services.flatpak.packages = [ ];
-  
+
   # Flatpak remotes
   services.flatpak.remotes = lib.mkIf config.services.flatpak.enable [
-    { name = "flathub"; location = "https://flathub.org/repo/flathub.flatpakrepo"; }
+    {
+      name = "flathub";
+      location = "https://flathub.org/repo/flathub.flatpakrepo";
+    }
   ];
 
   # Update DB for locate command
@@ -659,7 +689,14 @@
     package = pkgs.plocate;
     localuser = null;
     interval = "daily";
-    prunePaths = [ "/tmp" "/var/tmp" "/var/cache" "/var/lib/docker" "/var/lib/containers" "/nix/store" ];
+    prunePaths = [
+      "/tmp"
+      "/var/tmp"
+      "/var/cache"
+      "/var/lib/docker"
+      "/var/lib/containers"
+      "/nix/store"
+    ];
   };
 
   # Fwupd (firmware updates)
@@ -670,7 +707,7 @@
     enable = true;
     interval = "weekly";
   };
-  
+
   # Smartd for disk monitoring
   services.smartd = {
     enable = true;
@@ -679,10 +716,10 @@
       recipient = variables.email;
     };
   };
-  
+
   # Log rotation
   services.logrotate.enable = true;
-  
+
   # Systemd journal
   services.journald = {
     extraConfig = ''
@@ -690,7 +727,7 @@
       MaxFileSec=7day
     '';
   };
-  
+
   # Thermald for thermal management
   services.thermald.enable = config.laptop.enable;
 
@@ -725,7 +762,7 @@
 
   # Allow unfree firmware
   hardware.enableRedistributableFirmware = true;
-  
+
   # Enable all firmware
   hardware.firmware = with pkgs; [
     linux-firmware
@@ -771,7 +808,7 @@
       _JAVA_AWT_WM_NONREPARENTING = "1";
       NIXOS_OZONE_WL = "1";
     };
-    
+
     # Shell aliases
     shellAliases = {
       ll = "ls -l";
@@ -785,9 +822,13 @@
       diff = "diff --color=auto";
       ip = "ip -color=auto";
     };
-    
+
     # Paths to link
-    pathsToLink = [ "/share/fish" "/share/zsh" "/share/bash-completion" ];
+    pathsToLink = [
+      "/share/fish"
+      "/share/zsh"
+      "/share/bash-completion"
+    ];
   };
 
   # ═══════════════════════════════════════════════════════════════════════════
@@ -807,9 +848,19 @@
     ];
     fontconfig = {
       defaultFonts = {
-        serif = [ "Noto Serif" "Liberation Serif" ];
-        sansSerif = [ "Noto Sans" "Liberation Sans" ];
-        monospace = [ "JetBrains Mono" "Fira Code" "Liberation Mono" ];
+        serif = [
+          "Noto Serif"
+          "Liberation Serif"
+        ];
+        sansSerif = [
+          "Noto Sans"
+          "Liberation Sans"
+        ];
+        monospace = [
+          "JetBrains Mono"
+          "Fira Code"
+          "Liberation Mono"
+        ];
         emoji = [ "Noto Color Emoji" ];
       };
       enable = true;

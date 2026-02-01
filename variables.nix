@@ -43,7 +43,7 @@
 
   # SSH public keys for authorized access
   # Add your public keys here for passwordless SSH login
-  sshAuthorizedKeys = [];
+  sshAuthorizedKeys = [ ];
 
   # ============================================================================
   # 🖥️ SYSTEM SETTINGS
@@ -63,10 +63,6 @@
 
   # Path to your flake configuration directory
   flakePath = "/home/f/nixos";
-
-  # Windows dual-boot support
-  # Set to true if you dual-boot with Windows (fixes clock issues)
-  windowsDualBoot = false;
 
   # ============================================================================
   # 🖼️ DESKTOP ENVIRONMENT
@@ -104,7 +100,7 @@
     # Format: "name,resolution@refreshrate,position,scale"
     monitors = [
       "eDP-1,1920x1080@60,0x0,1"
-      ",preferred,auto,1"  # Auto-detect additional monitors
+      ",preferred,auto,1" # Auto-detect additional monitors
     ];
   };
 
@@ -124,7 +120,6 @@
   supportedLocales = [
     "en_US.UTF-8/UTF-8"
     "ru_RU.UTF-8/UTF-8"
-    "da_DK.UTF-8/UTF-8"
   ];
 
   # Keyboard configuration
@@ -135,7 +130,7 @@
 
     # Layout variant
     # Options: "", "dvorak", "colemak", "nodeadkeys", "mac"
-    variant = "";
+    variant = "dvorak";
 
     # Layout switching options
     # Common: "grp:alt_shift_toggle", "grp:win_space_toggle", "grp:caps_toggle"
@@ -165,7 +160,10 @@
     # Popular: "robbyrussell", "powerlevel10k/powerlevel10k", "agnoster"
     theme = "robbyrussell";
     # Additional oh-my-zsh plugins
-    extraPlugins = [ "zoxide" "fzf" ];
+    extraPlugins = [
+      "zoxide"
+      "fzf"
+    ];
   };
 
   # Default terminal emulator
@@ -207,7 +205,7 @@
   # GPG configuration
   gpg = {
     # SSH keys to use with gpg-agent
-    sshKeys = [];
+    sshKeys = [ ];
   };
 
   # ============================================================================
@@ -234,7 +232,7 @@
     # TCP ports to open
     openPorts = [ 7777 ];
     # UDP ports to open
-    openUDPPorts = [];
+    openUDPPorts = [ ];
     # Allow ping/ICMP
     allowPing = true;
     # Log refused connections
@@ -285,7 +283,7 @@
     # Enable ZRAM swap (compressed RAM swap)
     zram = true;
     # Enable Kernel Same-page Merging (memory deduplication)
-    ksm = false;
+    ksm = true;
   };
 
   # Garbage collection settings
@@ -313,7 +311,7 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
     # Additional overlays
-    overlays = [];
+    overlays = [ ];
   };
 
   # ============================================================================
@@ -334,7 +332,7 @@
     videoAcceleration = true;
 
     # Printer support (CUPS)
-    printing = true;
+    printing = false;
 
     # Scanner support
     scanning = false;
@@ -431,9 +429,18 @@
     # Enable BorgBackup
     enable = false;
     # Paths to backup
-    paths = [ "~/Documents" "~/Pictures" "~/.config" ];
+    paths = [
+      "~/Documents"
+      "~/Pictures"
+      "~/.config"
+    ];
     # Paths to exclude
-    exclude = [ "*.tmp" "*.cache" "node_modules" "target" ];
+    exclude = [
+      "*.tmp"
+      "*.cache"
+      "node_modules"
+      "target"
+    ];
     # Backup repository location
     repo = "";
     # Password file path
@@ -449,9 +456,9 @@
     syncthing = {
       enable = false;
       # Devices to sync with
-      devices = {};
+      devices = { };
       # Folders to sync
-      folders = {};
+      folders = { };
     };
   };
 
@@ -520,17 +527,17 @@
   # Advanced configuration (modify with caution)
 
   # Kernel parameters (appended to default)
-  kernelParams = [];
+  kernelParams = [ ];
 
   # Additional system packages
-  extraSystemPackages = [];
+  extraSystemPackages = [ ];
 
   # Additional user packages
-  extraUserPackages = [];
+  extraUserPackages = [ ];
 
   # System-wide environment variables
-  environmentVariables = {};
+  environmentVariables = { };
 
   # Custom systemd services
-  systemdServices = {};
+  systemdServices = { };
 }
