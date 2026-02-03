@@ -1,9 +1,5 @@
 {
-  description = "Minimal NixOS Configuration";
-
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,37 +9,33 @@
       url = "github:nix-community/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
-    let
-      variables = import ./variables.nix;
-      
-      specialArgs = { inherit inputs variables; };
-    in
-    {
-      nixosConfigurations.${variables.hostname} = nixpkgs.lib.nixosSystem {
-        system = variables.system;
-        specialArgs = specialArgs;
-        modules = [
-          ./configuration.nix
-          ./hardware-configuration.nix
-          
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              backupFileExtension = "backup";
-              extraSpecialArgs = specialArgs;
-              users.${variables.username} = import ./home.nix;
-            };
-          }
-        ];
-      };
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      modules = [
+        ./configuration.nix
+        ./hardware-configuration.nix
+        
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            backupFileExtension = "backup";
+            extraSpecialArgs = { inherit inputs; };
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.f = import ./home.nix;
+          };
+        }
+      ];
+      specialArgs = { inherit inputs; };
+      system = "x86_64-linux";
     };
+  };
 
   nixConfig = {
     extra-substituters = [ "https://nix-community.cachix.org" ];
