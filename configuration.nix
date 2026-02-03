@@ -143,8 +143,6 @@
       binfmt = true;
       enable = true;
     };
-    bash.completion.enable = true;
-    dconf.enable = true;
     firefox.enable = true;
     gamemode.enable = true;
     git = {
@@ -193,7 +191,7 @@
     libinput = {
       enable = true;
       touchpad = {
-        disableWhileTyping = true;
+        disableWhileTyping = false;
         naturalScrolling = true;
         tapping = true;
       };
@@ -234,19 +232,13 @@
         STOP_CHARGE_THRESH_BAT0 = 80;
       };
     };
-    xserver.xkb = {
-      layout = "us";
-      options = "caps:escape";
-      variant = "";
-    };
   };
 
   system.stateVersion = "25.05";
 
-  time.timeZone = "America/New_York";
+  time.timeZone = "Europe/Copenhagen";
 
   users.users.f = {
-    description = "Your Name";
     extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" ];
     isNormalUser = true;
     shell = pkgs.zsh;
