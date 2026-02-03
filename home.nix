@@ -67,7 +67,6 @@
         boot = "nh os boot";
         clean = "nh os clean";
         switch = "nh os switch";
-        update = "nh os upgrade";
       };
     };
 
@@ -109,7 +108,7 @@
       enable = true;
       settings = {
         user.name = "F";
-        user.email = "[EMAIL_ADDRESS]";
+        user.email = "vladislavtkachuk@yahoo.com";
         init.defaultBranch = "main";
         pull.rebase = true;
         push.autoSetupRemote = true;
