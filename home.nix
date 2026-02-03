@@ -58,14 +58,13 @@
 
     git = {
       enable = true;
-			settings = {
-				name = "F";
-				mail = "vladislavtkachuk@yahoo.com";
+      userName = "F";
+      userEmail = "vladislavtkachuk@yahoo.com";
       extraConfig = {
         init.defaultBranch = "main";
         pull.rebase = true;
         push.autoSetupRemote = true;
-      };
+        };
     };
 
     home-manager.enable = true;

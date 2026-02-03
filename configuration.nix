@@ -44,6 +44,7 @@
     packages = [ pkgs.terminus_font ];
   };
 
+  environment = {
     systemPackages = with pkgs; [
       bat
       btop
