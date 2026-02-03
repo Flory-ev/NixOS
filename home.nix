@@ -64,9 +64,10 @@
       };
 
       shellAliases = {
-        ".." = "cd ..";
-        ll = "ls -l";
-        la = "ls -la";
+        boot = "nh os boot";
+        clean = "nh os clean";
+        switch = "nh os switch";
+        update = "nh os upgrade";
       };
     };
 
@@ -88,7 +89,6 @@
       enable = true;
       enableZshIntegration = true;
       git = true;
-      icons = true;
     };
 
     fzf = {
