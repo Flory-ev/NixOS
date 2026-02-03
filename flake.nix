@@ -14,9 +14,9 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
-    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
 
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
       modules = [
         ./configuration.nix
         ./hardware-configuration.nix
@@ -24,7 +24,6 @@
         home-manager.nixosModules.home-manager
         {
           home-manager = {
-            backupFileExtension = "backup";
             extraSpecialArgs = { inherit inputs; };
             useGlobalPkgs = true;
             useUserPackages = true;
