@@ -6,9 +6,9 @@
 }:
 {
   home = {
-    homeDirectory = "/home/f";
-    stateVersion = "25.05";
     username = "f";
+		homeDirectory = "/home/f";
+    stateVersion = "25.05";
 
     packages = with pkgs; [
       antigravity
