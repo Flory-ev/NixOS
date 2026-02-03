@@ -107,10 +107,9 @@
 
     git = {
       enable = true;
-      userName = "F";
-      userEmail = "vladislavtkachuk@yahoo.com";
-
-      extraConfig = {
+      settings = {
+        user.name = "F";
+        user.email = "[EMAIL_ADDRESS]";
         init.defaultBranch = "main";
         pull.rebase = true;
         push.autoSetupRemote = true;
