@@ -23,9 +23,7 @@
 		  bitwarden-desktop
 		  chromium
 		  discord
-		  kitty
 		  lutris
-		  ncdu
 		  qbittorrent
 		  reaper
 		  spotify
