@@ -1,183 +1,127 @@
 {
   config,
-  inputs ? { },
-  lib,
   pkgs,
+  lib,
   ...
 }:
 {
-  imports = [ ./hardware-configuration.nix ];
-
   # ============================================================================
-  # Boot Configuration
+  # Home Manager Configuration
   # ============================================================================
 
-  boot = {
-    consoleLogLevel = 3;
+  home = {
+    username = "f";
+    homeDirectory = "/home/f";
+    stateVersion = "25.05";
 
-    initrd.systemd.enable = true;
+    # ==========================================================================
+    # User Packages
+    # ==========================================================================
 
-    # Security hardening
-    kernel.sysctl = {
-      "kernel.dmesg_restrict" = true;
-      "kernel.kptr_restrict" = 2;
-      "kernel.unprivileged_bpf_disabled" = 1;
-    };
-
-    kernelModules = [ "btusb" ];
-    kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = [ "mitigations=auto" ];
-
-    loader = {
-      efi.canTouchEfiVariables = true;
-      timeout = 5;
-
-      systemd-boot = {
-        enable = true;
-        editor = false;
-        consoleMode = "max";
-        configurationLimit = 10;
-      };
-    };
-
-    plymouth = {
-      enable = true;
-      theme = "breeze";
-    };
-
-    tmp.cleanOnBoot = true;
-  };
-
-  # ============================================================================
-  # Hardware Configuration
-  # ============================================================================
-
-  hardware = {
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-      settings.General.Experimental = true;
-    };
-
-    enableRedistributableFirmware = true;
-    firmware = [ pkgs.linux-firmware ];
-
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-    };
-
-    ksm.enable = true;
-  };
-
-  # ============================================================================
-  # Networking
-  # ============================================================================
-
-  networking = {
-    hostName = "vortex";
-    wireguard.enable = false;
-
-    firewall = {
-      enable = true;
-      allowPing = true;
-      allowedTCPPorts = [ 7777 ];
-      allowedUDPPorts = [ 7777 ];
-      logRefusedConnections = false;
-    };
-
-    networkmanager = {
-      enable = true;
-      wifi = {
-        backend = "iwd";
-        powersave = false;
-      };
-    };
-  };
-
-  # ============================================================================
-  # Localization
-  # ============================================================================
-
-  time.timeZone = "Europe/Copenhagen";
-
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-    supportedLocales = [ "en_US.UTF-8/UTF-8" ];
-  };
-
-  console = {
-    font = "Lat2-Terminus16";
-    packages = [ pkgs.terminus_font ];
-  };
-
-  # ============================================================================
-  # Fonts
-  # ============================================================================
-
-  fonts = {
-    fontconfig.enable = true;
     packages = with pkgs; [
-      fira-code
-      font-awesome
-      jetbrains-mono
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-color-emoji
+      antigravity
+      bat
+      bitwarden-desktop
+      chromium
+      discord
+      eza
+      fd
+      fzf
+      lutris
+      qbittorrent
+      reaper
+      spotify
+      telegram-desktop
+      thunderbird
+      tor-browser
+      tree
+      vlc
+      vscodium
+      zoxide
     ];
   };
 
   # ============================================================================
-  # Desktop Environment & Display
+  # Programs Configuration
   # ============================================================================
 
-  services = {
-    displayManager.cosmic-greeter.enable = true;
-    desktopManager.cosmic.enable = true;
+  programs = {
+    home-manager.enable = true;
 
-    libinput = {
+    # ==========================================================================
+    # Shell & Terminal
+    # ==========================================================================
+
+    zsh = {
       enable = true;
-      touchpad = {
-        tapping = true;
-        naturalScrolling = true;
-        disableWhileTyping = false;
-      };
-    };
+      enableCompletion = true;
+      autosuggestion.enable = true;
+      syntaxHighlighting.enable = true;
 
-    # Audio
-    pipewire = {
-      enable = true;
-      pulse.enable = true;
-      jack.enable = true;
-      wireplumber.enable = true;
-
-      alsa = {
+      oh-my-zsh = {
         enable = true;
-        support32Bit = true;
+        plugins = [
+          "git"
+          "sudo"
+        ];
+      };
+
+      shellAliases = {
+        boot = "nh os boot";
+        clean = "nh os clean";
+        switch = "nh os switch";
       };
     };
 
-    # System Services
-    earlyoom = {
+    # ==========================================================================
+    # Shell Enhancements
+    # ==========================================================================
+
+    bat = {
       enable = true;
-      freeMemThreshold = 5;
+      config.theme = "TwoDark";
     };
 
-    flatpak.enable = true;
-    fstrim.enable = true;
-    fwupd.enable = true;
-    logrotate.enable = true;
-    smartd.enable = true;
-    thermald.enable = true;
-
-    locate = {
+    direnv = {
       enable = true;
-      package = pkgs.plocate;
-      interval = "daily";
+      nix-direnv.enable = true;
     };
 
-    # DNS Resolution
-    resolved = {
+    eza = {
       enable = true;
-      settings.Resolve = {
-        DNSSEC = "true";
+      enableZshIntegration = true;
+      git = true;
+    };
+
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
+    zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
+    # ==========================================================================
+    # Development Tools
+    # ==========================================================================
+
+    git = {
+      enable = true;
+      settings = {
+        init.defaultBranch = "main";
+        pull.rebase = true;
+        push.autoSetupRemote = true;
+        user.name = "F";
+        user.email = "vladislavtkachuk@yahoo.com";
+      };
+    };
+
+    # ==========================================================================
+    # Applications
+    # ==========================================================================
+
+    firefox.enable = true;
+  };
+}
