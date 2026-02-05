@@ -14,11 +14,8 @@
 
   boot = {
     consoleLogLevel = 3;
-    
-    initrd = {
-      systemd.enable = true;
-      verbose = true;
-    };
+
+    initrd.systemd.enable = true;
 
     # Security hardening
     kernel.sysctl = {
@@ -34,7 +31,7 @@
     loader = {
       efi.canTouchEfiVariables = true;
       timeout = 5;
-      
+
       systemd-boot = {
         enable = true;
         editor = false;
@@ -64,7 +61,7 @@
 
     enableRedistributableFirmware = true;
     firmware = [ pkgs.linux-firmware ];
-    
+
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -153,7 +150,7 @@
       pulse.enable = true;
       jack.enable = true;
       wireplumber.enable = true;
-      
+
       alsa = {
         enable = true;
         support32Bit = true;
@@ -191,7 +188,7 @@
 
     # Power Management
     power-profiles-daemon.enable = lib.mkForce false;
-    
+
     tlp = {
       enable = true;
       settings = {
@@ -226,8 +223,6 @@
         init.defaultBranch = "main";
         pull.rebase = true;
         push.autoSetupRemote = true;
-        user.name = "Your Name";
-        user.email = "your.email@example.com";
       };
     };
 
@@ -241,7 +236,7 @@
 
     # Virtualization & Container Support
     virt-manager.enable = true;
-    
+
     appimage = {
       enable = true;
       binfmt = true;
@@ -258,10 +253,9 @@
       flake = "/home/f/nixos";
       clean = {
         enable = true;
-        extraArgs = "--keep 3 --keep-since 4d"; 
+        extraArgs = "--keep 3 --keep-since 4d";
       };
     };
-
   };
 
   # ============================================================================
@@ -319,8 +313,8 @@
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
       substituters = [ "https://cache.nixos.org/" ];
-      trusted-public-keys = [ 
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" 
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       ];
     };
   };
@@ -334,7 +328,7 @@
   users.users.f = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ 
+    extraGroups = [
       "docker"
       "libvirtd"
       "networkmanager"
