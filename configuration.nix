@@ -8,16 +8,11 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
-  # ============================================================================
-  # Boot Configuration
-  # ============================================================================
-
   boot = {
     consoleLogLevel = 3;
 
     initrd.systemd.enable = true;
 
-    # Security hardening
     kernel.sysctl = {
       "kernel.dmesg_restrict" = true;
       "kernel.kptr_restrict" = 2;
@@ -48,10 +43,6 @@
     tmp.cleanOnBoot = true;
   };
 
-  # ============================================================================
-  # Hardware Configuration
-  # ============================================================================
-
   hardware = {
     bluetooth = {
       enable = true;
@@ -69,10 +60,6 @@
 
     ksm.enable = true;
   };
-
-  # ============================================================================
-  # Networking
-  # ============================================================================
 
   networking = {
     hostName = "vortex";
@@ -95,10 +82,6 @@
     };
   };
 
-  # ============================================================================
-  # Localization
-  # ============================================================================
-
   time.timeZone = "Europe/Copenhagen";
 
   i18n = {
@@ -111,10 +94,6 @@
     packages = [ pkgs.terminus_font ];
   };
 
-  # ============================================================================
-  # Fonts
-  # ============================================================================
-
   fonts = {
     fontconfig.enable = true;
     packages = with pkgs; [
@@ -126,10 +105,6 @@
       noto-fonts-color-emoji
     ];
   };
-
-  # ============================================================================
-  # Desktop Environment & Display
-  # ============================================================================
 
   services = {
     displayManager.cosmic-greeter.enable = true;
@@ -144,7 +119,6 @@
       };
     };
 
-    # Audio
     pipewire = {
       enable = true;
       pulse.enable = true;
@@ -157,7 +131,6 @@
       };
     };
 
-    # System Services
     earlyoom = {
       enable = true;
       freeMemThreshold = 5;
@@ -176,7 +149,6 @@
       interval = "daily";
     };
 
-    # DNS Resolution
     resolved = {
       enable = true;
       settings.Resolve = {
