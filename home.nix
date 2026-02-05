@@ -46,11 +46,46 @@
   # ============================================================================
 
   programs = {
+    bat = {
+      enable = true;
+      config.theme = "TwoDark";
+    };
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    eza = {
+      enable = true;
+      enableZshIntegration = true;
+      git = true;
+    };
+
+    firefox.enable = true;
+
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
+    git = {
+      enable = true;
+      settings = {
+        init.defaultBranch = "main";
+        pull.rebase = true;
+        push.autoSetupRemote = true;
+        user.name = "F";
+        user.email = "vladislavtkachuk@yahoo.com";
+      };
+    };
+
     home-manager.enable = true;
 
-    # ==========================================================================
-    # Shell & Terminal
-    # ==========================================================================
+    zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+    };
 
     zsh = {
       enable = true;
@@ -72,56 +107,5 @@
         switch = "nh os switch";
       };
     };
-
-    # ==========================================================================
-    # Shell Enhancements
-    # ==========================================================================
-
-    bat = {
-      enable = true;
-      config.theme = "TwoDark";
-    };
-
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
-    eza = {
-      enable = true;
-      enableZshIntegration = true;
-      git = true;
-    };
-
-    fzf = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
-    zoxide = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
-    # ==========================================================================
-    # Development Tools
-    # ==========================================================================
-
-    git = {
-      enable = true;
-      settings = {
-        init.defaultBranch = "main";
-        pull.rebase = true;
-        push.autoSetupRemote = true;
-        user.name = "F";
-        user.email = "vladislavtkachuk@yahoo.com";
-      };
-    };
-
-    # ==========================================================================
-    # Applications
-    # ==========================================================================
-
-    firefox.enable = true;
   };
 }
