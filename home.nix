@@ -1,122 +1,183 @@
 {
   config,
-  pkgs,
+  inputs ? { },
   lib,
+  pkgs,
   ...
 }:
 {
-  # ============================================================================
-  # Home Manager Configuration
-  # ============================================================================
-
-  home = {
-    username = "f";
-    homeDirectory = "/home/f";
-    stateVersion = "25.05";
-
-    # ==========================================================================
-    # User Packages
-    # ==========================================================================
-
-    packages = with pkgs; [
-		  antigravity
-		  bitwarden-desktop
-		  chromium
-		  discord
-		  lutris
-		  qbittorrent
-		  reaper
-		  spotify
-		  telegram-desktop
-		  thunderbird
-		  tor-browser
-		  tree
-		  vlc
-		  vscodium
-		];
-  };
+  imports = [ ./hardware-configuration.nix ];
 
   # ============================================================================
-  # Programs Configuration
+  # Boot Configuration
   # ============================================================================
 
-  programs = {
-    home-manager.enable = true;
+  boot = {
+    consoleLogLevel = 3;
 
-    # ==========================================================================
-    # Shell & Terminal
-    # ==========================================================================
+    initrd.systemd.enable = true;
 
-    zsh = {
-      enable = true;
-      enableCompletion = true;
-      autosuggestion.enable = true;
-      syntaxHighlighting.enable = true;
+    # Security hardening
+    kernel.sysctl = {
+      "kernel.dmesg_restrict" = true;
+      "kernel.kptr_restrict" = 2;
+      "kernel.unprivileged_bpf_disabled" = 1;
+    };
 
-      oh-my-zsh = {
+    kernelModules = [ "btusb" ];
+    kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [ "mitigations=auto" ];
+
+    loader = {
+      efi.canTouchEfiVariables = true;
+      timeout = 5;
+
+      systemd-boot = {
         enable = true;
-        plugins = [ 
-          "git"
-          "sudo"
-        ];
-      };
-
-      shellAliases = {
-        boot = "nh os boot";
-        clean = "nh os clean";
-        switch = "nh os switch";
+        editor = false;
+        consoleMode = "max";
+        configurationLimit = 10;
       };
     };
 
-    # ==========================================================================
-    # Shell Enhancements
-    # ==========================================================================
-
-    bat = {
+    plymouth = {
       enable = true;
-      config.theme = "TwoDark";
+      theme = "breeze";
     };
 
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
-    eza = {
-      enable = true;
-      enableZshIntegration = true;
-      git = true;
-    };
-
-    fzf = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
-    zoxide = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
-    # ==========================================================================
-    # Development Tools
-    # ==========================================================================
-
-    git = {
-      enable = true;
-      settings = {
-        user.name = "F";
-        user.email = "vladislavtkachuk@yahoo.com";
-        init.defaultBranch = "main";
-        pull.rebase = true;
-        push.autoSetupRemote = true;
-      };
-    };
-
-    # ==========================================================================
-    # Applications
-    # ==========================================================================
-
-    firefox.enable = true;
+    tmp.cleanOnBoot = true;
   };
-}
+
+  # ============================================================================
+  # Hardware Configuration
+  # ============================================================================
+
+  hardware = {
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      settings.General.Experimental = true;
+    };
+
+    enableRedistributableFirmware = true;
+    firmware = [ pkgs.linux-firmware ];
+
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+
+    ksm.enable = true;
+  };
+
+  # ============================================================================
+  # Networking
+  # ============================================================================
+
+  networking = {
+    hostName = "vortex";
+    wireguard.enable = false;
+
+    firewall = {
+      enable = true;
+      allowPing = true;
+      allowedTCPPorts = [ 7777 ];
+      allowedUDPPorts = [ 7777 ];
+      logRefusedConnections = false;
+    };
+
+    networkmanager = {
+      enable = true;
+      wifi = {
+        backend = "iwd";
+        powersave = false;
+      };
+    };
+  };
+
+  # ============================================================================
+  # Localization
+  # ============================================================================
+
+  time.timeZone = "Europe/Copenhagen";
+
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    supportedLocales = [ "en_US.UTF-8/UTF-8" ];
+  };
+
+  console = {
+    font = "Lat2-Terminus16";
+    packages = [ pkgs.terminus_font ];
+  };
+
+  # ============================================================================
+  # Fonts
+  # ============================================================================
+
+  fonts = {
+    fontconfig.enable = true;
+    packages = with pkgs; [
+      fira-code
+      font-awesome
+      jetbrains-mono
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-color-emoji
+    ];
+  };
+
+  # ============================================================================
+  # Desktop Environment & Display
+  # ============================================================================
+
+  services = {
+    displayManager.cosmic-greeter.enable = true;
+    desktopManager.cosmic.enable = true;
+
+    libinput = {
+      enable = true;
+      touchpad = {
+        tapping = true;
+        naturalScrolling = true;
+        disableWhileTyping = false;
+      };
+    };
+
+    # Audio
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+      jack.enable = true;
+      wireplumber.enable = true;
+
+      alsa = {
+        enable = true;
+        support32Bit = true;
+      };
+    };
+
+    # System Services
+    earlyoom = {
+      enable = true;
+      freeMemThreshold = 5;
+    };
+
+    flatpak.enable = true;
+    fstrim.enable = true;
+    fwupd.enable = true;
+    logrotate.enable = true;
+    smartd.enable = true;
+    thermald.enable = true;
+
+    locate = {
+      enable = true;
+      package = pkgs.plocate;
+      interval = "daily";
+    };
+
+    # DNS Resolution
+    resolved = {
+      enable = true;
+      settings.Resolve = {
+        DNSSEC = "true";
