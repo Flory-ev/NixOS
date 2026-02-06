@@ -34,27 +34,8 @@
   };
 
   programs = {
-    bat = {
+    firefox = {
       enable = true;
-      config.theme = "TwoDark";
-    };
-
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
-    eza = {
-      enable = true;
-      enableZshIntegration = true;
-      git = true;
-    };
-
-    firefox.enable = true;
-
-    fzf = {
-      enable = true;
-      enableZshIntegration = true;
     };
 
     git = {
@@ -66,11 +47,6 @@
         user.name = "F";
         user.email = "vladislavtkachuk@yahoo.com";
       };
-    };
-
-    zoxide = {
-      enable = true;
-      enableZshIntegration = true;
     };
 
     zsh = {

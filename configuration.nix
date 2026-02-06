@@ -10,8 +10,11 @@
 
   boot = {
     consoleLogLevel = 3;
-
-    initrd.systemd.enable = true;
+    
+    initrd = {
+      systemd.enable = true;
+      verbose = true;
+    };
 
     kernel.sysctl = {
       "kernel.dmesg_restrict" = true;
@@ -21,12 +24,16 @@
 
     kernelModules = [ "btusb" ];
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = [ "mitigations=auto" ];
+    kernelParams = [ 
+      "mitigations=auto"
+      "quiet"
+      "splash"
+    ];
 
     loader = {
       efi.canTouchEfiVariables = true;
       timeout = 5;
-
+      
       systemd-boot = {
         enable = true;
         editor = false;
@@ -52,7 +59,7 @@
 
     enableRedistributableFirmware = true;
     firmware = [ pkgs.linux-firmware ];
-
+    
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -86,11 +93,26 @@
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
-    supportedLocales = [ "en_US.UTF-8/UTF-8" ];
+    extraLocaleSettings = {
+      LC_ADDRESS = "en_RU.UTF-8";
+      LC_IDENTIFICATION = "en_RU.UTF-8";
+      LC_MEASUREMENT = "en_RU.UTF-8";
+      LC_MONETARY = "en_RU.UTF-8";
+      LC_NAME = "en_RU.UTF-8";
+      LC_NUMERIC = "en_RU.UTF-8";
+      LC_PAPER = "en_RU.UTF-8";
+      LC_TELEPHONE = "en_RU.UTF-8";
+      LC_TIME = "en_RU.UTF-8";
+    };
+    supportedLocales = [ 
+      "en_US.UTF-8/UTF-8"
+      "en_RU.UTF-8/UTF-8"
+    ];
   };
 
   console = {
     font = "Lat2-Terminus16";
+    keyMap = "dk";
     packages = [ pkgs.terminus_font ];
   };
 
@@ -104,12 +126,6 @@
       noto-fonts-cjk-sans
       noto-fonts-color-emoji
     ];
-  };
-
-
-  programs.zsh = {
-    enable = true;
-    
   };
 
   services = {
@@ -130,7 +146,7 @@
       pulse.enable = true;
       jack.enable = true;
       wireplumber.enable = true;
-
+      
       alsa = {
         enable = true;
         support32Bit = true;
@@ -140,6 +156,7 @@
     earlyoom = {
       enable = true;
       freeMemThreshold = 5;
+      freeSwapThreshold = 10;
     };
 
     flatpak.enable = true;
@@ -159,18 +176,133 @@
       enable = true;
       settings.Resolve = {
         DNSSEC = "true";
+        DNSOverTLS = "opportunistic";
+        FallbackDNS = "1.1.1.1 8.8.8.8";
+      };
+    };
+
+    power-profiles-daemon.enable = lib.mkForce false;
+    
+    tlp = {
+      enable = true;
+      settings = {
+        CPU_SCALING_GOVERNOR_ON_AC = "performance";
+        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+        START_CHARGE_THRESH_BAT0 = 75;
+        STOP_CHARGE_THRESH_BAT0 = 80;
       };
     };
   };
 
-  users.users.f = {
-    isNormalUser = true;
-    description = "f";
-    extraGroups = [ "networkmanager" "wheel" ];
-    shell = pkgs.zsh;
+  programs = {
+    firefox.enable = true;
+
+    gamemode.enable = true;
+    
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+    };
+
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      autosuggestions.enable = true;
+      syntaxHighlighting.enable = true;
+    };
+
+    virt-manager.enable = true;
+    
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
+
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [ stdenv.cc.cc zlib ];
+    };
+
+    nh = {
+      enable = true;
+      flake = "/home/f/nixos";
+      clean = {
+        enable = true;
+        extraArgs = "--keep 3 --keep-since 4d"; 
+      };
+    };
+
   };
 
+  environment.systemPackages = with pkgs; [
+    inputs.kimi-cli.packages.x86_64-linux.kimi-cli
+    curl
+    wget
+  ];
+
+  virtualisation = {
+    docker = {
+      enable = true;
+      enableOnBoot = true;
+      storageDriver = "overlay2";
+    };
+
+    libvirtd = {
+      enable = true;
+      qemu.package = pkgs.qemu_kvm;
+    };
+
+    podman = {
+      enable = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
+
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+  };
+
+  nix = {
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+
+    optimise.automatic = true;
+
+    settings = {
+      auto-optimise-store = true;
+      experimental-features = [ "nix-command" "flakes" ];
+      
+      flake-registry = "";
+      nix-path = lib.mkForce "nixpkgs=/etc/nix/inputs/nixpkgs";
+      
+      substituters = [ "https://cache.nixos.org/" ];
+      trusted-public-keys = [ 
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" 
+      ];
+    };
+  };
+
+  environment.etc."nix/inputs/nixpkgs".source = inputs.nixpkgs.outPath;
+
   nixpkgs.config.allowUnfree = true;
+
+  users.users.f = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    extraGroups = [ 
+      "docker"
+      "libvirtd"
+      "networkmanager"
+      "wheel"
+    ];
+  };
+
+  security.sudo.wheelNeedsPassword = true;
 
   system.stateVersion = "25.05";
 }
