@@ -153,3 +153,7 @@
       enable = true;
       settings.Resolve = {
         DNSSEC = "true";
+      };
+    };
+  };
+}
