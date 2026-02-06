@@ -106,6 +106,12 @@
     ];
   };
 
+
+  programs.zsh = {
+    enable = true;
+    
+  };
+
   services = {
     displayManager.cosmic-greeter.enable = true;
     desktopManager.cosmic.enable = true;
@@ -156,4 +162,15 @@
       };
     };
   };
+
+  users.users.f = {
+    isNormalUser = true;
+    description = "f";
+    extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
+  };
+
+  nixpkgs.config.allowUnfree = true;
+
+  system.stateVersion = "25.05";
 }
