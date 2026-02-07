@@ -1,21 +1,35 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   # User Configuration
   users.users.f = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ "docker" "libvirtd" "networkmanager" "wheel" ];
+    extraGroups = [
+      "docker"
+      "libvirtd"
+      "networkmanager"
+      "wheel"
+    ];
   };
 
   # Localization
   time.timeZone = "Europe/Copenhagen";
-  
+
   i18n = {
     defaultLocale = "en_US.UTF-8";
-    supportedLocales = [ "en_US.UTF-8/UTF-8" "ru_RU.UTF-8/UTF-8" ];
+    supportedLocales = [
+      "en_US.UTF-8/UTF-8"
+      "ru_RU.UTF-8/UTF-8"
+    ];
   };
-  
+
   console = {
     font = "Lat2-Terminus16";
     keyMap = "dk";
@@ -33,7 +47,10 @@
     settings = {
       auto-optimise-store = true;
       download-buffer-size = 200000000;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       flake-registry = "";
       nix-path = lib.mkForce "nixpkgs=/etc/nix/inputs/nixpkgs";
       substituters = [ "https://cache.nixos.org/" ];

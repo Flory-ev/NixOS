@@ -1,10 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   networking = {
     hostName = "vortex";
     wireguard.enable = false;
-    
+
     firewall = {
       enable = true;
       allowPing = true;
@@ -12,7 +17,7 @@
       allowedUDPPorts = [ 7777 ];
       logRefusedConnections = false;
     };
-    
+
     networkmanager = {
       enable = true;
       wifi = {

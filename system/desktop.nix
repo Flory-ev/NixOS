@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # Display Manager & Desktop
@@ -88,7 +93,10 @@
 
     nix-ld = {
       enable = true;
-      libraries = with pkgs; [ stdenv.cc.cc zlib ];
+      libraries = with pkgs; [
+        stdenv.cc.cc
+        zlib
+      ];
     };
 
     nh = {

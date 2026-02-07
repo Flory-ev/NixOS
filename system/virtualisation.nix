@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   virtualisation = {
@@ -7,12 +12,12 @@
       enableOnBoot = true;
       storageDriver = "overlay2";
     };
-    
+
     libvirtd = {
       enable = true;
       qemu.package = pkgs.qemu_kvm;
     };
-    
+
     podman = {
       enable = true;
       defaultNetwork.settings.dns_enabled = true;

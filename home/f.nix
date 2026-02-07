@@ -16,6 +16,7 @@
       fd
       fzf
       lutris
+      nixfmt
       qbittorrent
       reaper
       spotify
@@ -49,7 +50,10 @@
 
       oh-my-zsh = {
         enable = true;
-        plugins = [ "git" "sudo" ];
+        plugins = [
+          "git"
+          "sudo"
+        ];
       };
 
       shellAliases = {

@@ -17,7 +17,15 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, flake-parts, nh, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      home-manager,
+      flake-parts,
+      nh,
+      ...
+    }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
@@ -51,8 +59,10 @@
         };
       };
 
-      perSystem = { config, pkgs, ... }: {
-        formatter = pkgs.nixfmt-classic;
-      };
+      perSystem =
+        { config, pkgs, ... }:
+        {
+          formatter = pkgs.nixfmt-classic;
+        };
     };
 }
