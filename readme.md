@@ -18,6 +18,7 @@ A modern, declarative NixOS setup using Flakes with Home Manager integration. Bu
 ## Structure
 
 ```
+nixos
 ├── flake.lock
 ├── flake.nix
 ├── hardware-configuration.nix
