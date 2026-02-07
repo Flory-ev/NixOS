@@ -8,11 +8,10 @@ A modern, declarative NixOS setup using Flakes with Home Manager integration. Bu
 
 | Attribute | Value |
 |-----------|-------|
+| **User** | `f` |
 | **Hostname** | `vortex` |
 | **Platform** | `x86_64-linux` |
-| **Nixpkgs** | `nixos-unstable` |
 | **State Version** | `25.05` |
-| **Primary User** | `f` |
 
 ---
 
@@ -20,12 +19,14 @@ A modern, declarative NixOS setup using Flakes with Home Manager integration. Bu
 
 ```
 .
-├── flake.nix              # Entry point - system & home configuration
-├── hardware-configuration.nix  # Hardware-specific settings (generate with nixos-generate-config)
-└── README.md              # This file
+├── License.md
+├── ReadMe.md
+├── flake.lock
+├── flake.nix
+└── hardware-configuration.nix
 ```
 
-This configuration uses a **single-file monolith** approach - everything is contained in `flake.nix` for simplicity and ease of maintenance.
+This configuration uses a **monolith** approach - everything is contained in `flake.nix`
 
 ---
 
@@ -73,7 +74,6 @@ This configuration uses a **single-file monolith** approach - everything is cont
 | `nixpkgs` | Main package repository (unstable channel) |
 | `home-manager` | User environment management |
 | `nh` | Nix helper for convenient rebuilds |
-| `kimi-cli` | AI assistant CLI tool |
 
 ---
 
@@ -83,17 +83,17 @@ This configuration uses a **single-file monolith** approach - everything is cont
 
 1. Install NixOS from the minimal ISO
 2. Generate hardware configuration:
-   ```bash
+   ```shell
    nixos-generate-config --root /mnt
    cp /mnt/etc/nixos/hardware-configuration.nix ~/nixos/
    ```
 3. Clone this repository:
-   ```bash
-   git clone <repo-url> ~/nixos
+   ```shell
+   git clone https://github.com/IIFlory/NixOS-Configuration.git ~/nixos
    cd ~/nixos
    ```
 4. Install:
-   ```bash
+   ```shell
    sudo nixos-install --flake .#vortex
    ```
 
@@ -104,7 +104,6 @@ This configuration uses a **single-file monolith** approach - everything is cont
 | `nh os switch` | Apply configuration changes |
 | `nh os boot` | Apply on next boot only |
 | `nh clean all` | Clean old generations (keeps 3, 4 days) |
-| `nix fmt` | Format Nix files |
 
 ---
 
@@ -188,19 +187,19 @@ Modify the `users.users.f` section to change:
 ## Maintenance
 
 ### Update System
-```bash
+```shell
 nix flake update
 nh os switch
 ```
 
 ### Garbage Collection
-```bash
+```shell
 nh clean all              # Keep 3 generations, 4 days
 nix store optimise        # Deduplicate store
 ```
 
 ### Rollback
-```bash
+```shell
 sudo nixos-rebuild switch --rollback
 ```
 
@@ -209,7 +208,7 @@ sudo nixos-rebuild switch --rollback
 ## Troubleshooting
 
 ### Build Failures
-```bash
+```shell
 # Check syntax
 nix flake check
 
@@ -221,20 +220,10 @@ nixos-rebuild switch --flake .#vortex --verbose
 ```
 
 ### Home Manager Issues
-```bash
+```shell
 # Rebuild home only
 home-manager switch --flake .#f
 
 # Check home news
 home-manager news
 ```
-
----
-
-## License
-
-This configuration is provided as-is. Feel free to fork and adapt for your own use.
-
----
-
-<p align="center">Built with ❄️ Nix</p>
