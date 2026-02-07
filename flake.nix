@@ -27,7 +27,245 @@
 
         ({ config, lib, pkgs, ... }: {
           # ============================================================================
-          # BOOT CONFIGURATION
+          # USER PACKAGES - Change these frequently
+          # ============================================================================
+          environment.systemPackages = with pkgs; [
+            curl
+            wget
+          ];
+
+          # ============================================================================
+          # USER CONFIGURATION
+          # ============================================================================
+          users.users.f = {
+            isNormalUser = true;
+            shell = pkgs.zsh;
+            extraGroups = [ 
+              "docker"
+              "libvirtd"
+              "networkmanager"
+              "wheel"
+            ];
+          };
+
+          # ============================================================================
+          # PROGRAMS - Applications you might enable/disable
+          # ============================================================================
+          programs = {
+            firefox.enable = true;
+            gamemode.enable = true;
+            
+            steam = {
+              enable = true;
+              remotePlay.openFirewall = true;
+            };
+
+            zsh = {
+              enable = true;
+              enableCompletion = true;
+              autosuggestions.enable = true;
+              syntaxHighlighting.enable = true;
+            };
+
+            virt-manager.enable = true;
+            
+            appimage = {
+              enable = true;
+              binfmt = true;
+            };
+
+            nix-ld = {
+              enable = true;
+              libraries = with pkgs; [ stdenv.cc.cc zlib ];
+            };
+
+            nh = {
+              enable = true;
+              flake = "/home/f/vortex";
+              clean = {
+                enable = true;
+                extraArgs = "--keep 3 --keep-since 4d"; 
+              };
+            };
+          };
+
+          # ============================================================================
+          # SERVICES - Features you might tweak
+          # ============================================================================
+          services = {
+            displayManager.cosmic-greeter.enable = true;
+            desktopManager.cosmic.enable = true;
+
+            pipewire = {
+              enable = true;
+              pulse.enable = true;
+              jack.enable = true;
+              wireplumber.enable = true;
+              
+              alsa = {
+                enable = true;
+                support32Bit = true;
+              };
+            };
+
+            flatpak.enable = true;
+            
+            tlp = {
+              enable = true;
+              settings = {
+                CPU_SCALING_GOVERNOR_ON_AC = "performance";
+                CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+                START_CHARGE_THRESH_BAT0 = 75;
+                STOP_CHARGE_THRESH_BAT0 = 80;
+              };
+            };
+
+            libinput = {
+              enable = true;
+              touchpad = {
+                tapping = true;
+                naturalScrolling = true;
+                disableWhileTyping = false;
+              };
+            };
+          };
+
+          # ============================================================================
+          # VIRTUALISATION - Docker/Podman/VMs
+          # ============================================================================
+          virtualisation = {
+            docker = {
+              enable = true;
+              enableOnBoot = true;
+              storageDriver = "overlay2";
+            };
+
+            libvirtd = {
+              enable = true;
+              qemu.package = pkgs.qemu_kvm;
+            };
+
+            podman = {
+              enable = true;
+              defaultNetwork.settings.dns_enabled = true;
+            };
+          };
+
+          # ============================================================================
+          # NETWORKING - Occasionally changed
+          # ============================================================================
+          networking = {
+            hostName = "vortex";
+            wireguard.enable = false;
+
+            firewall = {
+              enable = true;
+              allowPing = true;
+              allowedTCPPorts = [ 7777 ];
+              allowedUDPPorts = [ 7777 ];
+              logRefusedConnections = false;
+            };
+
+            networkmanager = {
+              enable = true;
+              wifi = {
+                backend = "iwd";
+                powersave = false;
+              };
+            };
+          };
+
+          # ============================================================================
+          # LOCALIZATION - Rarely changed
+          # ============================================================================
+          time.timeZone = "Europe/Copenhagen";
+
+          i18n = {
+            defaultLocale = "en_US.UTF-8";
+            supportedLocales = [ 
+              "en_US.UTF-8/UTF-8"
+              "ru_RU.UTF-8/UTF-8"
+            ];
+          };
+
+          console = {
+            font = "Lat2-Terminus16";
+            keyMap = "dk";
+            packages = [ pkgs.terminus_font ];
+          };
+
+          # ============================================================================
+          # FONTS - Rarely changed
+          # ============================================================================
+          fonts = {
+            fontconfig.enable = true;
+            packages = with pkgs; [
+              fira-code
+              font-awesome
+              jetbrains-mono
+              noto-fonts
+              noto-fonts-cjk-sans
+              noto-fonts-color-emoji
+            ];
+          };
+
+          # ============================================================================
+          # SYSTEM SERVICES - Set and forget
+          # ============================================================================
+          services = {
+            earlyoom = {
+              enable = true;
+              freeMemThreshold = 5;
+              freeSwapThreshold = 10;
+            };
+
+            fstrim.enable = true;
+            fwupd.enable = true;
+            logrotate.enable = true;
+            smartd.enable = true;
+            thermald.enable = true;
+
+            locate = {
+              enable = true;
+              package = pkgs.plocate;
+              interval = "daily";
+            };
+
+            resolved = {
+              enable = true;
+              settings.Resolve = {
+                DNSSEC = "true";
+                DNSOverTLS = "opportunistic";
+                FallbackDNS = "1.1.1.1 8.8.8.8";
+              };
+            };
+
+            power-profiles-daemon.enable = lib.mkForce false;
+          };
+
+          # ============================================================================
+          # HARDWARE CONFIGURATION - Rarely changed
+          # ============================================================================
+          hardware = {
+            bluetooth = {
+              enable = true;
+              powerOnBoot = true;
+              settings.General.Experimental = true;
+            };
+
+            enableRedistributableFirmware = true;
+            firmware = [ pkgs.linux-firmware ];
+            
+            graphics = {
+              enable = true;
+              enable32Bit = true;
+            };
+
+            ksm.enable = true;
+          };
+
+          # ============================================================================
+          # BOOT CONFIGURATION - Rarely changed
           # ============================================================================
           boot = {
             consoleLogLevel = 3;
@@ -72,225 +310,7 @@
           };
 
           # ============================================================================
-          # HARDWARE CONFIGURATION
-          # ============================================================================
-          hardware = {
-            bluetooth = {
-              enable = true;
-              powerOnBoot = true;
-              settings.General.Experimental = true;
-            };
-
-            enableRedistributableFirmware = true;
-            firmware = [ pkgs.linux-firmware ];
-            
-            graphics = {
-              enable = true;
-              enable32Bit = true;
-            };
-
-            ksm.enable = true;
-          };
-
-          # ============================================================================
-          # NETWORKING
-          # ============================================================================
-          networking = {
-            hostName = "vortex";
-            wireguard.enable = false;
-
-            firewall = {
-              enable = true;
-              allowPing = true;
-              allowedTCPPorts = [ 7777 ];
-              allowedUDPPorts = [ 7777 ];
-              logRefusedConnections = false;
-            };
-
-            networkmanager = {
-              enable = true;
-              wifi = {
-                backend = "iwd";
-                powersave = false;
-              };
-            };
-          };
-
-          # ============================================================================
-          # LOCALIZATION
-          # ============================================================================
-          time.timeZone = "Europe/Copenhagen";
-
-          i18n = {
-            defaultLocale = "en_US.UTF-8";
-            supportedLocales = [ 
-              "en_US.UTF-8/UTF-8"
-              "ru_RU.UTF-8/UTF-8"
-            ];
-          };
-
-          console = {
-            font = "Lat2-Terminus16";
-            keyMap = "dk";
-            packages = [ pkgs.terminus_font ];
-          };
-
-          # ============================================================================
-          # FONTS
-          # ============================================================================
-          fonts = {
-            fontconfig.enable = true;
-            packages = with pkgs; [
-              fira-code
-              font-awesome
-              jetbrains-mono
-              noto-fonts
-              noto-fonts-cjk-sans
-              noto-fonts-color-emoji
-            ];
-          };
-
-          # ============================================================================
-          # SERVICES
-          # ============================================================================
-          services = {
-            displayManager.cosmic-greeter.enable = true;
-            desktopManager.cosmic.enable = true;
-
-            libinput = {
-              enable = true;
-              touchpad = {
-                tapping = true;
-                naturalScrolling = true;
-                disableWhileTyping = false;
-              };
-            };
-
-            pipewire = {
-              enable = true;
-              pulse.enable = true;
-              jack.enable = true;
-              wireplumber.enable = true;
-              
-              alsa = {
-                enable = true;
-                support32Bit = true;
-              };
-            };
-
-            earlyoom = {
-              enable = true;
-              freeMemThreshold = 5;
-              freeSwapThreshold = 10;
-            };
-
-            flatpak.enable = true;
-            fstrim.enable = true;
-            fwupd.enable = true;
-            logrotate.enable = true;
-            smartd.enable = true;
-            thermald.enable = true;
-
-            locate = {
-              enable = true;
-              package = pkgs.plocate;
-              interval = "daily";
-            };
-
-            resolved = {
-              enable = true;
-              settings.Resolve = {
-                DNSSEC = "true";
-                DNSOverTLS = "opportunistic";
-                FallbackDNS = "1.1.1.1 8.8.8.8";
-              };
-            };
-
-            power-profiles-daemon.enable = lib.mkForce false;
-            
-            tlp = {
-              enable = true;
-              settings = {
-                CPU_SCALING_GOVERNOR_ON_AC = "performance";
-                CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-                START_CHARGE_THRESH_BAT0 = 75;
-                STOP_CHARGE_THRESH_BAT0 = 80;
-              };
-            };
-          };
-
-          # ============================================================================
-          # PROGRAMS
-          # ============================================================================
-          programs = {
-            firefox.enable = true;
-            gamemode.enable = true;
-            
-            steam = {
-              enable = true;
-              remotePlay.openFirewall = true;
-            };
-
-            zsh = {
-              enable = true;
-              enableCompletion = true;
-              autosuggestions.enable = true;
-              syntaxHighlighting.enable = true;
-            };
-
-            virt-manager.enable = true;
-            
-            appimage = {
-              enable = true;
-              binfmt = true;
-            };
-
-            nix-ld = {
-              enable = true;
-              libraries = with pkgs; [ stdenv.cc.cc zlib ];
-            };
-
-            nh = {
-              enable = true;
-              flake = "/home/f/vortex";
-              clean = {
-                enable = true;
-                extraArgs = "--keep 3 --keep-since 4d"; 
-              };
-            };
-          };
-
-          # ============================================================================
-          # SYSTEM PACKAGES
-          # ============================================================================
-          environment.systemPackages = with pkgs; [
-            curl
-            wget
-          ];
-
-          # ============================================================================
-          # VIRTUALISATION
-          # ============================================================================
-          virtualisation = {
-            docker = {
-              enable = true;
-              enableOnBoot = true;
-              storageDriver = "overlay2";
-            };
-
-            libvirtd = {
-              enable = true;
-              qemu.package = pkgs.qemu_kvm;
-            };
-
-            podman = {
-              enable = true;
-              defaultNetwork.settings.dns_enabled = true;
-            };
-          };
-
-          # ============================================================================
-          # ZRAM SWAP
+          # ZRAM SWAP - Rarely changed
           # ============================================================================
           zramSwap = {
             enable = true;
@@ -299,7 +319,7 @@
           };
 
           # ============================================================================
-          # NIX CONFIGURATION
+          # NIX CONFIGURATION - Rarely changed
           # ============================================================================
           nix = {
             settings = {
@@ -320,25 +340,14 @@
           nixpkgs.config.allowUnfree = true;
 
           # ============================================================================
-          # USERS
+          # SECURITY - Rarely changed
           # ============================================================================
-          users.users.f = {
-            isNormalUser = true;
-            shell = pkgs.zsh;
-            extraGroups = [ 
-              "docker"
-              "libvirtd"
-              "networkmanager"
-              "wheel"
-            ];
-          };
-
           security.sudo.wheelNeedsPassword = true;
           system.stateVersion = "25.05";
         })
 
         # ============================================================================
-        # HOME MANAGER
+        # HOME MANAGER - User packages and dotfiles (frequently changed)
         # ============================================================================
         home-manager.nixosModules.home-manager
         {
