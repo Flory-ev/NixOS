@@ -2,9 +2,6 @@
 
 # Unlicense
 
-[![License: Unlicense](https://img.shields.io/badge/License-The%20Unlicense-blue.svg?style=flat-square)](https://unlicense.org)
-[![Public Domain](https://img.shields.io/badge/Public%20Domain-✓-success?style=flat-square)]()
-
 </div>
 
 A license with no conditions whatsoever which dedicates works to the public domain. Unlicensed works, modifications, and larger works may be distributed under different terms and without source code.
