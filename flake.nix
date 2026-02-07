@@ -1,5 +1,5 @@
 {
-  description = "Vortex NixOS Configuration - Single File Monolith";
+  description = "NixOS Configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -13,22 +13,18 @@
       url = "github:nix-community/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    kimi-cli.url = "github:xiaoxiangmoe/kimi-cli";
   };
 
-  outputs = { self, nixpkgs, home-manager, kimi-cli, ... }@inputs: {
-    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
 
     nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       
       modules = [
-        # Hardware configuration - needs to be in separate file
         ./hardware-configuration.nix
 
-        # Everything else in one module
         ({ config, lib, pkgs, ... }: {
           # ============================================================================
           # BOOT CONFIGURATION
@@ -268,7 +264,6 @@
           # SYSTEM PACKAGES
           # ============================================================================
           environment.systemPackages = with pkgs; [
-            inputs.kimi-cli.packages.x86_64-linux.kimi-cli
             curl
             wget
           ];
@@ -388,7 +383,7 @@
 
                 git = {
                   enable = true;
-                  extraConfig = {
+                  settings = {
                     init.defaultBranch = "main";
                     pull.rebase = true;
                     push.autoSetupRemote = true;
