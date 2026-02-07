@@ -1,9 +1,9 @@
-# Vortex NixOS Configuration
+# Vortex
 
 ![NixOS](https://img.shields.io/badge/NixOS-25.05-5277C3?logo=nixos)
 ![License](https://img.shields.io/badge/License-Unlicense-green)
 
-A modern, declarative NixOS setup using Flakes with Home Manager integration. Built for daily driving, gaming, and development.
+A modern, declarative NixOS setup using Flakes with Home Manager integration.
 
 ---
 
@@ -29,71 +29,24 @@ nixos
 └── readme.md
 ```
 
-This configuration uses a **monolith** approach - everything is contained in `flake.nix`
-
----
-
-## Features
-
-### Desktop Environment
-- **COSMIC Desktop** - System76's modern Rust-based desktop environment
-- **Plymouth** boot splash with Breeze theme
-- **Systemd-boot** with graphical editor disabled for security
-
-### Gaming
-- Steam with remote play firewall rules
-- Gamemode for performance optimization
-- Lutris for managing game launchers
-
-### Development & Virtualization
-- Docker & Podman container engines
-- QEMU/KVM via libvirt (virt-manager included)
-- nix-ld for running non-Nix binaries
-- AppImage support
-
-### Audio & Media
-- PipeWire with PulseAudio and JACK compatibility
-- WirePlumber session manager
-- 32-bit ALSA support for legacy applications
-
-### Security
-- Kernel hardening (kptr_restrict, dmesg_restrict, BPF restrictions)
-- Firewall with ping allowed, port 7777 open for gaming
-- DNS-over-TLS with DNSSEC via systemd-resolved
-- Sudo password required for wheel group
-
-### Power Management
-- TLP with performance/powersave governors
-- Battery charge thresholds (75%-80%)
-- ZRAM swap with zstd compression
-- fstrim for SSD maintenance
-
----
-
-## Flake Inputs
-
-| Input | Purpose |
-|-------|---------|
-| `nixpkgs` | Main package repository (unstable channel) |
-| `home-manager` | User environment management |
-| `nh` | Nix helper for convenient rebuilds |
+This configuration uses a monolith approach - everything is contained in `flake.nix`
 
 ---
 
 ## Quick Start
 
-### Initial Installation
+### Installation
 
-1. Install NixOS from the minimal ISO
-2. Generate hardware configuration:
+1. Install NixOS
+2. Clone this repository:
+   ```shell
+   git clone https://github.com/IIFlory/Vortex.git ~/vortex
+   cd ~/vortex
+   ```
+3. Generate hardware configuration:
    ```shell
    nixos-generate-config --root /mnt
-   cp /mnt/etc/nixos/hardware-configuration.nix ~/nixos/
-   ```
-3. Clone this repository:
-   ```shell
-   git clone https://github.com/IIFlory/NixOS-Configuration.git ~/nixos
-   cd ~/nixos
+   cp /mnt/etc/nixos/hardware-configuration.nix ~/vortex/
    ```
 4. Install:
    ```shell
@@ -145,13 +98,6 @@ Zsh with Oh-My-Zsh featuring:
 - Git and sudo plugins
 - Custom aliases for Nix operations
 
-### Aliases
-| Alias | Command |
-|-------|---------|
-| `switch` | `nh os switch` |
-| `boot` | `nh os boot` |
-| `clean` | `nh clean all` |
-
 ---
 
 ## Customization
@@ -162,9 +108,9 @@ Edit the `home.packages` list in `flake.nix`:
 
 ```nix
 home.packages = with pkgs; [
-  # Your packages here
-  neovim
-  ripgrep
+  # Your 
+  # packages
+  # here
 ];
 ```
 
@@ -174,9 +120,10 @@ Replace the COSMIC services with your preferred DE:
 
 ```nix
 # Example: KDE Plasma
-services.xserver.enable = true;
-services.displayManager.sddm.enable = true;
-services.desktopManager.plasma6.enable = true;
+services = {
+   displayManager.sddm.enable = true;
+   desktopManager.plasma6.enable = true;
+}
 ```
 
 ### User Configuration
@@ -204,21 +151,5 @@ nix store optimise        # Deduplicate store
 
 ### Rollback
 ```shell
-sudo nixos-rebuild switch --rollback
-```
-
----
-
-## Troubleshooting
-
-### Build Failures
-```shell
-# Check syntax
-nix flake check
-
-# Build without switching
-nh os build
-
-# Verbose build
-nixos-rebuild switch --flake .#vortex --verbose
+nh os rollback
 ```
