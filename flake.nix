@@ -1,5 +1,5 @@
 {
-  description = "NixOS Configuration";
+  description = "Vortex";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -252,7 +252,7 @@
 
             nh = {
               enable = true;
-              flake = "/home/f/nixos";
+              flake = "/home/f/vortex";
               clean = {
                 enable = true;
                 extraArgs = "--keep 3 --keep-since 4d"; 
