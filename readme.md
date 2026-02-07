@@ -18,12 +18,11 @@ A modern, declarative NixOS setup using Flakes with Home Manager integration. Bu
 ## Structure
 
 ```
-.
-├── License.md
-├── ReadMe.md
 ├── flake.lock
 ├── flake.nix
-└── hardware-configuration.nix
+├── hardware-configuration.nix
+├── license.md
+└── readme.md
 ```
 
 This configuration uses a **monolith** approach - everything is contained in `flake.nix`
