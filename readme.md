@@ -1,7 +1,7 @@
 # Vortex NixOS Configuration
 
 ![NixOS](https://img.shields.io/badge/NixOS-25.05-5277C3?logo=nixos)
-![License](https://img.shields.io/badge/license-Unlicense-green)
+![License](https://img.shields.io/badge/License-Unlicense-green)
 
 A modern, declarative NixOS setup using Flakes with Home Manager integration. Built for daily driving, gaming, and development.
 
