@@ -8,7 +8,7 @@ A license with no conditions whatsoever which dedicates works to the public doma
 
 | Permissions | Limitations | Conditions |
 | :--- | :--- | :--- |
-| ✅ Private use | ❌ Liability | None |
+| ✅ Private use | ❌ Liability |  |
 | ✅ Commercial use | ❌ Warranty | |
 | ✅ Modification | | |
 | ✅ Distribution | | |
