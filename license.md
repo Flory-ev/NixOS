@@ -1,13 +1,20 @@
 <div align="center">
 
-# The Unlicense
+# Unlicense
 
-[![License: Unlicense](https://img.shields.io/badge/license-The%20Unlicense-blue.svg?style=flat-square)](https://unlicense.org)
-[![Public Domain](https://img.shields.io/badge/public%20domain-✓-success?style=flat-square)]()
-
-*Free and unencumbered software released into the public domain*
+[![License: Unlicense](https://img.shields.io/badge/License-The%20Unlicense-blue.svg?style=flat-square)](https://unlicense.org)
+[![Public Domain](https://img.shields.io/badge/Public%20Domain-✓-success?style=flat-square)]()
 
 </div>
+
+A license with no conditions whatsoever which dedicates works to the public domain. Unlicensed works, modifications, and larger works may be distributed under different terms and without source code.
+
+| Permissions | Limitations | Conditions |
+| :--- | :--- | :--- |
+| ✅ Private use | ❌ Liability | None |
+| ✅ Commercial use | ❌ Warranty | |
+| ✅ Modification | | |
+| ✅ Distribution | | |
 
 ---
 
@@ -26,12 +33,6 @@ successors. We intend this dedication to be an overt act of
 relinquishment in perpetuity of all present and future rights to this
 software under copyright law.
 
----
-
-<div align="center">
-
-**⚠️ Disclaimer**
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -39,9 +40,5 @@ IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
 OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
-
-</div>
-
----
 
 For more information, please refer to <https://unlicense.org>
