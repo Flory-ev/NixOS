@@ -222,12 +222,3 @@ nh os build
 # Verbose build
 nixos-rebuild switch --flake .#vortex --verbose
 ```
-
-### Home Manager Issues
-```shell
-# Rebuild home only
-home-manager switch --flake .#f
-
-# Check home news
-home-manager news
-```
