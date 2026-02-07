@@ -1,3 +1,6 @@
+![NixOS](https://img.shields.io/badge/NixOS-25.05-5277C3?logo=nixos)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 # Vortex NixOS Configuration
 
 A modern, declarative NixOS setup using Flakes with Home Manager integration. Built for daily driving, gaming, and development.
@@ -18,7 +21,6 @@ A modern, declarative NixOS setup using Flakes with Home Manager integration. Bu
 ## Structure
 
 ```
-nixos
 ├── flake.lock
 ├── flake.nix
 ├── hardware-configuration.nix
@@ -94,7 +96,7 @@ This configuration uses a **monolith** approach - everything is contained in `fl
    ```
 4. Install:
    ```shell
-   sudo nixos-install --flake .#vortex
+   sudo nixos-rebuild switch --flake .#vortex
    ```
 
 ### Post-Install Usage
@@ -103,7 +105,8 @@ This configuration uses a **monolith** approach - everything is contained in `fl
 |---------|-------------|
 | `nh os switch` | Apply configuration changes |
 | `nh os boot` | Apply on next boot only |
-| `nh clean all` | Clean old generations (keeps 3, 4 days) |
+| `nh search <package>` | Search for packages |
+| `nh clean all` | Clean old generations |
 
 ---
 
