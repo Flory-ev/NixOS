@@ -6,12 +6,11 @@
 }:
 
 {
-  # Display Manager & Desktop
   services = {
     displayManager.cosmic-greeter.enable = true;
-    desktopManager.cosmic.enable = true;
+    
+		desktopManager.cosmic.enable = true;
 
-    # Audio
     pipewire = {
       enable = true;
       pulse.enable = true;
@@ -23,10 +22,8 @@
       };
     };
 
-    # Flatpak
     flatpak.enable = true;
 
-    # Power Management
     tlp = {
       enable = true;
       settings = {
@@ -37,7 +34,6 @@
       };
     };
 
-    # Input
     libinput = {
       enable = true;
       touchpad = {
@@ -47,7 +43,6 @@
       };
     };
 
-    # System Services
     earlyoom = {
       enable = true;
       freeMemThreshold = 5;
@@ -55,10 +50,15 @@
     };
 
     fstrim.enable = true;
+
     fwupd.enable = true;
+
     logrotate.enable = true;
+
     smartd.enable = true;
+
     thermald.enable = true;
+
     power-profiles-daemon.enable = lib.mkForce false;
 
     locate = {
@@ -68,11 +68,10 @@
     };
   };
 
-  # Programs
   programs = {
     firefox.enable = true;
+
     gamemode.enable = true;
-    virt-manager.enable = true;
 
     steam = {
       enable = true;
@@ -109,7 +108,6 @@
     };
   };
 
-  # Hardware
   hardware = {
     bluetooth = {
       enable = true;
@@ -125,7 +123,6 @@
     ksm.enable = true;
   };
 
-  # Fonts
   fonts = {
     fontconfig.enable = true;
     packages = with pkgs; [
