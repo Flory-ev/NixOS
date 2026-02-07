@@ -7,19 +7,7 @@
 }:
 
 {
-  # User Configuration
-  users.users.f = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    extraGroups = [
-      "docker"
-      "libvirtd"
-      "networkmanager"
-      "wheel"
-    ];
-  };
 
-  # Localization
   time.timeZone = "Europe/Copenhagen";
 
   i18n = {
@@ -36,13 +24,16 @@
     packages = [ pkgs.terminus_font ];
   };
 
-  # System Packages
-  environment.systemPackages = with pkgs; [
-    curl
-    wget
-  ];
+  environment = {
+    systemPackages = with pkgs; [
+      curl
+      nixfmt
+      wget
+    ];
 
-  # Nix Configuration
+    etc."nix/inputs/nixpkgs".source = inputs.nixpkgs.outPath;
+  };
+
   nix = {
     settings = {
       auto-optimise-store = true;
@@ -60,12 +51,9 @@
     };
   };
 
-  environment.etc."nix/inputs/nixpkgs".source = inputs.nixpkgs.outPath;
   nixpkgs.config.allowUnfree = true;
 
-  # Security
   security.sudo.wheelNeedsPassword = true;
 
-  # System Version
   system.stateVersion = "25.05";
 }

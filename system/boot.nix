@@ -7,8 +7,6 @@
 
 {
   boot = {
-    consoleLogLevel = 3;
-
     initrd = {
       systemd.enable = true;
       verbose = true;

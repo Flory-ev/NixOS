@@ -35,24 +35,20 @@
           specialArgs = { inherit inputs; };
 
           modules = [
-            # Hardware
             ./hardware-configuration.nix
-
-            # System Modules
-            ./system/core.nix
             ./system/boot.nix
-            ./system/networking.nix
+            ./system/default.nix
             ./system/desktop.nix
+            ./system/networking.nix
+            ./system/users.nix
             ./system/virtualisation.nix
-
-            # Home Manager
             home-manager.nixosModules.home-manager
             {
               home-manager = {
                 extraSpecialArgs = { inherit inputs; };
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                users.f = import ./home/f.nix;
+                users.f = import ./home/f/default.nix;
               };
             }
           ];
