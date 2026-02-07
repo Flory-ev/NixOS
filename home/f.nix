@@ -32,12 +32,12 @@
   programs = {
     git = {
       enable = true;
-      extraConfig = {
+      settings = {
+        user.name = "F";
+        user.email = "vladislavtkachuk@yahoo.com";
         init.defaultBranch = "main";
         pull.rebase = true;
         push.autoSetupRemote = true;
-        user.name = "F";
-        user.email = "vladislavtkachuk@yahoo.com";
       };
     };
 
