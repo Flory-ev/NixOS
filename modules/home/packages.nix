@@ -19,6 +19,7 @@
     thunderbird
     tor-browser
     tree
+    veloren
     vlc
     vscodium
     zoxide
