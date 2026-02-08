@@ -13,6 +13,8 @@
     ./stylix.nix
   ];
 
+  nixpkgs.config.allowUnfree = true;
+
   home = {
     username = "f";
     homeDirectory = "/home/f";

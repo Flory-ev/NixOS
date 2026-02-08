@@ -2,9 +2,6 @@
 
 {
   services = {
-    displayManager.cosmic-greeter.enable = true;
-    desktopManager.cosmic.enable = true;
-
     flatpak.enable = true;
 
     tlp = {

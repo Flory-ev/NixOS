@@ -40,7 +40,7 @@
           {
             home-manager = {
               extraSpecialArgs = { inherit inputs; };
-              useGlobalPkgs = true;
+              useGlobalPkgs = false;
               useUserPackages = true;
               users.f = import ./modules/home/default.nix;
             };

@@ -1,17 +1,17 @@
 { pkgs, inputs, ... }:
 
 {
-  imports = [ inputs.stylix.homeManagerModules.stylix ];
+  imports = [ inputs.stylix.homeModules.stylix ];
 
   stylix = {
     enable = true;
-    image = pkgs.nixos-artwork.wallpapers.nine-ish-dark-gray.gnome-dark;
+    image = pkgs.nixos-artwork.wallpapers.nineish-dark-gray.gnomeFilePath;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
 
     cursor = {
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Ice";
-      size = 24;
+      size = 20;
     };
 
     fonts = {
@@ -43,9 +43,6 @@
     };
 
     targets = {
-      vscode.enable = false; # Handled manually in vscodium usually
-      gnome.enable = true;
-      gtk.enable = true;
     };
   };
 }
