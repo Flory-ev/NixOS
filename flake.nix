@@ -36,19 +36,19 @@
 
           modules = [
             ./hardware-configuration.nix
-            ./system/boot.nix
-            ./system/default.nix
-            ./system/desktop.nix
-            ./system/networking.nix
-            ./system/users.nix
-            ./system/virtualisation.nix
+            ./modules/system/boot.nix
+            ./modules/system/default.nix
+            ./modules/system/desktop.nix
+            ./modules/system/networking.nix
+            ./modules/system/users.nix
+            ./modules/system/virtualisation.nix
             home-manager.nixosModules.home-manager
             {
               home-manager = {
                 extraSpecialArgs = { inherit inputs; };
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                users.f = import ./home/f/default.nix;
+                users.f = import ./modules/home/default.nix;
               };
             }
           ];
