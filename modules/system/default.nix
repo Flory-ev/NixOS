@@ -8,6 +8,7 @@
 
 {
   imports = [
+    ./backups.nix
     ./locale.nix
     ./packages.nix
     ./security.nix

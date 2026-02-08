@@ -1,10 +1,6 @@
 { pkgs, ... }:
 
 {
-  # Restic Backup Configuration
-  # This module provides a foundation for system backups.
-  # Note: You will need to initialize your repository and provide password/credentials.
-
   services.restic.backups = {
     daily = {
       repository = "/run/media/f/Backup/vortex-backup"; # Local path example

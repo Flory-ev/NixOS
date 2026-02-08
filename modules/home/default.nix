@@ -1,10 +1,16 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   imports = [
     ./packages.nix
     ./programs.nix
     ./services.nix
+    ./stylix.nix
   ];
 
   home = {
