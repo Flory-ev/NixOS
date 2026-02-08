@@ -13,8 +13,6 @@
       url = "github:nix-community/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   outputs =
@@ -22,11 +20,9 @@
       self,
       nixpkgs,
       home-manager,
-      flake-parts,
       nh,
       ...
     }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
       flake = {
@@ -58,7 +54,7 @@
       perSystem =
         { config, pkgs, ... }:
         {
-          formatter = pkgs.nixfmt-classic;
+          formatter = pkgs.nixfmt;
         };
     };
 }
