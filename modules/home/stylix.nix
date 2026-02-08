@@ -43,6 +43,8 @@
     };
 
     targets = {
+      gnome.enable = true;
+      gtk.enable = true;
     };
   };
 }

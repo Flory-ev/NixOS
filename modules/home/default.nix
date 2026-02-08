@@ -10,7 +10,7 @@
     ./packages.nix
     ./programs.nix
     ./services.nix
-    ./stylix.nix
+    #./stylix.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
