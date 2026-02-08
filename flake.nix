@@ -16,45 +16,36 @@
   };
 
   outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      home-manager,
-      nh,
-      ...
-    }:
-      systems = [ "x86_64-linux" ];
+    inputs@{ self, nixpkgs, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
+    {
+      nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs; };
 
-      flake = {
-        nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-
-          modules = [
-            ./hardware-configuration.nix
-            ./modules/system/boot.nix
-            ./modules/system/default.nix
-            ./modules/system/desktop.nix
-            ./modules/system/networking.nix
-            ./modules/system/users.nix
-            ./modules/system/virtualisation.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                extraSpecialArgs = { inherit inputs; };
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                users.f = import ./modules/home/default.nix;
-              };
-            }
-          ];
-        };
+        modules = [
+          ./hardware-configuration.nix
+          ./modules/system/boot.nix
+          ./modules/system/default.nix
+          ./modules/system/desktop.nix
+          ./modules/system/networking.nix
+          ./modules/system/users.nix
+          ./modules/system/virtualisation.nix
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              extraSpecialArgs = { inherit inputs; };
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.f = import ./modules/home/default.nix;
+            };
+          }
+        ];
       };
 
-      perSystem =
-        { config, pkgs, ... }:
-        {
-          formatter = pkgs.nixfmt;
-        };
+      formatter.${system} = pkgs.nixfmt;
     };
 }
