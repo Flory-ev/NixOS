@@ -7,32 +7,13 @@
 }:
 
 {
+  imports = [
+    ./locale.nix
+    ./packages.nix
+    ./security.nix
+  ];
 
-  time.timeZone = "Europe/Copenhagen";
-
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-    supportedLocales = [
-      "en_US.UTF-8/UTF-8"
-      "ru_RU.UTF-8/UTF-8"
-    ];
-  };
-
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "dk";
-    packages = [ pkgs.terminus_font ];
-  };
-
-  environment = {
-    systemPackages = with pkgs; [
-      curl
-      nixfmt
-      wget
-    ];
-
-    etc."nix/inputs/nixpkgs".source = inputs.nixpkgs.outPath;
-  };
+  environment.etc."nix/inputs/nixpkgs".source = inputs.nixpkgs.outPath;
 
   nix = {
     settings = {
@@ -52,8 +33,6 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-
-  security.sudo.wheelNeedsPassword = true;
 
   system.stateVersion = "25.05";
 }
