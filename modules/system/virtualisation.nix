@@ -141,8 +141,7 @@
   
   # User groups for virtualization
   users.users = {
-    # Add your username here
-    yourusername = {
+    f = {
       extraGroups = [
         "docker"
         "libvirtd"
