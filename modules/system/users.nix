@@ -12,9 +12,6 @@
     shell = pkgs.zsh;
     extraGroups = [
       "audio"
-      "docker"
-      "input"
-      "libvirtd"
       "networkmanager"
       "storage"
       "video"
