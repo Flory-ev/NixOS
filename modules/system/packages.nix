@@ -1,9 +1,12 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    curl
-    nixfmt
-    wget
-  ];
+  environment.systemPackages =
+    (with pkgs; [
+      curl
+      nixfmt
+      wget
+    ])
+    ++ (with pkgs-unstable; [
+    ]);
 }
