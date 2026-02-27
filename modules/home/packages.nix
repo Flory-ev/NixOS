@@ -1,27 +1,30 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    antigravity
-    bat
-    bitwarden-desktop
-    chromium
-    discord
-    eza
-    fd
-    fzf
-    lutris
-    nixfmt
-    qbittorrent
-    reaper
-    spotify
-    telegram-desktop
-    thunderbird
-    tor-browser
-    tree
-    veloren
-    vlc
-    vscodium
-    zoxide
-  ];
+  home.packages =
+    (with pkgs; [
+      antigravity
+      bat
+      eza
+      fd
+      fzf
+      qbittorrent
+      thunderbird
+      tor-browser
+      tree
+      vlc
+      zoxide
+    ])
+    ++ (with pkgs-unstable; [
+      bitwarden-desktop
+      chromium
+      discord
+      lutris
+      nixfmt
+      reaper
+      spotify
+      telegram-desktop
+      veloren
+      vscodium
+    ]);
 }
