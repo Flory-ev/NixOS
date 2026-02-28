@@ -1,13 +1,9 @@
-{ pkgs, pkgs-unstable, ... }:
+{ pkgs, ... }:
 
 {
-  environment.systemPackages =
-    (with pkgs; [
-      curl
-      nixfmt
-      wget
-    ])
-    ++ (with pkgs-unstable; [
-      depotdownloader
-    ]);
+  environment.systemPackages = with pkgs; [
+    curl
+    nixfmt
+    wget
+  ];
 }
