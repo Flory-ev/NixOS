@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-unstable, ... }:
 
 {
   environment.systemPackages =
@@ -8,5 +8,6 @@
       wget
     ])
     ++ (with pkgs-unstable; [
+      depotdownloader
     ]);
 }

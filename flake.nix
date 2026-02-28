@@ -2,10 +2,8 @@
   description = "Vortex";
 
   inputs = {
-    nixpkgs = {
-      url = "github:nixos/nixpkgs/nixos-25.11";
-      unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    };
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -21,15 +19,25 @@
   };
 
   outputs =
-    inputs@{ self, nixpkgs, ... }:
+    inputs@{
+      self,
+      nixpkgs,
+      unstable,
+      ...
+    }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      pkgs-unstable = import unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
     in
     {
       nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs pkgs-unstable; };
 
         modules = [
           ./hardware-configuration.nix
@@ -42,7 +50,7 @@
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager = {
-              extraSpecialArgs = { inherit inputs; };
+              extraSpecialArgs = { inherit inputs pkgs-unstable; };
               useGlobalPkgs = false;
               useUserPackages = true;
               users.f = import ./modules/home/default.nix;
