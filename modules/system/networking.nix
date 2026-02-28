@@ -8,6 +8,10 @@
 {
   networking = {
     hostName = "vortex";
+    nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
     wireguard.enable = false;
 
     firewall = {
@@ -20,6 +24,7 @@
 
     networkmanager = {
       enable = true;
+      dns = "systemd-resolved";
       wifi = {
         backend = "iwd";
         powersave = false;
@@ -29,10 +34,5 @@
 
   services.resolved = {
     enable = true;
-    settings.Resolve = {
-      DNSSEC = "true";
-      DNSOverTLS = "opportunistic";
-      FallbackDNS = "1.1.1.1 8.8.8.8";
-    };
   };
 }
