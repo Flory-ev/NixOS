@@ -7,15 +7,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nh = {
-      url = "github:nix-community/nh";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    stylix.url = "github:danth/stylix";
   };
 
   outputs =
-    inputs@{ self, nixpkgs, ... }:
+    inputs@{ nixpkgs, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -47,18 +42,13 @@
                 ];
                 flake-registry = "";
                 nix-path = lib.mkForce "nixpkgs=/etc/nix/inputs/nixpkgs";
-                substituters = [ "https://cache.nixos.org/" ];
-                trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
               };
               nixpkgs.config.allowUnfree = true;
               system.stateVersion = "25.05";
 
               # --- Boot ---
               boot = {
-                initrd = {
-                  systemd.enable = true;
-                  verbose = true;
-                };
+                initrd.systemd.enable = true;
                 kernel.sysctl = {
                   "kernel.dmesg_restrict" = true;
                   "kernel.kptr_restrict" = 2;
@@ -128,7 +118,6 @@
                 ];
                 firewall = {
                   enable = true;
-                  allowPing = true;
                   allowedTCPPorts = [ 7777 ];
                   allowedUDPPorts = [ 7777 ];
                   logRefusedConnections = false;
@@ -152,7 +141,6 @@
                   settings.General.Experimental = true;
                 };
                 enableRedistributableFirmware = true;
-                firmware = [ pkgs.linux-firmware ];
                 graphics = {
                   enable = true;
                   enable32Bit = true;
@@ -167,23 +155,19 @@
                 enable = true;
                 pulse.enable = true;
                 jack.enable = true;
-                wireplumber.enable = true;
                 alsa = {
                   enable = true;
                   support32Bit = true;
                 };
               };
-              fonts = {
-                fontconfig.enable = true;
-                packages = with pkgs; [
-                  fira-code
-                  font-awesome
-                  jetbrains-mono
-                  noto-fonts
-                  noto-fonts-cjk-sans
-                  noto-fonts-color-emoji
-                ];
-              };
+              fonts.packages = with pkgs; [
+                fira-code
+                font-awesome
+                jetbrains-mono
+                noto-fonts
+                noto-fonts-cjk-sans
+                noto-fonts-color-emoji
+              ];
 
               # --- Programs ---
               programs = {
@@ -248,7 +232,6 @@
                 };
                 fstrim.enable = true;
                 fwupd.enable = true;
-                logrotate.enable = true;
                 smartd.enable = true;
                 thermald.enable = true;
                 power-profiles-daemon.enable = lib.mkForce false;
@@ -289,7 +272,6 @@
               virtualisation = {
                 docker = {
                   enable = true;
-                  enableOnBoot = true;
                   autoPrune = {
                     enable = true;
                     flags = [
@@ -355,11 +337,9 @@
 
               # --- Home Manager ---
               home-manager = {
-                extraSpecialArgs = { inherit inputs; };
-                useGlobalPkgs = false;
                 useUserPackages = true;
                 users.f =
-                  { pkgs, inputs, ... }:
+                  { pkgs, ... }:
                   {
                     nixpkgs.config.allowUnfree = true;
                     home = {
