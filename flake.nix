@@ -52,7 +52,8 @@
                 };
                 kernelModules = [
                   "btusb"
-                  "kvm-amd" # change to kvm-intel if on Intel
+                  "kvm-amd"
+                  "kvm-intel"
                   "vfio-pci"
                   "vhost-net"
                   "tap"
@@ -63,7 +64,8 @@
                   "mitigations=auto"
                   "quiet"
                   "splash"
-                  "amd_iommu=on" # change to intel_iommu=on if on Intel
+                  "amd_iommu=on"
+                  "intel_iommu=on"
                   "iommu=pt"
                 ];
                 loader = {
