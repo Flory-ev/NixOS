@@ -11,13 +11,9 @@
 
   outputs =
     inputs@{ nixpkgs, ... }:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in
     {
       nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
-        inherit system;
+        system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
           ./hardware-configuration.nix
@@ -56,8 +52,7 @@
                 };
                 kernelModules = [
                   "btusb"
-                  "kvm-amd"
-                  "kvm-intel"
+                  "kvm-amd" # change to kvm-intel if on Intel
                   "vfio-pci"
                   "vhost-net"
                   "tap"
@@ -68,8 +63,7 @@
                   "mitigations=auto"
                   "quiet"
                   "splash"
-                  "intel_iommu=on"
-                  "amd_iommu=on"
+                  "amd_iommu=on" # change to intel_iommu=on if on Intel
                   "iommu=pt"
                 ];
                 loader = {
@@ -90,7 +84,6 @@
               };
               zramSwap = {
                 enable = true;
-                algorithm = "zstd";
                 memoryPercent = 50;
               };
 
@@ -141,10 +134,7 @@
                   settings.General.Experimental = true;
                 };
                 enableRedistributableFirmware = true;
-                graphics = {
-                  enable = true;
-                  enable32Bit = true;
-                };
+                graphics.enable32Bit = true;
                 ksm.enable = true;
               };
 
@@ -177,12 +167,7 @@
                   enable = true;
                   remotePlay.openFirewall = true;
                 };
-                zsh = {
-                  enable = true;
-                  enableCompletion = true;
-                  autosuggestions.enable = true;
-                  syntaxHighlighting.enable = true;
-                };
+                zsh.enable = true;
                 appimage = {
                   enable = true;
                   binfmt = true;
@@ -217,13 +202,10 @@
                     STOP_CHARGE_THRESH_BAT0 = 80;
                   };
                 };
-                libinput = {
-                  enable = true;
-                  touchpad = {
-                    tapping = true;
-                    naturalScrolling = true;
-                    disableWhileTyping = false;
-                  };
+                libinput.touchpad = {
+                  tapping = true;
+                  naturalScrolling = true;
+                  disableWhileTyping = false;
                 };
                 earlyoom = {
                   enable = true;
@@ -265,9 +247,6 @@
                 };
               };
 
-              # --- Security ---
-              security.sudo.wheelNeedsPassword = true;
-
               # --- Virtualisation ---
               virtualisation = {
                 docker = {
@@ -304,13 +283,11 @@
                 isNormalUser = true;
                 shell = pkgs.zsh;
                 extraGroups = [
-                  "audio"
                   "docker"
                   "input"
                   "kvm"
                   "libvirtd"
                   "networkmanager"
-                  "storage"
                   "video"
                   "wheel"
                 ];
@@ -321,13 +298,10 @@
                 systemPackages = with pkgs; [
                   curl
                   nixfmt
-                  restic
                   wget
                   guestfs-tools
-                  libguestfs
                   spice
                   spice-gtk
-                  spice-protocol
                   virt-viewer
                   virtio-win
                   win-spice
@@ -337,11 +311,11 @@
 
               # --- Home Manager ---
               home-manager = {
+                useGlobalPkgs = true;
                 useUserPackages = true;
                 users.f =
                   { pkgs, ... }:
                   {
-                    nixpkgs.config.allowUnfree = true;
                     home = {
                       username = "f";
                       homeDirectory = "/home/f";
@@ -399,7 +373,6 @@
                         };
                       };
                     };
-                    services = { };
                   };
               };
 
@@ -408,6 +381,6 @@
         ];
       };
 
-      formatter.${system} = pkgs.nixfmt;
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
     };
 }
