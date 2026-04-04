@@ -238,7 +238,7 @@
                 virt-manager.enable = true;
               };
 
-              # --- Desktop / Audio / Fonts ---
+              # --- Fonts ---
               fonts.packages = with pkgs; [
                 fira-code
                 font-awesome
