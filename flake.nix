@@ -39,23 +39,15 @@
                       packages = with pkgs; [
                         antigravity
                         bat
-                        bitwarden-desktop
-                        chromium
-                        discord
                         eza
                         fd
                         fzf
-                        lutris
                         qbittorrent
                         reaper
                         spotify
                         telegram-desktop
-                        thunderbird
                         tor-browser
                         tree
-                        veloren
-                        vlc
-                        vscodium
                         zoxide
                       ];
                     };
@@ -130,6 +122,7 @@
                   enable = true;
                   qemu = {
                     package = pkgs.qemu_kvm;
+                    runAsRoot = false;
                     swtpm.enable = true;
                   };
                   onBoot = "start";
@@ -324,7 +317,6 @@
                 };
                 kernelModules = [
                   "btusb"
-                  "kvm-amd"
                   "kvm-intel"
                   "vfio-pci"
                   "vhost-net"
@@ -336,7 +328,6 @@
                   "mitigations=auto"
                   "quiet"
                   "splash"
-                  "amd_iommu=on"
                   "intel_iommu=on"
                   "iommu=pt"
                 ];
