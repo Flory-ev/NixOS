@@ -17,12 +17,7 @@
           ./hardware-configuration.nix
           inputs.home-manager.nixosModules.home-manager
           (
-            {
-              lib,
-              pkgs,
-              inputs,
-              ...
-            }:
+            { pkgs, ... }:
             {
 
               # --- Home Manager ---
@@ -64,7 +59,6 @@
                       };
                       zsh = {
                         enable = true;
-                        enableCompletion = true;
                         autosuggestion.enable = true;
                         syntaxHighlighting.enable = true;
                         oh-my-zsh = {
@@ -155,14 +149,6 @@
                 };
                 fstrim.enable = true;
                 fwupd.enable = true;
-                smartd.enable = true;
-                thermald.enable = true;
-                power-profiles-daemon.enable = lib.mkForce false;
-                locate = {
-                  enable = true;
-                  package = pkgs.plocate;
-                  interval = "daily";
-                };
                 restic.backups.daily = {
                   repository = "/run/media/f/Backup/vortex-backup";
                   passwordFile = "/etc/restic/password";
@@ -186,17 +172,17 @@
                     "--keep-monthly 6"
                   ];
                 };
-              };
-              services.resolved.enable = true;
-              services.displayManager.cosmic-greeter.enable = true;
-              services.desktopManager.cosmic.enable = true;
-              services.pipewire = {
-                enable = true;
-                pulse.enable = true;
-                jack.enable = true;
-                alsa = {
+                resolved.enable = true;
+                displayManager.cosmic-greeter.enable = true;
+                desktopManager.cosmic.enable = true;
+                pipewire = {
                   enable = true;
-                  support32Bit = true;
+                  pulse.enable = true;
+                  jack.enable = true;
+                  alsa = {
+                    enable = true;
+                    support32Bit = true;
+                  };
                 };
               };
 
@@ -290,7 +276,6 @@
                 };
                 enableRedistributableFirmware = true;
                 graphics.enable32Bit = true;
-                ksm.enable = true;
               };
 
               # --- Locale ---
@@ -305,7 +290,6 @@
               console = {
                 font = "Lat2-Terminus16";
                 keyMap = "dk";
-                packages = [ pkgs.terminus_font ];
               };
 
               # --- Boot ---
@@ -328,7 +312,6 @@
                 kernelParams = [
                   "mitigations=auto"
                   "quiet"
-                  "splash"
                   "intel_iommu=on"
                   "iommu=pt"
                 ];
@@ -342,29 +325,14 @@
                     configurationLimit = 10;
                   };
                 };
-                plymouth = {
-                  enable = true;
-                  theme = "breeze";
-                };
-                tmp.cleanOnBoot = true;
               };
-              zramSwap = {
-                enable = true;
-                memoryPercent = 50;
-              };
+              zramSwap.enable = true;
 
               # --- Nix ---
-              environment.etc."nix/inputs/nixpkgs".source = inputs.nixpkgs.outPath;
-              nix.settings = {
-                auto-optimise-store = true;
-                download-buffer-size = 200000000;
-                experimental-features = [
-                  "nix-command"
-                  "flakes"
-                ];
-                flake-registry = "";
-                nix-path = lib.mkForce "nixpkgs=/etc/nix/inputs/nixpkgs";
-              };
+              nix.settings.experimental-features = [
+                "nix-command"
+                "flakes"
+              ];
               nixpkgs.config.allowUnfree = true;
               system.stateVersion = "25.05";
 
