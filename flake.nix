@@ -9,9 +9,15 @@
 
   outputs =
     inputs@{ nixpkgs, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
     {
+      formatter.${system} = pkgs.nixfmt;
+
       nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        inherit system;
         specialArgs = { inherit inputs; };
         modules = [
           ./hardware-configuration.nix
@@ -264,7 +270,5 @@
           )
         ];
       };
-
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
     };
 }
