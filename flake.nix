@@ -87,6 +87,7 @@
                   allowedTCPPorts = [ 7777 ];
                   allowedUDPPorts = [ 7777 ];
                   logRefusedConnections = false;
+                  trustedInterfaces = [ "virbr0" ];
                 };
                 networkmanager = {
                   enable = true;
@@ -96,18 +97,21 @@
                     powersave = false;
                   };
                 };
+                tempAddresses = "enabled";
               };
 
               # --- Services ---
-              services = {
-                resolved = {
-                  enable = true;
-                  fallbackDns = [
-                    "1.1.1.1"
-                    "8.8.8.8"
-                  ];
-                  dnssec = "false";
-                };
+              services.resolved = {
+                enable = true;
+                dnssec = "allow-downgrade";
+                dns = [
+                  "1.1.1.1#cloudflare-dns.com"
+                  "8.8.8.8#dns.google"
+                ];
+                fallbackDns = [
+                  "9.9.9.9#dns.quad9.net"
+                ];
+                extraConfig = "DNSOverTLS=opportunistic";
               };
 
               # --- Virtualisation ---
