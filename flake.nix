@@ -25,6 +25,7 @@
           (
             { pkgs, ... }:
             {
+
               # --- Boot ---
               boot = {
                 initrd.systemd.enable = true;
@@ -82,23 +83,41 @@
               networking = {
                 hostName = "vortex";
                 firewall = {
-                  enable = true;
                   allowedTCPPorts = [ 7777 ];
                   allowedUDPPorts = [ 7777 ];
-                  logRefusedConnections = false;
-                  trustedInterfaces = [ "virbr0" ];
                 };
                 networkmanager = {
                   enable = true;
+                  dns = "systemd-resolved";
                   wifi = {
                     backend = "iwd";
                     powersave = false;
                   };
                 };
-                tempAddresses = "enabled";
               };
 
               # --- Services ---
+              services = {
+                displayManager.cosmic-greeter.enable = true;
+                desktopManager.cosmic.enable = true;
+                pipewire = {
+                  enable = true;
+                  pulse.enable = true;
+                  jack.enable = true;
+                  alsa = {
+                    enable = true;
+                    support32Bit = true;
+                  };
+                };
+                earlyoom = {
+                  enable = true;
+                  freeMemThreshold = 5;
+                  freeSwapThreshold = 10;
+                };
+                flatpak.enable = true;
+                fstrim.enable = true;
+                fwupd.enable = true;
+              };
 
               # --- Virtualisation ---
               virtualisation = {
@@ -136,7 +155,6 @@
                 };
                 firefox.enable = true;
                 gamemode.enable = true;
-                niri.enable = true;
                 nh = {
                   enable = true;
                   flake = "/home/f/vortex";
@@ -247,6 +265,7 @@
               };
               nixpkgs.config.allowUnfree = true;
               system.stateVersion = "25.05";
+
             }
           )
         ];
