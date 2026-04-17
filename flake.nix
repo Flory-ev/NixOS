@@ -25,7 +25,6 @@
           (
             { pkgs, ... }:
             {
-
               # --- Boot ---
               boot = {
                 initrd.systemd.enable = true;
@@ -82,6 +81,7 @@
               # --- Networking ---
               networking = {
                 hostName = "vortex";
+                useDHCP = false;
                 firewall = {
                   enable = true;
                   allowedTCPPorts = [ 7777 ];
@@ -104,6 +104,7 @@
               services.resolved = {
                 enable = true;
                 dnssec = "allow-downgrade";
+                dnsovertls = "opportunistic";
                 dns = [
                   "1.1.1.1#cloudflare-dns.com"
                   "8.8.8.8#dns.google"
@@ -111,7 +112,6 @@
                 fallbackDns = [
                   "9.9.9.9#dns.quad9.net"
                 ];
-                extraConfig = "DNSOverTLS=opportunistic";
               };
 
               # --- Virtualisation ---
@@ -150,6 +150,7 @@
                 };
                 firefox.enable = true;
                 gamemode.enable = true;
+                niri.enable = true;
                 nh = {
                   enable = true;
                   flake = "/home/f/vortex";
@@ -260,7 +261,6 @@
               };
               nixpkgs.config.allowUnfree = true;
               system.stateVersion = "25.05";
-
             }
           )
         ];
