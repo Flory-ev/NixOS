@@ -90,7 +90,6 @@
                 };
                 networkmanager = {
                   enable = true;
-                  dns = "systemd-resolved";
                   wifi = {
                     backend = "iwd";
                     powersave = false;
@@ -100,17 +99,6 @@
               };
 
               # --- Services ---
-              services.resolved = {
-                enable = true;
-                dnssec = "allow-downgrade";
-                dns = [
-                  "1.1.1.1#cloudflare-dns.com"
-                  "8.8.8.8#dns.google"
-                ];
-                fallbackDns = [
-                  "9.9.9.9#dns.quad9.net"
-                ];
-              };
 
               # --- Virtualisation ---
               virtualisation = {
