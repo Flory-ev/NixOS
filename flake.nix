@@ -98,6 +98,7 @@
 
               # --- Services ---
               services = {
+                resolved.enable = true;
                 displayManager.cosmic-greeter.enable = true;
                 desktopManager.cosmic.enable = true;
                 pipewire = {
