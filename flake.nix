@@ -83,8 +83,10 @@
               networking = {
                 hostName = "vortex";
                 firewall = {
+                  enable = true;
                   allowedTCPPorts = [ 7777 ];
                   allowedUDPPorts = [ 7777 ];
+                  logRefusedConnections = false;
                 };
                 networkmanager = {
                   enable = true;
@@ -98,25 +100,14 @@
 
               # --- Services ---
               services = {
-                displayManager.cosmic-greeter.enable = true;
-                desktopManager.cosmic.enable = true;
-                pipewire = {
+                resolved = {
                   enable = true;
-                  pulse.enable = true;
-                  jack.enable = true;
-                  alsa = {
-                    enable = true;
-                    support32Bit = true;
-                  };
+                  fallbackDns = [
+                    "1.1.1.1"
+                    "8.8.8.8"
+                  ];
+                  dnssec = "false";
                 };
-                earlyoom = {
-                  enable = true;
-                  freeMemThreshold = 5;
-                  freeSwapThreshold = 10;
-                };
-                flatpak.enable = true;
-                fstrim.enable = true;
-                fwupd.enable = true;
               };
 
               # --- Virtualisation ---
