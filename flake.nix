@@ -81,7 +81,6 @@
               # --- Networking ---
               networking = {
                 hostName = "vortex";
-                useDHCP = false;
                 firewall = {
                   enable = true;
                   allowedTCPPorts = [ 7777 ];
@@ -104,7 +103,6 @@
               services.resolved = {
                 enable = true;
                 dnssec = "allow-downgrade";
-                dnsovertls = "opportunistic";
                 dns = [
                   "1.1.1.1#cloudflare-dns.com"
                   "8.8.8.8#dns.google"
