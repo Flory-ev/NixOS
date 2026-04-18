@@ -5,10 +5,5 @@
     curl
     nixfmt
     wget
-    spice
-    spice-gtk
-    virt-viewer
-    virtio-win
-    win-spice
   ];
 }

@@ -16,9 +16,6 @@
   };
   environment = {
     systemPackages = with pkgs; [
-      curl
-      nixfmt
-      wget
       spice
       spice-gtk
       virt-viewer
