@@ -31,6 +31,7 @@
           ./nixos/home.nix
           ./nixos/networking.nix
           ./nixos/nix.nix
+          ./nixos/packages.nix
           ./nixos/programs.nix
           ./nixos/services.nix
           ./nixos/users.nix
