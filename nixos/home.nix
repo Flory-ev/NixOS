@@ -16,6 +16,7 @@
           fd
           fzf
           qbittorrent
+          libreoffice
           reaper
           spotify
           telegram-desktop
