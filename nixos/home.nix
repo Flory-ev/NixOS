@@ -19,6 +19,7 @@
           libreoffice
           reaper
           spotify
+          sqlitebrowser
           telegram-desktop
           tor-browser
           tree
