@@ -13,30 +13,15 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
+      imports = [
+        ./hosts
+        ./modules
+      ];
+
       perSystem =
         { pkgs, ... }:
         {
           formatter = pkgs.nixfmt;
         };
-
-      flake.nixosConfigurations.vortex = inputs.nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./hardware-configuration.nix
-          inputs.home-manager.nixosModules.home-manager
-          ./nixos/boot.nix
-          ./nixos/fonts.nix
-          ./nixos/hardware.nix
-          ./nixos/home.nix
-          ./nixos/networking.nix
-          ./nixos/nix.nix
-          ./nixos/packages.nix
-          ./nixos/programs.nix
-          ./nixos/services.nix
-          ./nixos/users.nix
-          ./nixos/virtualisation.nix
-        ];
-      };
     };
 }
