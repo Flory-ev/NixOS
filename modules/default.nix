@@ -4,17 +4,17 @@
   flake.nixosModules = {
     default = {
       imports = [
-        ./boot.nix
-        ./fonts.nix
-        ./hardware.nix
-        ./home.nix
-        ./networking.nix
-        ./nix.nix
-        ./packages.nix
-        ./programs.nix
-        ./services.nix
-        ./users.nix
-        ./virtualisation.nix
+        ./core/boot.nix
+        ./core/hardware.nix
+        ./core/networking.nix
+        ./core/nix.nix
+        ./desktop/fonts.nix
+        ./desktop/home.nix
+        ./desktop/programs.nix
+        ./system/packages.nix
+        ./system/services.nix
+        ./system/users.nix
+        ./virtualisation/virtualisation.nix
       ];
     };
   };
