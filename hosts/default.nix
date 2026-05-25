@@ -7,7 +7,9 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./vortex
-        self.nixosModules.default
+        self.nixosModules.core
+        self.nixosModules.desktop
+        self.nixosModules.home
       ];
     };
 
@@ -16,7 +18,9 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./stardust
-        self.nixosModules.default
+        self.nixosModules.core
+        self.nixosModules.desktop
+        self.nixosModules.home
       ];
     };
   };
