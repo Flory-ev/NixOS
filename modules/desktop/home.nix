@@ -20,6 +20,7 @@
           reaper
           spotify
           sqlitebrowser
+          termius
           telegram-desktop
           tor-browser
           tree

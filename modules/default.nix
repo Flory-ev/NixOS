@@ -14,7 +14,6 @@
         ./system/packages.nix
         ./system/services.nix
         ./system/users.nix
-        ./virtualisation/virtualisation.nix
       ];
     };
   };
