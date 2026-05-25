@@ -3,8 +3,8 @@
   # --- Services ---
   services = {
     resolved.enable = true;
-    displayManager.cosmic-greeter.enable = true;
-    desktopManager.cosmic.enable = true;
+    displayManager.sddm.enable = true;
+    desktopManager.plasma6.enable = true;
     pipewire = {
       enable = true;
       pulse.enable = true;
