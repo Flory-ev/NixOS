@@ -5,10 +5,8 @@
     antigravity
     bat
     brightnessctl
-    dunst
     eza
     fd
-    fuzzel
     fzf
     libnotify
     networkmanagerapplet
@@ -17,13 +15,11 @@
     reaper
     spotify
     sqlitebrowser
-    swaylock
     awww
     termius
     telegram-desktop
     tor-browser
     tree
-    waybar
     wl-clipboard
     zoxide
   ];

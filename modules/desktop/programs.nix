@@ -15,7 +15,6 @@
         extraArgs = "--keep 3 --keep-since 4d";
       };
     };
-    niri.enable = true;
     nix-ld = {
       enable = true;
       libraries = with pkgs; [

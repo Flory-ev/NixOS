@@ -24,8 +24,7 @@
     fwupd.enable = true;
   };
 
-  # programs.niri.enable already configures xdg-portal for niri;
-  # add gtk portal for file pickers in non-COSMIC sessions
+  # Add gtk portal for file pickers in non-COSMIC sessions
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   security.polkit.enable = true;

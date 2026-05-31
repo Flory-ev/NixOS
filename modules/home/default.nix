@@ -8,10 +8,8 @@
     useUserPackages = true;
     users.f = {
       imports = [
-        ./git.nix
-        ./niri.nix
         ./packages.nix
-        ./shell.nix
+        ./programs.nix
       ];
       home = {
         username = "f";

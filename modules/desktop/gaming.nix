@@ -81,12 +81,12 @@
 
   # ── Gaming Packages ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    mangohud       # FPS/perf overlay  (launch with MANGOHUD=1 %command%)
-    protonup-qt    # manage Proton-GE versions
-    winetricks     # Wine configuration helpers
-    protontricks   # Proton-specific winetricks wrapper
-    vulkan-tools   # vulkaninfo, vkcube — verify Vulkan is working
-    glxinfo        # check OpenGL renderer and driver version
+    mangohud     # FPS/perf overlay  (launch with MANGOHUD=1 %command%)
+    protonup-qt  # manage Proton-GE versions
+    winetricks   # Wine configuration helpers
+    protontricks # Proton-specific winetricks wrapper
+    vulkan-tools # vulkaninfo, vkcube — verify Vulkan is working
+    mesa-demos   # check OpenGL renderer and driver version
   ];
 
   # ── Proton / Wine / NVIDIA Environment ─────────────────────────────
