@@ -10,7 +10,6 @@
     };
     kernelModules = [
       "btusb"
-      "kvm-intel"
       "vfio-pci"
       "vhost-net"
       "tap"
@@ -19,8 +18,6 @@
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "quiet"
-      "intel_iommu=on"
-      "iommu=pt"
     ];
     loader = {
       efi.canTouchEfiVariables = true;

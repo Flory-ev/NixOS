@@ -16,6 +16,7 @@
     desktop = {
       imports = [
         ./desktop/fonts.nix
+        ./desktop/gaming.nix
         ./desktop/programs.nix
       ];
     };
