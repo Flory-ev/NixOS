@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 {
   # ╔══════════════════════════════════════════════════════════════════╗
   # ║                     GAMING OPTIMIZATIONS                        ║
@@ -81,12 +86,12 @@
 
   # ── Gaming Packages ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    mangohud     # FPS/perf overlay  (launch with MANGOHUD=1 %command%)
-    protonup-qt  # manage Proton-GE versions
-    winetricks   # Wine configuration helpers
+    mangohud # FPS/perf overlay  (launch with MANGOHUD=1 %command%)
+    protonup-qt # manage Proton-GE versions
+    winetricks # Wine configuration helpers
     protontricks # Proton-specific winetricks wrapper
     vulkan-tools # vulkaninfo, vkcube — verify Vulkan is working
-    mesa-demos   # check OpenGL renderer and driver version
+    mesa-demos # check OpenGL renderer and driver version
   ];
 
   # ── Proton / Wine / NVIDIA Environment ─────────────────────────────
@@ -96,7 +101,7 @@
     WINE_FULLSCREEN_FSR_STRENGTH = "2"; # 0 = max sharpening, 5 = least
 
     # ─── NVIDIA-specific Proton variables ───
-    PROTON_ENABLE_NVAPI = "1";   # expose NVIDIA API to games (DLSS, etc.)
+    PROTON_ENABLE_NVAPI = "1"; # expose NVIDIA API to games (DLSS, etc.)
     PROTON_HIDE_NVIDIA_GPU = "0"; # don't hide the GPU from DirectX games
 
     # ─── AMD GPU — uncomment when using an AMD GPU ───
