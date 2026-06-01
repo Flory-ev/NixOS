@@ -6,6 +6,7 @@
     bat
     brightnessctl
     eza
+    fastfetch
     fd
     fzf
     libnotify
