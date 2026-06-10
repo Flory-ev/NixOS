@@ -1,1 +1,8 @@
 hardware-configuration.nix
+result
+.direnv
+.envrc
+*.qcow2
+*.iso
+*.img
+.DS_Store
