@@ -9,6 +9,7 @@
     fastfetch
     fd
     fzf
+    heroic
     qbittorrent
     reaper
     spotify
