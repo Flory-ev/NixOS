@@ -4,7 +4,6 @@
   home.packages = with pkgs; [
     antigravity
     bat
-    discord
     eza
     fastfetch
     fd
