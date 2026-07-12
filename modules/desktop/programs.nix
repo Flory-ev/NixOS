@@ -1,5 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
+  imports = [ inputs.niri.nixosModules.niri ];
+
   # --- Programs ---
   programs = {
     appimage = {

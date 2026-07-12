@@ -1,5 +1,5 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  xdg.configFile."niri/config.kdl".source = ./config.kdl;
+  programs.niri.config = builtins.readFile ./config.kdl;
 }
