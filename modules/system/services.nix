@@ -3,8 +3,15 @@
   # --- Services ---
   services = {
     resolved.enable = true;
-    displayManager.sddm.enable = true;
-    desktopManager.plasma6.enable = true;
+    greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd niri-session";
+          user = "greeter";
+        };
+      };
+    };
     pipewire = {
       enable = true;
       pulse.enable = true;
@@ -24,8 +31,14 @@
     fwupd.enable = true;
   };
 
-  # Add gtk portal for file pickers in non-COSMIC sessions
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  # Add portals for niri compatibility
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gnome
+      pkgs.xdg-desktop-portal-gtk
+    ];
+  };
 
   security.polkit.enable = true;
 }

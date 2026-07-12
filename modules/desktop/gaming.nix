@@ -125,9 +125,6 @@
 
     # Vulkan layers and OpenCL support
     extraPackages = with pkgs; [
-      # ─── NVIDIA: Vulkan validation and compute ───
-      vulkan-validation-layers
-
       # ─── AMD GPU — uncomment when using an AMD GPU ───
       # amdvlk                # alternative AMD Vulkan driver
       # rocmPackages.clr.icd  # OpenCL support via ROCm

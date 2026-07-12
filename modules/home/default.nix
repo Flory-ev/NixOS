@@ -8,6 +8,7 @@
     useUserPackages = true;
     users.f = {
       imports = [
+        ./niri.nix
         ./packages.nix
         ./programs.nix
       ];

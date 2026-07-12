@@ -7,6 +7,8 @@
       binfmt = true;
     };
     firefox.enable = true;
+    kdeconnect.enable = true;
+    niri.enable = true;
     nh = {
       enable = true;
       flake = "/home/f/nixos";
