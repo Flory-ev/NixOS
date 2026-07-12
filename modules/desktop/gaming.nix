@@ -99,8 +99,7 @@
     WINE_FULLSCREEN_FSR = "1";
     WINE_FULLSCREEN_FSR_STRENGTH = "2"; # 0 = max sharpening, 5 = least
 
-    # NVIDIA-specific Proton variables now live in hosts/vortex/default.nix,
-    # since this module is shared by every host (including non-NVIDIA ones).
+    # NVIDIA-specific Proton variables now live in configuration.nix.
 
     # ─── AMD GPU — uncomment when using an AMD GPU ───
     # RADV_PERFTEST = "aco";         # use ACO shader compiler (faster)
@@ -140,12 +139,8 @@
 
   # ── GPU driver configuration ───────────────────────────────────────
   # NVIDIA-specific driver config (services.xserver.videoDrivers,
-  # hardware.nvidia, etc.) intentionally does NOT live here anymore.
-  # This "desktop" module is imported by every host, including ones
-  # without an NVIDIA GPU (e.g. stardust). Forcing the nvidia driver
-  # and hardware.nvidia on a host with no NVIDIA card would leave it
-  # without a working display driver. NVIDIA config now lives in
-  # hosts/vortex/default.nix, which is the only host that has one.
+  # hardware.nvidia, etc.) lives in configuration.nix, not here — keeps
+  # this file reusable if you ever split hosts again.
 
   # ─── AMD GPU driver — uncomment this block when using an AMD GPU ───
   # services.xserver.videoDrivers = [ "amdgpu" ];

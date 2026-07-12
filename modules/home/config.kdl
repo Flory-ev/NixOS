@@ -165,7 +165,10 @@ binds {
 
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
-    Mod+M { maximize-window-to-edges; }
+    // "maximize-window-to-edges" needs niri 25.11+; the pinned niri-stable
+    // input is 25.08. Run `nix flake update niri-stable` to get it, then
+    // uncomment the line below.
+    // Mod+M { maximize-window-to-edges; }
     Mod+Ctrl+F { expand-column-to-available-width; }
     Mod+C { center-column; }
 

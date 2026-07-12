@@ -1,8 +1,6 @@
 { config, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
-
   networking.hostName = "vortex";
 
   # ── AMD CPU + NVIDIA GPU desktop ───────────────────────────────────
@@ -26,13 +24,7 @@
     ];
   };
 
-  # ─── Intel CPU — uncomment if this machine ever gets an Intel CPU ───
-  # boot.kernelModules = [ "kvm-intel" ];
-  # boot.kernelParams = [ "intel_iommu=on" "iommu=pt" ];
-
-  # ── NVIDIA driver configuration (vortex-only: this is the only host ──
-  # ── with an NVIDIA GPU — do NOT move this into the shared desktop  ──
-  # ── module, or it gets forced onto non-NVIDIA hosts like stardust) ──
+  # ── NVIDIA driver configuration ────────────────────────────────────
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {

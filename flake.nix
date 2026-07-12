@@ -13,14 +13,23 @@
   };
 
   outputs =
-    inputs@{ flake-parts, ... }:
+    inputs@{ self, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
-      imports = [
-        ./hosts
-        ./modules
-      ];
+      imports = [ ./modules ];
+
+      flake.nixosConfigurations.vortex = inputs.nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration.nix
+          self.nixosModules.core
+          self.nixosModules.desktop
+          self.nixosModules.home
+        ];
+      };
 
       perSystem =
         { pkgs, ... }:
