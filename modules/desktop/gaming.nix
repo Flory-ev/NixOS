@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   lib,
   ...
 }:
@@ -100,9 +99,8 @@
     WINE_FULLSCREEN_FSR = "1";
     WINE_FULLSCREEN_FSR_STRENGTH = "2"; # 0 = max sharpening, 5 = least
 
-    # ─── NVIDIA-specific Proton variables ───
-    PROTON_ENABLE_NVAPI = "1"; # expose NVIDIA API to games (DLSS, etc.)
-    PROTON_HIDE_NVIDIA_GPU = "0"; # don't hide the GPU from DirectX games
+    # NVIDIA-specific Proton variables now live in hosts/vortex/default.nix,
+    # since this module is shared by every host (including non-NVIDIA ones).
 
     # ─── AMD GPU — uncomment when using an AMD GPU ───
     # RADV_PERFTEST = "aco";         # use ACO shader compiler (faster)
@@ -140,29 +138,14 @@
     ];
   };
 
-  # ── NVIDIA driver configuration ────────────────────────────────────
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-  hardware.nvidia = {
-    modesetting.enable = true;
-
-    # Use the open-source NVIDIA kernel modules (supported on Turing+, i.e. RTX 20xx+)
-    # Set to false if you have a Maxwell/Pascal card (GTX 9xx/10xx)
-    open = true;
-
-    # Enable the NVIDIA settings GUI
-    nvidiaSettings = true;
-
-    # Power management — saves power when GPU is idle (important for laptops)
-    powerManagement.enable = true;
-
-    # Fine-grained power management (Turing+) — puts GPU to sleep when not in use
-    # Enable this on laptops, disable on desktops if it causes issues
-    powerManagement.finegrained = false;
-
-    # Use the latest stable driver
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
+  # ── GPU driver configuration ───────────────────────────────────────
+  # NVIDIA-specific driver config (services.xserver.videoDrivers,
+  # hardware.nvidia, etc.) intentionally does NOT live here anymore.
+  # This "desktop" module is imported by every host, including ones
+  # without an NVIDIA GPU (e.g. stardust). Forcing the nvidia driver
+  # and hardware.nvidia on a host with no NVIDIA card would leave it
+  # without a working display driver. NVIDIA config now lives in
+  # hosts/vortex/default.nix, which is the only host that has one.
 
   # ─── AMD GPU driver — uncomment this block when using an AMD GPU ───
   # services.xserver.videoDrivers = [ "amdgpu" ];
