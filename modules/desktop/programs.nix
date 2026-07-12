@@ -9,6 +9,7 @@
     firefox.enable = true;
     kdeconnect.enable = true;
     niri.enable = true;
+    xwayland.enable = true;
     nh = {
       enable = true;
       flake = "/home/f/nixos";

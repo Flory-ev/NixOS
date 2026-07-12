@@ -12,11 +12,13 @@ input {
     touchpad {
         tap
         natural-scroll
-    }
+    } 
 }
 
-/-output "eDP-1" {
-    scale 1
+output "DP-2" {
+    mode "1920x1080@239.964"
+    scale 1.0
+    variable-refresh-rate on-demand=true
 }
 
 layout {
