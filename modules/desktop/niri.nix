@@ -5,7 +5,7 @@
     waybar # Status bar
     fuzzel # App launcher
     mako # Notifications
-    swww # Wallpaper daemon
+    awww # Wallpaper daemon
     swaylock # Screen locker
     brightnessctl # Brightness control (for keybinds)
     playerctl # Media key support
