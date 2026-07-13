@@ -12,6 +12,9 @@
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "quiet"
+      "amd_pstate=active"
+      "nvidia-drm.modeset=1"
+      "nvidia-drm.fbdev=1"
     ];
     loader = {
       efi.canTouchEfiVariables = true;
