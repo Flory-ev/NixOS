@@ -2,7 +2,6 @@
 {
   # --- Services ---
   services = {
-desktopManager.plasma6.enable = true;
     resolved.enable = true;
     greetd = {
       enable = true;

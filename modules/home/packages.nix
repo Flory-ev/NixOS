@@ -12,6 +12,7 @@
     heroic
     qbittorrent
     reaper
+    peazip
     spotify
     sqlitebrowser
     termius

@@ -32,7 +32,6 @@
       remotePlay.openFirewall = true;
       extraCompatPackages = with pkgs; [ proton-ge-bin ];
     };
-    virt-manager.enable = true;
     zsh.enable = true;
   };
 }

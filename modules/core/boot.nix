@@ -8,13 +8,7 @@
       "kernel.kptr_restrict" = 2;
       "kernel.unprivileged_bpf_disabled" = 1;
     };
-    kernelModules = [
-      "btusb"
-      "vfio-pci"
-      "vhost-net"
-      "tap"
-      "tun"
-    ];
+    kernelModules = [ "btusb" ];
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "quiet"

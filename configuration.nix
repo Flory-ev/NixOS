@@ -7,10 +7,6 @@
   boot = {
     kernelModules = [ "kvm-amd" ];
     kernelParams = [
-      # IOMMU passthrough — lower latency for VMs and direct device access
-      "amd_iommu=on"
-      "iommu=pt"
-
       # Disable mitigations for maximum gaming performance
       # WARNING: reduces security — only use on a personal gaming machine
       "mitigations=off"
