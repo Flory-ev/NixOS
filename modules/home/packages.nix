@@ -9,9 +9,8 @@
     fastfetch
     fd
     fzf
-    heroic
     qbittorrent
-    reaper
+    kdePackages.dolphin
     peazip
     spotify
     sqlitebrowser
