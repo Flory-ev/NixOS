@@ -17,7 +17,6 @@
       imports = [
         ./desktop/fonts.nix
         ./desktop/gaming.nix
-        ./desktop/niri.nix
         ./desktop/programs.nix
       ];
     };

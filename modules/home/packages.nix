@@ -10,7 +10,6 @@
     fd
     fzf
     qbittorrent
-    kdePackages.dolphin
     peazip
     spotify
     sqlitebrowser
