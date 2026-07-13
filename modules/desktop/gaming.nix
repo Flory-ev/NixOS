@@ -75,6 +75,18 @@
   };
 
   # ── Gamescope ──────────────────────────────────────────────────────
+  # This is also the fix for "mouse doesn't work in games": raw
+  # xwayland-satellite has a known, unresolved cursor-grab/pointer-confine
+  # bug (github.com/Supreeeme/xwayland-satellite#219) that leaves the mouse
+  # stuck at a screen edge or unusable in menus for a lot of games. niri's
+  # own docs recommend wrapping affected games in gamescope instead of
+  # fixing this at the compositor level. Per-game, in Steam ->
+  # right-click game -> Properties -> Launch Options, set:
+  #   gamescope -f -W 2560 -H 1440 --force-grab-cursor --backend sdl -- %command%
+  # (swap -W/-H for your resolution; --backend sdl is required — gamescope's
+  # default Wayland backend doesn't grab the cursor correctly). For a
+  # system-wide fix, log in via the "Steam Big Picture" gamescope session
+  # this module already provides instead of launching Steam from niri directly.
   programs = {
     gamescope = {
       enable = true;

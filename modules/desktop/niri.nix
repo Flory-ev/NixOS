@@ -12,5 +12,8 @@
     wl-clipboard # Clipboard support
     grim # Screenshot tool
     slurp # Region selection
+    xwayland-satellite # Required for niri's built-in Xwayland integration
+    # (Steam, and any X11 app/game, needs this in $PATH — niri auto-spawns
+    # it on demand since 25.08, but only if it can find the binary)
   ];
 }

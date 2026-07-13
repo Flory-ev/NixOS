@@ -2,12 +2,7 @@
 {
   # --- Services ---
   services = {
-    # NOTE: removed `desktopManager.plasma6.enable = true;` — it doesn't fit
-    # anywhere else in this config (greetd launches niri-session directly,
-    # no SDDM, no other KDE bits), and it silently pulled in a large set of
-    # Plasma packages/services for a desktop you never log into. Looked like
-    # a leftover from before the switch to Niri. Re-add it if you actually
-    # want Plasma available as a session option.
+desktopManager.plasma6.enable = true;
     resolved.enable = true;
     greetd = {
       enable = true;

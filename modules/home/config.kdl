@@ -1,6 +1,3 @@
-// Niri configuration file (KDL format)
-// https://github.com/niri-wm/niri/wiki
-
 input {
     keyboard {
         xkb {
@@ -55,6 +52,7 @@ layout {
 spawn-at-startup "waybar"
 spawn-at-startup "awww-daemon"
 spawn-at-startup "mako"
+spawn-at-startup "xwayland"A
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
