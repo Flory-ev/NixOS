@@ -10,7 +10,6 @@
     fd
     fzf
     qbittorrent
-    peazip
     spotify
     sqlitebrowser
     termius
