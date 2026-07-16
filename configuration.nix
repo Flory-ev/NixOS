@@ -30,6 +30,9 @@
       };
     };
   };
+
+  powerManagement.cpuFreqGovernor = "performance";
+  security.polkit.enable = true;
   zramSwap.enable = true;
 
   # System
@@ -74,8 +77,6 @@
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
   };
-
-  services.xserver.videoDrivers = [ "nvidia" ];
 
   # Networking
   networking = {
@@ -135,9 +136,8 @@
     flatpak.enable = true;
     fstrim.enable = true;
     fwupd.enable = true;
+    xserver.videoDrivers = [ "nvidia" ];
   };
-
-  security.polkit.enable = true;
 
   # Fonts
   fonts.packages = with pkgs; [
@@ -148,9 +148,6 @@
     noto-fonts-cjk-sans
     noto-fonts-color-emoji
   ];
-
-  # Gaming
-  powerManagement.cpuFreqGovernor = "performance";
 
   # Programs
   programs = {

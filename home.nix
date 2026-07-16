@@ -45,9 +45,10 @@
   programs.plasma = {
     enable = true;
 
-    overrideConfig = false;
+    overrideConfig = true;
 
     workspace = {
+      wallpaperPlainColor = "0,0,0";
       lookAndFeel = "org.kde.breezedark.desktop";
       colorScheme = "BreezeDark";
       iconTheme = "breeze-dark";
