@@ -17,9 +17,18 @@
     ];
   };
 
-  # ============================================================
-  # Shell / git
-  # ============================================================
+  # Programs
+  programs.git = {
+    enable = true;
+    settings = {
+      user.name = "F";
+      user.email = "vladislavtkachuk@yahoo.com";
+      init.defaultBranch = "main";
+      pull.rebase = true;
+      push.autoSetupRemote = true;
+    };
+  };
+
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
@@ -33,27 +42,9 @@
     };
   };
 
-  programs.git = {
-    enable = true;
-    settings = {
-      user.name = "F";
-      user.email = "vladislavtkachuk@yahoo.com";
-      init.defaultBranch = "main";
-      pull.rebase = true;
-      push.autoSetupRemote = true;
-    };
-  };
-
-  # ============================================================
-  # Plasma (declarative KDE config via plasma-manager)
-  # ============================================================
   programs.plasma = {
     enable = true;
 
-    # Leave overrideConfig off for now: plasma-manager will only touch the
-    # settings declared below and won't reset everything else to defaults
-    # on login. Flip to `true` once the config below is "complete enough"
-    # for a fully declarative desktop.
     overrideConfig = false;
 
     workspace = {
@@ -78,7 +69,6 @@
     };
 
     kwin = {
-      # Minimalist single-desktop setup — no virtual-desktop switching.
       virtualDesktops.number = 1;
 
       effects = {
@@ -98,24 +88,32 @@
 
     panels = [
       {
-        location = "bottom";
-        height = 44;
+        location = "top";
+        height = 25;
+        alignment = "center";
+        lengthMode = "fill";
+        hiding = "none";
+        floating = false;
+        screen = "all";
         widgets = [
-          "org.kde.plasma.kickoff"
-          "org.kde.plasma.icontasks"
-          "org.kde.plasma.marginsseparator"
+          "org.kde.plasma.panelspacer"
           "org.kde.plasma.systemtray"
           "org.kde.plasma.digitalclock"
         ];
       }
+      {
+        location = "bottom";
+        height = 50;
+        alignment = "center";
+        lengthMode = "fit";
+        hiding = "none";
+        floating = true;
+        screen = "all";
+        widgets = [
+          "org.kde.plasma.kickoff"
+          "org.kde.plasma.icontasks"
+        ];
+      }
     ];
-
-    hotkeys.commands = {
-      launch-terminal = {
-        name = "Launch Alacritty";
-        key = "Meta+Return";
-        command = "alacritty";
-      };
-    };
   };
 }

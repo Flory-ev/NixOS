@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 {
-  # ============================================================
-  # Boot / kernel
-  # ============================================================
+  # Boot
   boot = {
     initrd.systemd.enable = true;
     kernel.sysctl = {
@@ -10,13 +8,11 @@
       "kernel.kptr_restrict" = 2;
       "kernel.unprivileged_bpf_disabled" = 1;
 
-      # CS2, Star Citizen, and other large-world games need a huge map count
       "vm.max_map_count" = 2147483642;
-      # Reduce swap aggressiveness — keep game data in RAM as long as possible
       "vm.swappiness" = 10;
     };
     kernelModules = [ "btusb" ];
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages;
     kernelParams = [
       "quiet"
       "amd_pstate=active"
@@ -36,9 +32,7 @@
   };
   zramSwap.enable = true;
 
-  # ============================================================
-  # System / locale
-  # ============================================================
+  # System
   time.timeZone = "Europe/Copenhagen";
   i18n.supportedLocales = [
     "en_US.UTF-8/UTF-8"
@@ -57,9 +51,7 @@
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "25.05";
 
-  # ============================================================
   # Hardware
-  # ============================================================
   hardware = {
     bluetooth = {
       enable = true;
@@ -67,29 +59,25 @@
       settings.General.Experimental = true;
     };
 
-    # Graphics / NVIDIA
+    # Graphics
     graphics = {
       enable = true;
-      enable32Bit = true; # required for 32-bit games and Wine
+      enable32Bit = true;
     };
 
     nvidia = {
       modesetting.enable = true;
-      # Use the open-source NVIDIA kernel modules (supported on Turing+, i.e. RTX 20xx+)
-      # Set to false if you have a Maxwell/Pascal card (GTX 9xx/10xx)
       open = true;
       nvidiaSettings = true;
       powerManagement.enable = true;
-      powerManagement.finegrained = false; # only worth enabling on laptops
+      powerManagement.finegrained = false;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  # ============================================================
   # Networking
-  # ============================================================
   networking = {
     hostName = "vortex";
     firewall = {
@@ -108,14 +96,12 @@
       enable = true;
       settings = {
         General.RoamRetryInterval = 15;
-        Rank.BandModifier5Ghz = 2.0; # strongly prefer 5 GHz networks
+        Rank.BandModifier5Ghz = 2.0;
       };
     };
   };
 
-  # ============================================================
   # Users
-  # ============================================================
   users.users.f = {
     isNormalUser = true;
     shell = pkgs.zsh;
@@ -127,9 +113,7 @@
     ];
   };
 
-  # ============================================================
   # Services
-  # ============================================================
   services = {
     displayManager.plasma-login-manager.enable = true;
     desktopManager.plasma6.enable = true;
@@ -155,9 +139,7 @@
 
   security.polkit.enable = true;
 
-  # ============================================================
   # Fonts
-  # ============================================================
   fonts.packages = with pkgs; [
     fira-code
     font-awesome
@@ -167,11 +149,10 @@
     noto-fonts-color-emoji
   ];
 
-  # ============================================================
   # Gaming
-  # ============================================================
   powerManagement.cpuFreqGovernor = "performance";
 
+  # Programs
   programs = {
     appimage = {
       enable = true;
@@ -206,13 +187,13 @@
       enable = true;
       settings = {
         general = {
-          renice = 10; # give game processes higher priority
-          softrealtime = "auto"; # enable SCHED_ISO when available
+          renice = -10;
+          softrealtime = "auto";
         };
         gpu = {
           apply_gpu_optimisations = "accept-responsibility";
           gpu_device = 0;
-          nv_powermizer_mode = 1; # NVIDIA: prefer maximum performance
+          nv_powermizer_mode = 1;
         };
         custom = {
           start = "${pkgs.libnotify}/bin/notify-send 'GameMode' 'Optimizations activated'";
@@ -223,31 +204,20 @@
 
     gamescope = {
       enable = true;
-      capSysNice = true; # allow gamescope to renice itself for lower latency
+      capSysNice = true;
     };
   };
 
-  # Fix for "mouse doesn't work in games": xwayland-satellite has a known
-  # cursor-grab bug (github.com/Supreeeme/xwayland-satellite#219). Per-game
-  # in Steam -> Properties -> Launch Options:
-  #   gamescope -f -W 2560 -H 1440 --force-grab-cursor --backend sdl -- %command%
-
-  environment.sessionVariables = {
-    WINE_FULLSCREEN_FSR = "1"; # AMD FSR upscaling in Wine/Proton fullscreen games
-    WINE_FULLSCREEN_FSR_STRENGTH = "2"; # 0 = max sharpening, 5 = least
-    STEAM_RUNTIME_PREFER_HOST_LIBRARIES = "0"; # let Steam use its own shader cache
-    SDL_VIDEODRIVER = "wayland,x11"; # avoids flicker in some games on Wayland
-    PROTON_ENABLE_NVAPI = "1"; # expose NVIDIA API to games (DLSS, etc.)
-    PROTON_HIDE_NVIDIA_GPU = "0"; # don't hide the GPU from DirectX games
-  };
-
+  # Environment
   environment.systemPackages = with pkgs; [
     nixfmt
-    mangohud # FPS/perf overlay (launch with MANGOHUD=1 %command%)
-    protonup-qt # manage Proton-GE versions
-    winetricks # Wine configuration helpers
-    protontricks # Proton-specific winetricks wrapper
-    vulkan-tools # vulkaninfo, vkcube — verify Vulkan is working
-    mesa-demos # check OpenGL renderer and driver version
   ];
+
+  environment.sessionVariables = {
+    WINE_FULLSCREEN_FSR = "1";
+    WINE_FULLSCREEN_FSR_STRENGTH = "2";
+    STEAM_RUNTIME_PREFER_HOST_LIBRARIES = "0";
+    PROTON_ENABLE_NVAPI = "1";
+    PROTON_HIDE_NVIDIA_GPU = "0";
+  };
 }
