@@ -1,14 +1,59 @@
 { pkgs, ... }:
-
 {
-  # --- Plasma (declarative KDE config via plasma-manager) ---
+  home = {
+    username = "f";
+    homeDirectory = "/home/f";
+    stateVersion = "25.05";
+
+    packages = with pkgs; [
+      alacritty
+      antigravity
+      qbittorrent
+      spotify
+      sqlitebrowser
+      termius
+      telegram-desktop
+      tor-browser
+    ];
+  };
+
+  # ============================================================
+  # Shell / git
+  # ============================================================
+  programs.zsh = {
+    enable = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+    oh-my-zsh = {
+      enable = true;
+      plugins = [
+        "git"
+        "sudo"
+      ];
+    };
+  };
+
+  programs.git = {
+    enable = true;
+    settings = {
+      user.name = "F";
+      user.email = "vladislavtkachuk@yahoo.com";
+      init.defaultBranch = "main";
+      pull.rebase = true;
+      push.autoSetupRemote = true;
+    };
+  };
+
+  # ============================================================
+  # Plasma (declarative KDE config via plasma-manager)
+  # ============================================================
   programs.plasma = {
     enable = true;
 
     # Leave overrideConfig off for now: plasma-manager will only touch the
     # settings declared below and won't reset everything else to defaults
     # on login. Flip to `true` once the config below is "complete enough"
-    # for a fully declarative desktop (mirrors the Niri philosophy).
+    # for a fully declarative desktop.
     overrideConfig = false;
 
     workspace = {
@@ -29,13 +74,11 @@
         { layout = "us"; }
         { layout = "ru"; }
       ];
-      # Same toggle used in the old Niri config.kdl
       options = [ "grp:win_space_toggle" ];
     };
 
     kwin = {
-      # Minimalist single-desktop setup, similar in spirit to the
-      # scrollable-column Niri layout — no virtual-desktop switching.
+      # Minimalist single-desktop setup — no virtual-desktop switching.
       virtualDesktops.number = 1;
 
       effects = {

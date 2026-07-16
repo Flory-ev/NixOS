@@ -1,7 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,27 +13,25 @@
   };
 
   outputs =
-    inputs@{ self, flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
-
-      imports = [ ./modules ];
-
-      flake.nixosConfigurations.vortex = inputs.nixpkgs.lib.nixosSystem {
+    inputs@{ self, nixpkgs, home-manager, plasma-manager, ... }:
+    {
+      nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
           ./hardware-configuration.nix
-          self.nixosModules.core
-          self.nixosModules.desktop
-          self.nixosModules.home
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = { inherit inputs; };
+              sharedModules = [ plasma-manager.homeModules.plasma-manager ];
+              users.f = import ./home.nix;
+            };
+          }
         ];
       };
-
-      perSystem =
-        { pkgs, ... }:
-        {
-          formatter = pkgs.nixfmt;
-        };
     };
 }
