@@ -32,8 +32,10 @@
   };
 
   powerManagement.cpuFreqGovernor = "performance";
-  security.polkit.enable = true;
   zramSwap.enable = true;
+
+  # Security
+  security.rtkit.enable = true;
 
   # System
   time.timeZone = "Europe/Copenhagen";
@@ -62,7 +64,8 @@
       settings.General.Experimental = true;
     };
 
-    # Graphics
+    cpu.amd.updateMicrocode = true;
+
     graphics = {
       enable = true;
       enable32Bit = true;
