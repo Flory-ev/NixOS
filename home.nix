@@ -51,10 +51,32 @@
       cursor.theme = "Breeze_Snow";
     };
 
-    fonts.fixedWidth = {
-      family = "JetBrains Mono";
-      pointSize = 10;
-    };
+    fonts = {
+  general = {
+    family = "JetBrains Mono";
+    pointSize = 10;
+  };
+  fixedWidth = {
+    family = "JetBrains Mono";
+    pointSize = 10;
+  };
+  small = {
+    family = "JetBrains Mono";
+    pointSize = 8;
+  };
+  toolbar = {
+    family = "JetBrains Mono";
+    pointSize = 10;
+  };
+  menu = {
+    family = "JetBrains Mono";
+    pointSize = 10;
+  };
+  windowTitle = {
+    family = "JetBrains Mono";
+    pointSize = 10;
+  };
+};
 
     input.keyboard = {
       numlockOnStartup = "on";
