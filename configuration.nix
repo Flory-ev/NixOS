@@ -11,12 +11,9 @@
       "vm.max_map_count" = 2147483642;
       "vm.swappiness" = 10;
     };
-    kernelModules = [ "btusb" ];
-    kernelPackages = pkgs.linuxPackages;
     kernelParams = [
       "quiet"
       "amd_pstate=active"
-      "nvidia-drm.modeset=1"
       "nvidia-drm.fbdev=1"
     ];
     loader = {
@@ -74,10 +71,8 @@
     nvidia = {
       modesetting.enable = true;
       open = true;
-      nvidiaSettings = true;
       powerManagement.enable = true;
-      powerManagement.finegrained = false;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      config.boot.kernelPackages.nvidiaPackages.stable;
     };
   };
 
