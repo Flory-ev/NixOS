@@ -6,14 +6,10 @@
     stateVersion = "25.05";
 
     packages = with pkgs; [
-      alacritty
-      antigravity
       qbittorrent
       spotify
-      sqlitebrowser
       termius
       telegram-desktop
-      tor-browser
     ];
   };
 
