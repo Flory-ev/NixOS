@@ -79,10 +79,6 @@
   # Networking
   networking = {
     hostName = "vortex";
-    firewall = {
-      allowedTCPPorts = [ 7777 ];
-      allowedUDPPorts = [ 7777 ];
-    };
     networkmanager = {
       enable = true;
       dns = "systemd-resolved";
@@ -139,7 +135,6 @@
 
   # Fonts
   fonts.packages = with pkgs; [
-    fira-code
     font-awesome
     jetbrains-mono
     noto-fonts
