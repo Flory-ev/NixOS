@@ -14,7 +14,20 @@
   };
 
   # Programs
-  programs.git = {
+  programs =
+    git = {
+      enable = true;
+      settings = {
+        user.name = "F";
+        user.email = "vladislavtkachuk@yahoo.com";
+        init.defaultBranch = "main";
+        pull.rebase = true;
+        push.autoSetupRemote = true;
+    };
+  };
+
+  programs = {
+  git = {
     enable = true;
     settings = {
       user.name = "F";
@@ -25,15 +38,28 @@
     };
   };
 
-  programs.zsh = {
+  zsh = {
     enable = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
   };
 
-  programs.plasma = {
+  zed-editor = {
     enable = true;
+    extensions = [ "nix" "toml" "rust" ];
+    userSettings = {
+      theme = {
+        mode = "system";
+        dark = "One Dark";
+        light = "One Light";
+      };
+      hour_format = "hour24";
+      vim_mode = true;
+    };
+  };
 
+  plasma = {
+    enable = true;
     overrideConfig = true;
 
     workspace = {
@@ -102,4 +128,4 @@
       }
     ];
   };
-}
+};
