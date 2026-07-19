@@ -99,7 +99,7 @@
   # Users
   users.users.f = {
     isNormalUser = true;
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     extraGroups = [
       "networkmanager"
       "wheel"
@@ -162,7 +162,7 @@
         zlib
       ];
     };
-    zsh.enable = true;
+    fish.enable = true;
     steam = {
       enable = true;
       remotePlay.openFirewall = true;
