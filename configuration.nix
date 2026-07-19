@@ -163,14 +163,12 @@
       ];
     };
     zsh.enable = true;
-
     steam = {
       enable = true;
       remotePlay.openFirewall = true;
       extraCompatPackages = with pkgs; [ proton-ge-bin ];
       gamescopeSession.enable = true;
     };
-
     gamemode = {
       enable = true;
       settings = {
@@ -189,7 +187,6 @@
         };
       };
     };
-
     gamescope = {
       enable = true;
       capSysNice = true;
