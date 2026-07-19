@@ -72,7 +72,7 @@
       modesetting.enable = true;
       open = true;
       powerManagement.enable = true;
-      config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
   };
 
@@ -101,9 +101,7 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     extraGroups = [
-      "input"
       "networkmanager"
-      "video"
       "wheel"
     ];
   };

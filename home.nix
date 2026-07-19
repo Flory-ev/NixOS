@@ -29,13 +29,6 @@
     enable = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "sudo"
-      ];
-    };
   };
 
   programs.plasma = {
@@ -51,52 +44,34 @@
       cursor.theme = "Breeze_Snow";
     };
 
-    fonts = {
-  general = {
-    family = "JetBrains Mono";
-    pointSize = 10;
-  };
-  fixedWidth = {
-    family = "JetBrains Mono";
-    pointSize = 10;
-  };
-  small = {
-    family = "JetBrains Mono";
-    pointSize = 8;
-  };
-  toolbar = {
-    family = "JetBrains Mono";
-    pointSize = 10;
-  };
-  menu = {
-    family = "JetBrains Mono";
-    pointSize = 10;
-  };
-  windowTitle = {
-    family = "JetBrains Mono";
-    pointSize = 10;
-  };
-};
+    fonts = let
+      mono = { family = "JetBrains Mono"; pointSize = 10; };
+    in {
+      general = mono;
+      fixedWidth = mono;
+      toolbar = mono;
+      menu = mono;
+      windowTitle = mono;
+      small = { family = "JetBrains Mono"; pointSize = 8; };
+    };
 
     input.keyboard = {
-      numlockOnStartup = "on";
       layouts = [
         { layout = "us"; }
         { layout = "ru"; }
       ];
-      options = [ "grp:win_space_toggle" ];
+      options = [ "grp:logo_space_toggle" ];
     };
 
     kwin = {
       virtualDesktops.number = 1;
 
       effects = {
-        blur.enable = false;
+        blur.enable = true;
         minimization.animation = "magiclamp";
       };
 
       titlebarButtons = {
-        left = [ ];
         right = [
           "minimize"
           "maximize"
@@ -109,11 +84,6 @@
       {
         location = "top";
         height = 25;
-        alignment = "center";
-        lengthMode = "fill";
-        hiding = "none";
-        floating = false;
-        screen = "all";
         widgets = [
           "org.kde.plasma.panelspacer"
           "org.kde.plasma.systemtray"
@@ -123,11 +93,8 @@
       {
         location = "bottom";
         height = 50;
-        alignment = "center";
         lengthMode = "fit";
-        hiding = "none";
         floating = true;
-        screen = "all";
         widgets = [
           "org.kde.plasma.kickoff"
           "org.kde.plasma.icontasks"
