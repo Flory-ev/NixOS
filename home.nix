@@ -8,41 +8,37 @@
     packages = with pkgs; [
       qbittorrent
       spotify
-      termius
       telegram-desktop
+      termius
     ];
   };
 
   # Programs
   programs = {
-    gh = {
+    bat.enable = true;
+    eza = {
       enable = true;
+      git = true;
+      icons = "auto";
     };
+    firefox.enable = true;
+    fish.enable = true;
+    gh.enable = true;
     git = {
       enable = true;
       settings = {
         user.name = "F";
         user.email = "vladislavtkachuk@yahoo.com";
-        init.defaultBranch = "main";
-        pull.rebase = true;
-        push.autoSetupRemote = true;
       };
     };
+    ripgrep.enable = true;
     zed-editor = {
       enable = true;
       extensions = [ "nix" ];
-      userSettings = {
-        theme = {
-          mode = "system";
-          dark = "One Dark";
-          light = "One Light";
-        };
-      };
     };
-    zsh = {
+    zoxide = {
       enable = true;
-      autosuggestion.enable = true;
-      syntaxHighlighting.enable = true;
+      enableFishIntegration = true;
     };
   };
 }

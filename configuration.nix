@@ -4,12 +4,11 @@
   boot = {
     initrd.systemd.enable = true;
     kernel.sysctl = {
+      "vm.max_map_count" = 2147483642;
+      "vm.swappiness" = 10;
       "kernel.dmesg_restrict" = true;
       "kernel.kptr_restrict" = 2;
       "kernel.unprivileged_bpf_disabled" = 1;
-
-      "vm.max_map_count" = 2147483642;
-      "vm.swappiness" = 10;
     };
     kernelParams = [
       "quiet"
@@ -20,10 +19,10 @@
       efi.canTouchEfiVariables = true;
       timeout = 5;
       systemd-boot = {
-        enable = true;
-        editor = false;
-        consoleMode = "max";
         configurationLimit = 10;
+        consoleMode = "max";
+        editor = false;
+        enable = true;
       };
     };
   };
@@ -72,7 +71,6 @@
       modesetting.enable = true;
       open = true;
       powerManagement.enable = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
   };
 
@@ -108,9 +106,16 @@
 
   # Services
   services = {
-    displayManager.cosmic-greeter.enable = true;
     desktopManager.cosmic.enable = true;
-    resolved.enable = true;
+    displayManager.cosmic-greeter.enable = true;
+    earlyoom = {
+      enable = true;
+      freeMemThreshold = 5;
+      freeSwapThreshold = 10;
+    };
+    flatpak.enable = true;
+    fstrim.enable = true;
+    fwupd.enable = true;
     pipewire = {
       enable = true;
       pulse.enable = true;
@@ -120,14 +125,7 @@
         support32Bit = true;
       };
     };
-    earlyoom = {
-      enable = true;
-      freeMemThreshold = 5;
-      freeSwapThreshold = 10;
-    };
-    flatpak.enable = true;
-    fstrim.enable = true;
-    fwupd.enable = true;
+    resolved.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
   };
 
@@ -146,28 +144,7 @@
       enable = true;
       binfmt = true;
     };
-    firefox.enable = true;
-    nh = {
-      enable = true;
-      flake = "/home/f/nixos";
-      clean = {
-        enable = true;
-        extraArgs = "--keep 3 --keep-since 4d";
-      };
-    };
-    nix-ld = {
-      enable = true;
-      libraries = with pkgs; [
-        stdenv.cc.cc
-        zlib
-      ];
-    };
     fish.enable = true;
-    steam = {
-      enable = true;
-      remotePlay.openFirewall = true;
-      gamescopeSession.enable = true;
-    };
     gamemode = {
       enable = true;
       settings = {
@@ -190,6 +167,26 @@
       enable = true;
       capSysNice = true;
     };
+    nh = {
+      enable = true;
+      flake = "/home/f/nixos";
+      clean = {
+        enable = true;
+        extraArgs = "--keep 3 --keep-since 4d";
+      };
+    };
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        stdenv.cc.cc
+        zlib
+      ];
+    };
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+      gamescopeSession.enable = true;
+    };
   };
 
   # Environment
@@ -198,10 +195,10 @@
   ];
 
   environment.sessionVariables = {
-    WINE_FULLSCREEN_FSR = "1";
-    WINE_FULLSCREEN_FSR_STRENGTH = "2";
-    STEAM_RUNTIME_PREFER_HOST_LIBRARIES = "0";
     PROTON_ENABLE_NVAPI = "1";
     PROTON_HIDE_NVIDIA_GPU = "0";
+    STEAM_RUNTIME_PREFER_HOST_LIBRARIES = "0";
+    WINE_FULLSCREEN_FSR = "1";
+    WINE_FULLSCREEN_FSR_STRENGTH = "2";
   };
 }
