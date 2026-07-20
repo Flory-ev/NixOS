@@ -5,21 +5,16 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
   };
 
   outputs =
-    inputs@{ self, nixpkgs, home-manager, plasma-manager, ... }:
+    inputs@{ self, nixpkgs, home-manager, ... }:
     {
       nixosConfigurations.vortex = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
-          ./system/default.nix
+          ./configuration.nix
           ./hardware-configuration.nix
           home-manager.nixosModules.home-manager
           {
@@ -27,8 +22,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = { inherit inputs; };
-              sharedModules = [ plasma-manager.homeModules.plasma-manager ];
-              users.f = import ./home/default.nix;
+              users.f = import ./home.nix;
             };
           }
         ];
