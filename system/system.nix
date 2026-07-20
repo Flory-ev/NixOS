@@ -7,6 +7,12 @@
   ];
   console.keyMap = "us";
 
+  documentation = {
+    enable = false;
+    nixos.enable = false;
+    man.enable = false;
+  };
+
   powerManagement.cpuFreqGovernor = "performance";
   zramSwap.enable = true;
 

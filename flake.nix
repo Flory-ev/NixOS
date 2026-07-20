@@ -19,7 +19,7 @@
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
-          ./configuration.nix
+          ./system/default.nix
           ./hardware-configuration.nix
           home-manager.nixosModules.home-manager
           {
@@ -28,7 +28,7 @@
               useUserPackages = true;
               extraSpecialArgs = { inherit inputs; };
               sharedModules = [ plasma-manager.homeModules.plasma-manager ];
-              users.f = import ./home.nix;
+              users.f = import ./home/default.nix;
             };
           }
         ];
