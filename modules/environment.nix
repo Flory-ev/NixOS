@@ -1,5 +1,7 @@
 { pkgs, ... }:
 {
+  coreutils.package = pkgs.uutils-coreutils;
+
   environment.systemPackages = with pkgs; [
     nixfmt
   ];
