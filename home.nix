@@ -13,7 +13,6 @@
     ];
   };
 
-  # Programs
   programs = {
     bat.enable = true;
     eza = {
@@ -32,6 +31,20 @@
       };
     };
     ripgrep.enable = true;
+    starship = {
+      enable = true;
+      enableFishIntegration = true;
+      settings = {
+        add_newline = true;
+        character = {
+          success_symbol = "[❯](bold green)";
+          error_symbol = "[❯](bold red)";
+        };
+        git_branch = {
+          symbol = "🌱 ";
+        };
+      };
+    };
     zed-editor = {
       enable = true;
       extensions = [ "nix" ];
