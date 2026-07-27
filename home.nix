@@ -14,18 +14,20 @@
   };
 
   programs = {
+    bat.enable = true;
+    dust.enable = true;
+    eza.enable = true;
+    fd.enable = true;
     firefox.enable = true;
-
     fish.enable = true;
-
-    gh.enable = true;
-
     git = {
       enable = true;
-      userName = "F";
-      userEmail = "vladislavtkachuk@yahoo.com";
+      settings = {
+        user.name = "F";
+        user.email = "vladislavtkachuk@yahoo.com";
+      };
     };
-
+    ripgrep.enable = true;
     starship = {
       enable = true;
       settings = {
@@ -39,10 +41,10 @@
         };
       };
     };
-
     zed-editor = {
       enable = true;
       extensions = [ "nix" ];
     };
+    zoxide.enable = true;
   };
 }
