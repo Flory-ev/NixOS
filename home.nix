@@ -14,26 +14,20 @@
   };
 
   programs = {
-    bat.enable = true;
-    eza = {
-      enable = true;
-      git = true;
-      icons = "auto";
-    };
     firefox.enable = true;
+
     fish.enable = true;
+
     gh.enable = true;
+
     git = {
       enable = true;
-      settings = {
-        user.name = "F";
-        user.email = "vladislavtkachuk@yahoo.com";
-      };
+      userName = "F";
+      userEmail = "vladislavtkachuk@yahoo.com";
     };
-    ripgrep.enable = true;
+
     starship = {
       enable = true;
-      enableFishIntegration = true;
       settings = {
         add_newline = true;
         character = {
@@ -45,13 +39,10 @@
         };
       };
     };
+
     zed-editor = {
       enable = true;
       extensions = [ "nix" ];
-    };
-    zoxide = {
-      enable = true;
-      enableFishIntegration = true;
     };
   };
 }
