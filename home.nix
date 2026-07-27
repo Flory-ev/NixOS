@@ -4,7 +4,6 @@
     username = "f";
     homeDirectory = "/home/f";
     stateVersion = "26.05";
-
     packages = with pkgs; [
       qbittorrent
       spotify
