@@ -139,6 +139,20 @@
   };
 
   security = {
+    pam.loginLimits = [
+      {
+        domain = "@audio";
+        item = "memlock";
+        type = "-";
+        value = "unlimited";
+      }
+      {
+        domain = "@audio";
+        item = "rtprio";
+        type = "-";
+        value = "99";
+      }
+    ];
     rtkit.enable = true;
     sudo-rs.enable = true;
   };
@@ -174,12 +188,6 @@
   ];
   console.keyMap = "us";
 
-  documentation = {
-    enable = false;
-    nixos.enable = false;
-    man.enable = false;
-  };
-
   powerManagement.cpuFreqGovernor = "performance";
   zramSwap.enable = true;
 
@@ -198,6 +206,7 @@
     isNormalUser = true;
     shell = pkgs.fish;
     extraGroups = [
+      "audio"
       "networkmanager"
       "wheel"
     ];

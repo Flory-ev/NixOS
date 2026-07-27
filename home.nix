@@ -7,9 +7,14 @@
     packages = with pkgs; [
       dust
       qbittorrent
+      reaper
       spotify
       telegram-desktop
       termius
+      wineWow64Packages.staging
+      winetricks
+      yabridge
+      yabridgectl
     ];
   };
 
