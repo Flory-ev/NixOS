@@ -5,6 +5,7 @@
     homeDirectory = "/home/f";
     stateVersion = "26.05";
     packages = with pkgs; [
+      bitwarden-desktop
       dust
       qbittorrent
       reaper

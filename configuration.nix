@@ -79,6 +79,11 @@
         powersave = false;
       };
     };
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 7777 ];
+      allowedUDPPorts = [ 7777 ];
+    };
     wireless.iwd = {
       enable = true;
       settings = {
