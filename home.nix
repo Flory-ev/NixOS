@@ -1,8 +1,11 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   home = {
     username = "f";
     homeDirectory = "/home/f";
+    sessionVariables = {
+      SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/bitwarden-ssh-agent.sock";
+    };
     stateVersion = "26.05";
     packages = with pkgs; [
       bitwarden-desktop
@@ -12,6 +15,7 @@
       spotify
       telegram-desktop
       termius
+      vital
       wineWow64Packages.staging
       winetricks
       yabridge
@@ -33,6 +37,13 @@
       };
     };
     ripgrep.enable = true;
+    ssh = {
+      enable = true;
+      extraConfig = ''
+        Host *
+          IdentityAgent ~/.bitwarden-ssh-agent.sock
+      '';
+    };
     starship = {
       enable = true;
       settings = {
