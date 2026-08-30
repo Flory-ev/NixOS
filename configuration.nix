@@ -123,7 +123,7 @@
     };
     nh = {
       enable = true;
-      flake = "/home/f/nixos";
+      flake = "/etc/nixos";
       clean = {
         enable = true;
         extraArgs = "--keep 3 --keep-since 4d";

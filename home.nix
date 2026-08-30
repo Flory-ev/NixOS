@@ -11,6 +11,7 @@
       bitwarden-desktop
       dust
       qbittorrent
+      protontricks
       reaper
       spotify
       telegram-desktop
