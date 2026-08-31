@@ -88,7 +88,7 @@
       enable = true;
       settings = {
         General.RoamRetryInterval = 15;
-        Rank.BandModifier5Ghz = 2.0;
+        Rank.BandModifier5Ghz = 5.0;
       };
     };
   };
@@ -173,6 +173,7 @@
     flatpak.enable = true;
     fstrim.enable = true;
     fwupd.enable = true;
+    mullvad-vpn.enable = true;
     pipewire = {
       enable = true;
       pulse.enable = true;
