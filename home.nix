@@ -16,6 +16,7 @@
       spotify
       telegram-desktop
       termius
+      tutanota-desktop
       vital
       wineWow64Packages.staging
       winetricks
